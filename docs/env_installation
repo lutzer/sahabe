@@ -1,0 +1,35 @@
+DB: 
+	-MySql 5.6
+
+Backend:
+	-Python 3.4
+	-RESTapi Django 1.6 see: http://www.django-rest-framework.org/#installation
+
+Frontend:
+	-Web interface: 
+		-java script
+		-Backbone 1.1.2
+
+IDE ( eclipse Kepler ):
+	-plugin JSDT : javascript development tool
+	-plugin PyDev: python IDE for Eclipse 
+	-plugin UML Designer: edit UML 2.4
+
+	(linux gnome shell 3)
+	-To add an app entry and show its icon in the
+	 dashboard  create the file eclipse.desktop in /usr/share/applications/ .
+	 File content:
+
+	 [Desktop Entry]
+ 	 Type=Application
+	 Name=Kepler
+	 Icon=/home/abo/IDEs/eclipse_kepler/icon.xpm
+	 Exec=/home/abo/IDEs/eclipse_kepler/eclipse
+	 Terminal=false
+	 Categories=Development;IDE;Java;
+	 
+	-To show the menu icons in eclipse install dconf-tools then start dconf-editor,
+	 change under org.gnome.desktop.interface menus-have-icons to true and under
+	 org.gnome.desktop.interface buttons-have-icons to true or use the command:
+	 gsettings set org.gnome.desktop.interface menus-have-icons true
+	 gsettings set org.gnome.desktop.interface buttons-have-icons true
