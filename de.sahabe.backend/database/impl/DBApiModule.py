@@ -6,6 +6,15 @@ Created on Jun 11, 2014
 import sys
 import MySQLdb
 
+class DataTypes(object):
+    UUID    = "CHAR(64)"
+    CHAR64  = "CHAR(64)"
+    VCHAR255= "VARCHAR(255)"
+    VCHAR64 = "VARCHAR(64)"
+    SHA_2   = "CHAR(64)"
+    DATE    = "DATE"
+    BOOL    = "BIT"
+    
 def connect(_host, _user, _passwd, _db):
     ''' 
     create connection to DBMS.
@@ -59,7 +68,7 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
         query += "FOREIGN KEY (" + key + ") REFERENCES " + tColumn[0] + " (" + tColumn[1] + "), "
     
     query = query[:-2] + ")"
-    
+    print(query)
     cursor.execute(query)
     cursor.close()
     
@@ -110,4 +119,12 @@ def selectFrom(conn, table, *columns):
     cursor.close()
     return rows
  
+ 
+def dropTable(conn, table):
+    cursor = conn.cursor()
+    cursor.execute("DROP TABLE "+table)
+     
+     
+     
+     
 
