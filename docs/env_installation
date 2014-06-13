@@ -1,5 +1,14 @@
 DB: 
 	-MySql 5.6
+	-data base configuration:
+		- CREATE DATABASE sahabe;
+		- CREATE DATABASE sahabe_test;
+		- CREATE USER 'sahabe'@'localhost' IDENTIFIED BY 'sahabe';
+		- GRANT ALL PRIVILEGES ON sahabe.* TO sahabe@localhost; 
+		- CREATE USER 'sahabe_test'@'localhost' IDENTIFIED BY 'sahabe_test';
+		- GRANT ALL PRIVILEGES ON sahabe_test.* TO sahabe_test@localhost;	
+	
+
 
 Backend:
 	-Python 2.7
