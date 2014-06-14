@@ -54,16 +54,12 @@
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_MdTpQO88EeOOv4-NOhrTUg" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_MdTpQe88EeOOv4-NOhrTUg" value="1"/>
     </ownedAttribute>
-    <ownedAttribute xmi:id="_QHDXIO88EeOOv4-NOhrTUg" name="group" type="_TcJK8PJuEeObJNvZSgnDNQ">
+    <ownedAttribute xmi:id="_QHDXIO88EeOOv4-NOhrTUg" name="group_tag" type="_TcJK8PJuEeObJNvZSgnDNQ">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QHD-MO88EeOOv4-NOhrTUg" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QHD-Me88EeOOv4-NOhrTUg" value="1"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_NrfToO88EeOOv4-NOhrTUg" name="Tag_Map">
-    <ownedAttribute xmi:id="_JBZtoO89EeOOv4-NOhrTUg" name="key" type="_PvGmoO87EeOOv4-NOhrTUg">
-      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JBaUsO89EeOOv4-NOhrTUg" value="1"/>
-      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JBa7wO89EeOOv4-NOhrTUg" value="1"/>
-    </ownedAttribute>
     <ownedAttribute xmi:id="_JPS_sO89EeOOv4-NOhrTUg" name="link_id" type="_PvGmoO87EeOOv4-NOhrTUg">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JPS_se89EeOOv4-NOhrTUg" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JPS_su89EeOOv4-NOhrTUg" value="1"/>
@@ -112,7 +108,7 @@
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XyexwO88EeOOv4-NOhrTUg"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Xyexwe88EeOOv4-NOhrTUg" value="1"/>
     </ownedAttribute>
-    <ownedAttribute xmi:id="_X_w_0O88EeOOv4-NOhrTUg" name="creation">
+    <ownedAttribute xmi:id="_X_w_0O88EeOOv4-NOhrTUg" name="create_date">
       <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/XMLPrimitiveTypes.library.uml#Time"/>
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_X_xm4O88EeOOv4-NOhrTUg" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_X_xm4e88EeOOv4-NOhrTUg" value="1"/>
