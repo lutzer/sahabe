@@ -7,22 +7,24 @@ import sys
 import MySQLdb
 
 class DataTypes(object):
-    UUID    = "CHAR(64)"
-    CHAR64  = "CHAR(64)"
-    VCHAR255= "VARCHAR(255)"
+    UUID = "CHAR(36)"
+    CHAR32 = "CHAR(32)"
+    CHAR64 = "CHAR(64)"
+    VCHAR32 = "VARCHAR(32)"
     VCHAR64 = "VARCHAR(64)"
-    SHA_2   = "CHAR(64)"
-    DATE    = "DATE"
-    BOOL    = "BIT"
+    VCHAR255 = "VARCHAR(255)"
+    SHA_2 = "CHAR(64)"
+    DATE = "DATE"
+    BOOL = "BIT"
     
 def connect(_host, _user, _passwd, _db):
     ''' 
     create connection to DBMS.
     connection must closed by developer, use close()
-    @param host:
-    @param user: 
-    @param passwd: 
-    @param db:  
+    @param host: -string 
+    @param user: -string
+    @param passwd: -string
+    @param db: -string
     '''
     try:
         conn = MySQLdb.Connect(host=_host,
@@ -30,7 +32,7 @@ def connect(_host, _user, _passwd, _db):
                        passwd=_passwd,
                        db=_db)
     except MySQLdb.Error, e : 
-        print "Error %d: %s % (e.args[0], e.args[1])"
+        print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
     return conn
 
@@ -68,7 +70,7 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
         query += "FOREIGN KEY (" + key + ") REFERENCES " + tColumn[0] + " (" + tColumn[1] + "), "
     
     query = query[:-2] + ")"
-    print(query)
+    print "db-api: ", query
     cursor.execute(query)
     cursor.close()
     
@@ -78,7 +80,7 @@ def insertToTable(conn, table, *order, **kwargs):
     @param conn: connection object
     @param table: table name
     @param order: is a set of ordered keys 
-    @param kwargs: <column>=<dataType>
+    @param kwargs: <column>=<value>
     '''
     cursor = conn.cursor()
     
@@ -89,25 +91,33 @@ def insertToTable(conn, table, *order, **kwargs):
         values += "'" + kwargs[key] + "' , "
     query = "INSERT INTO " + table + " (" + columns[:-2] + ") VALUES (" + values[:-2] + ")" 
     
-    cursor.execute(""" query """)
+    cursor.execute(query)
     cursor.close()
     # TODO: should commit() be moved to a higher abstraction level?
     conn.commit()
     return cursor.rowcount
 
-def selectFrom(conn, table, *columns):
+def selectFrom(conn, table, *columns, **kwargs):
     '''
     select from user
     @param conn: MySQLbd connection object
     @param table: String -table name
-    @param order: a set of ordered String keys 
-    @param kwargs: <column>=<dataType>
+    @param *columns: <column> ordered set of columns  
+    @param **kwargs: <column>:<value> includes where statement
     '''
     cursor = conn.cursor()
     query_columns = ""    
     for column in columns:
             query_columns += column + ", "
-    query = "SELECT " + query_columns[:-2] + " FROM " + table
+    
+    where = ""
+    if kwargs is not None:
+        where = " WHERE "
+        for col, val in kwargs.items():
+            where += col + "= '" + val + "' AND "
+        where = where[:-4]
+    
+    query = "SELECT " + query_columns[:-2] + " FROM " + table + where  
     cursor.execute(query)
     
     rows = []
@@ -120,9 +130,10 @@ def selectFrom(conn, table, *columns):
     return rows
  
  
-def dropTable(conn, table):
+def dropTable(conn, *tables):
     cursor = conn.cursor()
-    cursor.execute("DROP TABLE "+table)
+    for table in tables:
+        cursor.execute("DROP TABLE IF EXISTS " + table)
      
      
      
