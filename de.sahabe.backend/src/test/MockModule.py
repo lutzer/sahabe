@@ -11,8 +11,11 @@ import time
 import datetime
 
 def generateName(size=32, chars=string.ascii_lowercase):
-    return ''.join(random.choice(chars) for _ in range(random.randint(2, size))) 
+    return ''.join(random.choice(chars) for _ in range(random.randint(2, size)))
 
+def generateEmail(size=32): 
+    return generateText(size-10)+"@sahabe.de"
+    
 def generateText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -45,7 +48,7 @@ class DBMock():
             self.name = generateName()
             self.email = self.name + "@sahabe.de"
     
-    class  Category():
+    class Category():
         id = ""
         userId = ""
         name = ""
@@ -53,17 +56,6 @@ class DBMock():
             self.id = str(uuid.uuid4())
             self.userId = user.id
             self.name = generateName()
-    
-    class Tag():
-        id = ""
-        userId = ""
-        name = ""
-        grou = 0
-        def __init__(self, user):
-            self.id = str(uuid.uuid4())
-            self.userId = user.id
-            self.name = generateName()
-            self.grou = 0
     
     class Link():
         id = ""
@@ -71,8 +63,8 @@ class DBMock():
         categoryId = ""
         url = ""
         name = ""
-        desciption = ""
-        creation = ""
+        description = ""
+        createDate = ""
         
         def __init__(self, user, category):
             self.id = str(uuid.uuid4())
@@ -82,15 +74,24 @@ class DBMock():
             self.name = generateName()
             self.desciption = generateText(36)
             """ make datetime stamp """
-            self.creation = datetime.datetime.fromtimestamp(time.time())
+            self.createDate = str(datetime.datetime.fromtimestamp(time.time()))
+    
+    class Tag():
+        id = ""
+        userId = ""
+        name = ""
+        groupTag = 0
+        def __init__(self, user):
+            self.id = str(uuid.uuid4())
+            self.userId = user.id
+            self.name = generateName()
+            self.groupTag = 0
     
     class TagMap():
-        key = ""
         linkId = ""
         tagId = ""
         
         def __init__(self, link, tag):
-            self.key = str(uuid.uuid4())
             self.linkId = link.id
             self.tagId = tag.id
     

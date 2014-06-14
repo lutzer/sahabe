@@ -15,7 +15,8 @@ class DataTypes(object):
     VCHAR255 = "VARCHAR(255)"
     SHA_2 = "CHAR(64)"
     DATE = "DATE"
-    BOOL = "BIT"
+    DATETIME = "DATETIME"
+    BOOL = "TINYINT(1)"
     
 def connect(_host, _user, _passwd, _db):
     ''' 
@@ -74,7 +75,7 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     cursor.execute(query)
     cursor.close()
     
-def insertToTable(conn, table, *order, **kwargs):
+def insertToTable(conn, table, **kwargs):
     ''' 
     insert to table. 
     @param conn: connection object
@@ -86,11 +87,10 @@ def insertToTable(conn, table, *order, **kwargs):
     
     columns = ""
     values = ""
-    for key in order:
+    for key, value in kwargs.items():
         columns += key + " , "
-        values += "'" + kwargs[key] + "' , "
+        values += "'" + value + "' , "
     query = "INSERT INTO " + table + " (" + columns[:-2] + ") VALUES (" + values[:-2] + ")" 
-    
     cursor.execute(query)
     cursor.close()
     # TODO: should commit() be moved to a higher abstraction level?
