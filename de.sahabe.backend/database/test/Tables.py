@@ -9,8 +9,13 @@ import impl.InitSahabeDB as dbinit
 from test.MockModule import DBMock as mock
 
 
+host = "localhost"
+dbUser = "sahabe_test"
+dbPw = "sahabe_test"
+database="sahabe_test"
+
 # FIXME: run initialize new tables 
-# dbinit.run(host, dbUser, dbPw, database)
+#dbinit.run(host, dbUser, dbPw, database)
 
 class Tables(unittest.TestCase):
     
@@ -52,7 +57,8 @@ class Tables(unittest.TestCase):
         
     def insertPW(self, userId, value, salt):
         db.insertToTable(self.conn, "pw_hash", user_id=userId,
-                         value=value, salt=salt)    
+                         value=value, salt=salt)
+ 
         
     def extractNumber(self, _str):    
         result = ""

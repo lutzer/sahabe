@@ -19,6 +19,18 @@ class Link(Tables.Tables):
     - Test: UNIQUE constrains
     """
     
+    def __initDependencies(self):
+        self.initDBMockContents()
+        self.id = self.link.id
+        self.userId = self.link.userId
+        self.catId = self.link.catId
+        self.url = self.link.url
+        self.name = self.link.name
+        self.desc = self.link.description
+        self.date = self.link.createDate
+        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.insertCategory(self.cat.id, self.cat.userId, self.cat.name)
+    
     def setUp(self):
         self.connect()
         self.initDBMockContents()
@@ -29,7 +41,6 @@ class Link(Tables.Tables):
         self.name = self.link.name
         self.desc = self.link.description
         self.date = self.link.createDate
-        
         self.insertUser(self.user.id, self.user.name, self.user.email)
         self.insertCategory(self.cat.id, self.cat.userId, self.cat.name)
         
@@ -201,109 +212,95 @@ class Link(Tables.Tables):
     # FIXME: what's about UNIQUE constrains?
         
     def testInsertDublicateId(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
+        _id = self.id
+        self.__initDependencies()
+        self.assertRaises(IntegrityError, self.insertLink,
+                          _id,
+                          self.userId,
+                          self.catId,
+                          self.url,
+                          self.name,
+                          self.desc,
+                          self.date)
+        
+    def testInsertDublicateUserId(self):
+        self.insertLink(self.id, self.userId, self.catId, self.url,
+                        self.name, self.desc, self.date)
+        userId = self.userId
+        self.__initDependencies()
         self.assertRaises(IntegrityError, self.insertLink,
                           self.id,
                           userId,
-                          catId,
-                          mock.randomText(64),
-                          mock.randomName(),
-                          mock.randomText(32),
-                          mock.timeStamp())
-        
-    def testInsertDublicateUserId(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
-        self.assertRaises(IntegrityError, self.insertLink,
-                          mock.uuid(),
-                          self.userId,
-                          catId,
-                          mock.randomText(64),
-                          mock.randomName(),
-                          mock.randomText(32),
-                          mock.timeStamp())
+                          self.catId,
+                          self.url,
+                          self.name,
+                          self.desc,
+                          self.date)
         
     def testInsertDublicateCatId(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
+        catId = self.catId
+        self.__initDependencies()
         self.assertRaises(IntegrityError, self.insertLink,
-                          mock.uuid(),
-                          userId,
-                          self.catId,
-                          mock.randomText(64),
-                          mock.randomName(),
-                          mock.randomText(32),
-                          mock.timeStamp())
+                          self.id,
+                          self.userId,
+                          catId,
+                          self.url,
+                          self.name,
+                          self.desc,
+                          self.date)
         
     def testInsertDublicateUrl(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
-        self.insertLink(mock.uuid(),
-                        userId,
-                        catId,
-                        self.url,
-                        mock.randomName(),
-                        mock.randomText(32),
-                        mock.timeStamp())
+        url = self.url
+        self.__initDependencies()
+        self.insertLink(self.id,
+                        self.userId,
+                        self.catId,
+                        url,
+                        self.name,
+                        self.desc,
+                        self.date)
     
     def testInsertDublicateName(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
-        self.insertLink(mock.uuid(),
-                        userId,
-                        catId,
-                        mock.randomText(64),
-                        self.name,
-                        mock.randomText(32),
-                        mock.timeStamp())
+        name = self.name
+        self.__initDependencies()
+        self.insertLink(self.id,
+                        self.userId,
+                        self.catId,
+                        self.url,
+                        name,
+                        self.desc,
+                        self.date)
         
     def testInsertDublicateDescription(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
-        self.insertLink(mock.uuid(),
-                        userId,
-                        catId,
-                        mock.randomText(64),
-                        mock.randomName(),
-                        self.desc,
-                        mock.timeStamp())
+        desc = self.desc
+        self.__initDependencies()
+        self.insertLink(self.id,
+                        self.userId,
+                        self.catId,
+                        self.url,
+                        self.name,
+                        desc,
+                        self.date)
         
     def testInsertDublicateCreateDate(self):
-        userId=mock.uuid()
-        self.insertUser(userId, mock.randomName(), mock.randomEmail())
-        catId =mock.uuid()
-        self.insertCategory(catId, userId, mock.randomName())
         self.insertLink(self.id, self.userId, self.catId, self.url,
                         self.name, self.desc, self.date)
-        self.insertLink(mock.uuid(),
-                        userId,
-                        catId,
-                        mock.randomText(64),
-                        mock.randomName(),
-                        mock.randomText(32),
-                        self.date)
+        date = self.date
+        self.__initDependencies()
+        self.insertLink(self.id,
+                        self.userId,
+                        self.catId,
+                        self.url,
+                        self.name,
+                        self.desc,
+                        date)

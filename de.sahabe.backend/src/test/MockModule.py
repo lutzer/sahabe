@@ -86,12 +86,12 @@ class DBMock():
         id = ""
         userId = ""
         name = ""
-        groupTag = 0
+        groupTag = '0'
         def __init__(self, user):
             self.id = uuid()
             self.userId = user.id
             self.name = randomName()
-            self.groupTag = 0
+            self.groupTag = '0'
     
     class TagMap():
         linkId = ""

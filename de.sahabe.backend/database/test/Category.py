@@ -17,6 +17,13 @@ class Category(Tables.Tables):
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     """
+    
+    def __initDependencies(self):
+        self.initDBMockContents()
+        self.id = self.cat.id
+        self.userId = self.cat.userId
+        self.name = self.cat.name
+        self.insertUser(self.user.id, self.user.name, self.user.email)
 
     def setUp(self):
         self.connect()
@@ -89,21 +96,26 @@ class Category(Tables.Tables):
         
     def testInsertDoublicateId(self):
         self.insertCategory(self.id, self.userId, self.name)
+        _id=self.id
+        self.__initDependencies()
         self.assertRaises(IntegrityError, self.insertCategory,
-                          self.id,
-                          mock.uuid(),
-                          mock.randomName())
+                          _id,
+                          self.userId,
+                          self.name)
         
     def testInsertDoublicateUserId(self):
         self.insertCategory(self.id, self.userId, self.name)
+        userId=self.userId
+        self.__initDependencies()
         self.assertRaises(IntegrityError, self.insertCategory,
-                          mock.uuid(),
-                          self.userId,
-                          mock.randomName())
+                          self.id,
+                          userId,
+                          self.name)
         
     def testInsertDoublicateName(self):
         self.insertCategory(self.id, self.userId, self.name)
-        self.assertRaises(IntegrityError, self.insertCategory,
-                          mock.uuid(),
-                          mock.uuid(),
-                          self.name)
+        name=self.name
+        self.__initDependencies()
+        self.insertCategory(self.id,
+                            self.userId,
+                            name)
