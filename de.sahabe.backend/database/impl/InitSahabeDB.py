@@ -43,7 +43,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             "link",
                             "id",
                             {"id", "user_id", "category_id"},
-                            {"id", "user_id", "category_id", "url", "name", "create_date"},
+                            {"id", "user_id", "category_id", "url", "create_date"},
                             {"user_id":"user.id", "category_id":"category.id"},
                             "id", "user_id", "category_id", "url", "name", "description", "create_date",
                             id=dt.UUID, user_id=dt.UUID, category_id=dt.UUID, url=dt.VCHAR255,

@@ -31,56 +31,88 @@ class User(Tables.Tables):
     def testInsertion(self):
         self.insertUser(self.id, self.name, self.email)
         
-        rows = db.selectFrom(self.conn, "user", "id", "name", "email", id=self.id)
+        rows = db.selectFrom(self.conn, "user", "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])
         self.assertEqual(self.email, rows[0][2])
+
+    
+    """ DATA TYPE TESTS """
     
     def testInsertInvalidId(self):
-        self.assertRaises(DataError, self.insertUser ,
-                         self.id + "e", self.name, self.email)
+        self.assertRaises(DataError, self.insertUser,
+                          self.id + "e",
+                          self.name,
+                          self.email)
         """ insert too short """
-        # FIXME: what's about UUID ??? 
+        # FIXME: what's about UUID length constrains? 
         """
         self.assertRaises(DataError, self.insertUser ,
                          self.id[:-13], self.name, self.email)
         """
         
     def testInsertInvalidName(self):
-        name = mock.generateText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertUser ,
-                         self.id , name, self.email)
+        name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaises(DataError, self.insertUser,
+                          self.id,
+                          name,
+                          self.email)
     
     def testInsertInvalidEmail(self):
-        email = mock.generateEmail(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertUser ,
-                         self.id , self.name, email)
+        email = mock.randomEmail(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaises(DataError, self.insertUser,
+                          self.id,
+                          self.name,
+                          email)
+
+
+    
+    """ NULL CONSTRAINS TESTS """    
         
     def testInsertNoId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn,
-                         "user", name=self.name, email=self.email)
+        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+                          name=self.name,
+                          email=self.email)
         
     def testInsertNoName(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn,
-                         "user", id=self.id, email=self.email)
+        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+                          id=self.id,
+                          email=self.email)
         
     def testInsertNoEmail(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn,
-                         "user", id=self.id, name=self.name)
+        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+                          id=self.id,
+                          name=self.name)
+        
+    
+    """ UNIQUE CONSTRAINS TESTS """
         
     def testInsertDublicateId(self):
         self.insertUser(self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, self.insertUser, self.id,
-                          mock.generateName(), mock.generateEmail())
+        self.assertRaises(IntegrityError, self.insertUser,
+                          self.id,
+                          mock.randomName(),
+                          mock.randomEmail())
         
     def testInsertDublicateName(self):
         self.insertUser(self.id, self.name, self.email)
         self.assertRaises(IntegrityError, self.insertUser,
-                          mock.uuid(), self.name, mock.generateEmail())
+                          mock.uuid(),
+                          self.name,
+                          mock.randomEmail())
         
     def testInsertDublicateEmail(self):
         self.insertUser(self.id, self.name, self.email)
         self.assertRaises(IntegrityError, self.insertUser,
-                          mock.uuid(), mock.generateName(), self.email)
-
+                          mock.uuid(),
+                          mock.randomName(),
+                          self.email)
+        
+   
+        
+        
+        
+        
+        
+        

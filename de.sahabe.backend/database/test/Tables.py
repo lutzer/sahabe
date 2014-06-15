@@ -8,10 +8,6 @@ import impl.DBApiModule as db
 import impl.InitSahabeDB as dbinit
 from test.MockModule import DBMock as mock
 
-host = "localhost"
-dbUser = "sahabe_test"
-dbPw = "sahabe_test"
-database = "sahabe_test"
 
 # FIXME: run initialize new tables 
 # dbinit.run(host, dbUser, dbPw, database)
@@ -19,7 +15,10 @@ database = "sahabe_test"
 class Tables(unittest.TestCase):
     
     def connect(self):
-        self.conn = db.connect(host, dbUser, dbPw, database)
+        self.conn = db.connect("localhost",
+                               "sahabe_test",
+                               "sahabe_test",
+                               "sahabe_test")
         
     def initDBMockContents(self):
         entry = mock()
@@ -31,9 +30,9 @@ class Tables(unittest.TestCase):
         self.pw = entry.pw
     
     def insertUser(self, _id, name, email):
-        db.insertToTable(self.conn, "user", id=_id,
-                         name=name, email=email)
-        
+        db.insertToTable(self.conn, "user",
+                         id=_id, name=name, email=email)
+            
     def insertCategory(self, _id, userId, name):
         db.insertToTable(self.conn, "category",
                          id=_id, user_id=userId, name=name)
@@ -62,7 +61,8 @@ class Tables(unittest.TestCase):
             if s.isdigit():
                 result += s
         return int(result)
-   
+    
+
     def setUp(self):
         self.connect()
         self.initDBMockContents()
@@ -75,7 +75,7 @@ class Tables(unittest.TestCase):
         self.assertEqual(self.user.id, self.tag.userId)
         self.assertEqual(self.user.id, self.cat.userId)
         self.assertEqual(self.user.id, self.pw.userId)
-        self.assertEqual(self.cat.id, self.link.categoryId)
+        self.assertEqual(self.cat.id, self.link.catId)
         self.assertEqual(self.link.id, self.tagMap.linkId)
         self.assertEqual(self.tag.id, self.tagMap.tagId)
 

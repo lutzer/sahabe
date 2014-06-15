@@ -7,20 +7,25 @@ import string
 import random
 import uuid as uid
 import hashlib
-import time
 import datetime
 
-def generateName(size=32, chars=string.ascii_lowercase):
+
+def randomName(size=32, chars=string.ascii_lowercase):
     return ''.join(random.choice(chars) for _ in range(random.randint(8, size)))
 
-def generateEmail(size=32): 
-    return generateText(size-10)+"@sahabe.de"
+def randomEmail(size=32): 
+    return randomText(size - 10) + "@sahabe.de"
     
-def generateText(size=64, chars=string.ascii_letters + string.digits):
+def randomText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def uuid():
     return str(uid.uuid4())
+
+def timeStamp():
+    timeStamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return str(timeStamp)
+
 
 class DBMock():
     """
@@ -45,10 +50,9 @@ class DBMock():
         id = ""
         name = ""
         email = ""
-    
         def __init__(self):
             self.id = uuid()
-            self.name = generateName()
+            self.name = randomName()
             self.email = self.name + "@sahabe.de"
     
     class Category():
@@ -58,26 +62,25 @@ class DBMock():
         def __init__(self, user):
             self.id = uuid()
             self.userId = user.id
-            self.name = generateName()
+            self.name = randomName()
     
     class Link():
         id = ""
         userId = ""
-        categoryId = ""
+        catId = ""
         url = ""
         name = ""
         description = ""
         createDate = ""
-        
         def __init__(self, user, category):
             self.id = uuid()
             self.userId = user.id
-            self.categoryId = category.id
-            self.url = generateText(64)
-            self.name = generateName()
-            self.desciption = generateText(36)
+            self.catId = category.id
+            self.url = randomText(64)
+            self.name = randomName()
+            self.desciption = randomText(36)
             """ make datetime stamp """
-            self.createDate = str(datetime.datetime.fromtimestamp(time.time()))
+            self.createDate = timeStamp()
     
     class Tag():
         id = ""
@@ -87,13 +90,12 @@ class DBMock():
         def __init__(self, user):
             self.id = uuid()
             self.userId = user.id
-            self.name = generateName()
+            self.name = randomName()
             self.groupTag = 0
     
     class TagMap():
         linkId = ""
         tagId = ""
-        
         def __init__(self, link, tag):
             self.linkId = link.id
             self.tagId = tag.id
@@ -102,8 +104,7 @@ class DBMock():
         userId = "" 
         value = ""
         salt = ""
-        
         def __init__(self, user):
             self.userId = user.id 
-            self.value = hashlib.sha256(generateText(16)).hexdigest()
-            self.salt = generateText(64, string.ascii_lowercase + string.digits)
+            self.value = hashlib.sha256(randomText(16)).hexdigest()
+            self.salt = randomText(64, string.ascii_lowercase + string.digits)
