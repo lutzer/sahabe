@@ -13,57 +13,59 @@ dbUser = "sahabe_test"
 dbPw = "sahabe_test"
 database = "sahabe_test"
 
-def connect():
-    return db.connect(host, dbUser, dbPw, database)
+# FIXME: run initialize new tables 
+# dbinit.run(host, dbUser, dbPw, database)
 
-def init():
-    dbinit.run(host, dbUser, dbPw, database)
+class Tables(unittest.TestCase):
     
-def insertUser(conn, _id, _name, _email):
-    db.insertToTable(conn, "user", id=_id,
-                     name=_name, email=_email)
-    
-def insertCategory(self):
-    db.insertToTable(self.conn, "category",
-                     id=self.cat.id, user_id=self.cat.userId, name=self.cat.name)
-
-def insertLink(self):
-    db.insertToTable(self.conn, "link", id=self.link.id, user_id=self.link.userId,
-                     category_id=self.link.categoryId, url=self.link.url,
-                     name=self.link.name, description=self.link.description,
-                     create_date=self.link.createDate)
-
-def insertTag(self):
-    db.insertToTable(self.conn, "tag", id=self.tag.id, user_id=self.tag.userId,
-                     name=self.tag.name, group_tag=str(self.tag.groupTag))
-
-def insertTagMap(self):
-    db.insertToTable(self.conn, "tag_map",link_id=self.tagMap.linkId,
-                    tag_id=self.tagMap.tagId)
-    
-def __insertPW(self):
-        db.insertToTable(self.conn, "pw_hash", user_id=self.pw.userId,
-                         value=self.pw.value, salt=self.pw.salt)    
-    
-def extractNumber(_str):    
-    result=""
-    split = list(_str)
-    for s in split:
-        if s.isdigit():
-            result+=s
-    return int(result)
-
-class TestTablesInsertion(unittest.TestCase):
-   
-    def setUp(self):
-        self.conn = db.connect(host, dbUser, dbPw , database)
+    def connect(self):
+        self.conn = db.connect(host, dbUser, dbPw, database)
+        
+    def initDBMockContents(self):
         entry = mock()
         self.user = entry.user
         self.cat = entry.category
         self.link = entry.link
         self.tag = entry.tag
         self.tagMap = entry.tagMap
-        self.pw = entry.pw   
+        self.pw = entry.pw
+    
+    def insertUser(self, _id, name, email):
+        db.insertToTable(self.conn, "user", id=_id,
+                         name=name, email=email)
+        
+    def insertCategory(self, _id, userId, name):
+        db.insertToTable(self.conn, "category",
+                         id=_id, user_id=userId, name=name)
+    
+    def insertLink(self, _id, userId, catId, url, name, desc, createDate):
+        db.insertToTable(self.conn, "link", id=_id, user_id=userId,
+                         category_id=catId, url=url, name=name,
+                         description=desc, create_date=createDate)
+    
+    def insertTag(self, _id, userId, name, gTag):
+        db.insertToTable(self.conn, "tag", id=_id, user_id=userId,
+                         name=name, group_tag=str(gTag))
+    
+    def insertTagMap(self, linkId, tagId):
+        db.insertToTable(self.conn, "tag_map", link_id=linkId,
+                         tag_id=tagId)
+        
+    def insertPW(self, userId, value, salt):
+        db.insertToTable(self.conn, "pw_hash", user_id=userId,
+                         value=value, salt=salt)    
+        
+    def extractNumber(self, _str):    
+        result = ""
+        split = list(_str)
+        for s in split:
+            if s.isdigit():
+                result += s
+        return int(result)
+   
+    def setUp(self):
+        self.connect()
+        self.initDBMockContents()
         
     def tearDown(self):
         self.conn.close()
@@ -76,7 +78,7 @@ class TestTablesInsertion(unittest.TestCase):
         self.assertEqual(self.cat.id, self.link.categoryId)
         self.assertEqual(self.link.id, self.tagMap.linkId)
         self.assertEqual(self.tag.id, self.tagMap.tagId)
-        
+
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

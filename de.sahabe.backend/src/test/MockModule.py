@@ -5,19 +5,22 @@ Created on Jun 13, 2014
 '''
 import string
 import random
-import uuid
+import uuid as uid
 import hashlib
 import time
 import datetime
 
 def generateName(size=32, chars=string.ascii_lowercase):
-    return ''.join(random.choice(chars) for _ in range(random.randint(2, size)))
+    return ''.join(random.choice(chars) for _ in range(random.randint(8, size)))
 
 def generateEmail(size=32): 
     return generateText(size-10)+"@sahabe.de"
     
 def generateText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+def uuid():
+    return str(uid.uuid4())
 
 class DBMock():
     """
@@ -44,7 +47,7 @@ class DBMock():
         email = ""
     
         def __init__(self):
-            self.id = str(uuid.uuid4())
+            self.id = uuid()
             self.name = generateName()
             self.email = self.name + "@sahabe.de"
     
@@ -53,7 +56,7 @@ class DBMock():
         userId = ""
         name = ""
         def __init__(self, user):
-            self.id = str(uuid.uuid4())
+            self.id = uuid()
             self.userId = user.id
             self.name = generateName()
     
@@ -67,7 +70,7 @@ class DBMock():
         createDate = ""
         
         def __init__(self, user, category):
-            self.id = str(uuid.uuid4())
+            self.id = uuid()
             self.userId = user.id
             self.categoryId = category.id
             self.url = generateText(64)
@@ -82,7 +85,7 @@ class DBMock():
         name = ""
         groupTag = 0
         def __init__(self, user):
-            self.id = str(uuid.uuid4())
+            self.id = uuid()
             self.userId = user.id
             self.name = generateName()
             self.groupTag = 0

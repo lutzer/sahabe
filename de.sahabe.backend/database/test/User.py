@@ -3,28 +3,33 @@ Created on Jun 14, 2014
 
 @author: maan al balkhi
 '''
-from _mysql import DataError, IntegrityError
-from _mysql_exceptions import OperationalError
-from impl.DBApiModule import DataTypes as dt
-import Tables as tb
-import impl.DBApiModule as db
+import Tables
 import test.MockModule as mock
+import impl.DBApiModule as db
+from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
-class TestTablesInsertion(tb.unittest.TestCase):
-                    
+class User(Tables.Tables):
+    """
+    - Test: insertion and fetching data from/to table
+    - Test: references.
+    - Test: inserting invalid date
+    - Test: NOT NULLS constrains
+    - Test: UNIQUE constrains
+    """ 
+    
     def setUp(self):
-        self.conn = tb.connect()
-        user = tb.mock().user
-        self.id = user.id
-        self.name = user.name
-        self.email = user.email
+        self.connect()
+        self.initDBMockContents()
+        self.id = self.user.id
+        self.name = self.user.name
+        self.email = self.user.email
         
     def tearDown(self):
         self.conn.close()
     
     def testInsertion(self):
-        tb.insertUser(self.conn, self.id, self.name, self.email)
+        self.insertUser(self.id, self.name, self.email)
         
         rows = db.selectFrom(self.conn, "user", "id", "name", "email", id=self.id)
         
@@ -33,22 +38,23 @@ class TestTablesInsertion(tb.unittest.TestCase):
         self.assertEqual(self.email, rows[0][2])
     
     def testInsertInvalidId(self):
-        """ too long """
-        self.assertRaises(DataError, tb.insertUser , self.conn,
+        self.assertRaises(DataError, self.insertUser ,
                          self.id + "e", self.name, self.email)
-        """ too short """
+        """ insert too short """
+        # FIXME: what's about UUID ??? 
         """
-        self.assertRaises(DataError, tb.insertUser ,self.conn,
-                         self.id[:-2], self.name, self.email)
+        self.assertRaises(DataError, self.insertUser ,
+                         self.id[:-13], self.name, self.email)
         """
+        
     def testInsertInvalidName(self):
-        name = mock.generateText(tb.extractNumber(dt.VCHAR64) + 2)
-        self.assertRaises(DataError, tb.insertUser , self.conn,
+        name = mock.generateText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaises(DataError, self.insertUser ,
                          self.id , name, self.email)
     
     def testInsertInvalidEmail(self):
-        email = mock.generateEmail(tb.extractNumber(dt.VCHAR64) + 2)
-        self.assertRaises(DataError, tb.insertUser , self.conn,
+        email = mock.generateEmail(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaises(DataError, self.insertUser ,
                          self.id , self.name, email)
         
     def testInsertNoId(self):
@@ -58,25 +64,23 @@ class TestTablesInsertion(tb.unittest.TestCase):
     def testInsertNoName(self):
         self.assertRaises(OperationalError, db.insertToTable , self.conn,
                          "user", id=self.id, email=self.email)
+        
     def testInsertNoEmail(self):
         self.assertRaises(OperationalError, db.insertToTable , self.conn,
                          "user", id=self.id, name=self.name)
         
     def testInsertDublicateId(self):
-        tb.insertUser(self.conn, self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, tb.insertUser, self.conn, self.id,
+        self.insertUser(self.id, self.name, self.email)
+        self.assertRaises(IntegrityError, self.insertUser, self.id,
                           mock.generateName(), mock.generateEmail())
         
     def testInsertDublicateName(self):
-        tb.insertUser(self.conn, self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, tb.insertUser, self.conn,
-                          str(mock.uuid.uuid4()), self.name, mock.generateEmail())
+        self.insertUser(self.id, self.name, self.email)
+        self.assertRaises(IntegrityError, self.insertUser,
+                          mock.uuid(), self.name, mock.generateEmail())
         
     def testInsertDublicateEmail(self):
-        tb.insertUser(self.conn, self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, tb.insertUser, self.conn,
-                          str(mock.uuid.uuid4()), mock.generateName(), self.email)
-        
-if __name__ == "__main__":
-    # import sys;sys.argv = ['', 'Test.testName']
-    tb.unittest.main()
+        self.insertUser(self.id, self.name, self.email)
+        self.assertRaises(IntegrityError, self.insertUser,
+                          mock.uuid(), mock.generateName(), self.email)
+
