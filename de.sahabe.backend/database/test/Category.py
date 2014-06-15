@@ -103,14 +103,23 @@ class Category(Tables.Tables):
                           self.userId,
                           self.name)
         
-    def testInsertDoublicateUserId(self):
+    def testInsertDoublicatUIDAndName(self):
         self.insertCategory(self.id, self.userId, self.name)
         userId=self.userId
+        name=self.name
         self.__initDependencies()
         self.assertRaises(IntegrityError, self.insertCategory,
                           self.id,
                           userId,
-                          self.name)
+                          name)
+        
+    def testInsertDoublicateUserId(self):
+        self.insertCategory(self.id, self.userId, self.name)
+        userId=self.userId
+        self.__initDependencies()
+        self.insertCategory(self.id,
+                            userId,
+                            self.name)
         
     def testInsertDoublicateName(self):
         self.insertCategory(self.id, self.userId, self.name)
