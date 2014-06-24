@@ -1,0 +1,22 @@
+DB:		-MySQL is provided from Oracle under dual licenses system:
+		 http://www.mysql.de/about/legal/licensing/oem/
+		-alternatives:
+		 -Relational DBs:
+		 	-Percona: (MySQL fork) Cloud computing, performance
+		 	-MariaDB: (MySQL fork) MySQLfounded by Original MySQL main developers, open source,
+			 pushing boundaries with the most advanced optimizer in MySQL space, 
+			 integrating with NoSQL solutions with its Cassandra Storage Engine, 
+			 additional db functions
+		 	-ourDelta: (MySQL fork)
+		 	-Drizzle: (MySQL fork)
+		 -NoSQL DBs:
+			-MongoDB: Agile and Scalable
+			-Raik and Elrang: open source database that illustrates how to build large scale 
+			 systems using Erlang/OTP
+
+
+RESTful:	-CherryPy: A Minimalist Python Web Framework	
+		-web.py: web framework for Python that is as simple as it is powerful.
+		-Bottle: simple and lightweight WSGI micro web-framework for Python
+		-Flask: microframework for Python based on Werkzeug, 
+		 Jinja 2 and good intentions. It's BSD licensed. 
