@@ -17,7 +17,8 @@ class DataTypes(object):
     DATE = "DATE"
     DATETIME = "DATETIME"
     BOOL = "TINYINT(1)"
-    
+
+@staticmethod
 def connect(_host, _user, _passwd, _db):
     ''' 
     create connection to DBMS.
@@ -37,7 +38,7 @@ def connect(_host, _user, _passwd, _db):
         sys.exit(1)
     return conn
 
-
+@staticmethod
 def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *order, **kwargs):
     '''
     create table.
@@ -74,7 +75,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     print "db-api: ", query
     cursor.execute(query)
     cursor.close()
-    
+
+@staticmethod    
 def insertToTable(conn, table, **kwargs):
     ''' 
     insert to table. 
@@ -97,6 +99,7 @@ def insertToTable(conn, table, **kwargs):
     conn.commit()
     return cursor.rowcount
 
+@staticmethod
 def selectFrom(conn, table, *columns, **kwargs):
     '''
     select from user
@@ -129,7 +132,7 @@ def selectFrom(conn, table, *columns, **kwargs):
     cursor.close()
     return rows
  
- 
+@staticmethod 
 def dropTable(conn, *tables):
     cursor = conn.cursor()
     for table in tables:

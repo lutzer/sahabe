@@ -25,4 +25,9 @@ RESTful:	-CherryPy: A Minimalist Python Web Framework
 		-Flask: microframework for Python based on Werkzeug, 
 		 Jinja 2 and good intentions. It's BSD licensed.
 
- 
+eclipse UML plugin ( papyrus for eclipse-kepler)
+		-update site: http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/kepler
+
+
+
+TODO: ----------------LICENSES-----------
