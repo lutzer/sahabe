@@ -14,7 +14,7 @@ class Link(Tables.Tables):
     """
     - Test: insertion and fetching data from/to table
     - Test: references.
-    - Test: inserting invalid date
+    - Test: inserting invalid modifiedAt
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     """
@@ -23,43 +23,34 @@ class Link(Tables.Tables):
         self.initDBMockContents()
         self.id = self.link.id
         self.userId = self.link.userId
-        self.catId = self.link.catId
         self.url = self.link.url
-        self.name = self.link.name
+        self.title = self.link.title
         self.desc = self.link.description
-        self.date = self.link.createDate
+        self.typeName = self.link.typeName
+        self.modifiedAt = self.link.modifiedAt
         self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertCategory(self.cat.id, self.cat.userId, self.cat.name)
     
     def setUp(self):
         self.connect()
-        self.initDBMockContents()
-        self.id = self.link.id
-        self.userId = self.link.userId
-        self.catId = self.link.catId
-        self.url = self.link.url
-        self.name = self.link.name
-        self.desc = self.link.description
-        self.date = self.link.createDate
-        self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertCategory(self.cat.id, self.cat.userId, self.cat.name)
+        self.__initDependencies()
+        
         
     def tearDown(self):
         self.conn.close()
     
     def testInsertion(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url, self.name,
-                        self.desc, self.date)
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName ,self.modifiedAt)
         
         rows = db.selectFrom(self.conn, "link", "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.user.id, rows[0][1])
-        self.assertEqual(self.cat.id, rows[0][2])
-        self.assertEqual(self.url, rows[0][3])
-        self.assertEqual(self.name, rows[0][4])
-        self.assertEqual(self.desc, rows[0][5])
-        self.assertEqual(self.date, str(rows[0][6]))
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
         
         
     
@@ -68,239 +59,232 @@ class Link(Tables.Tables):
 
     def testInsertInvalidId(self):
         self.assertRaises(DataError, self.insertLink ,
-                         self.id + "e", self.userId, self.catId, self.url,
-                         self.name, self.desc, self.date)
+                         self.id + "e", self.userId, self.url, self.title,
+                         self.desc, self.typeName, self.modifiedAt)
         """ insert too short """
         # FIXME: what's about UUID length constrains? 
         """
         self.assertRaises(DataError, self.insertLink ,
-                         self.id[:-13], self.name, self.email)
+                         self.id[:-13], self.title, self.email)
         """
         
     def testInsertInvalidUserId(self):
-        self.assertRaises(DataError, self.insertLink,
+        self.assertRaisesRegexp(DataError, "Data too long" ,self.insertLink,
                          self.id,
                          mock.uuid() + "e",
-                         self.catId,
                          self.url,
-                         self.name,
+                         self.title,
                          self.desc,
-                         self.date)
-    
-    def testInsertInvalidCategoryId(self):
-        self.assertRaises(DataError, self.insertLink,
-                         self.id,
-                         self.userId,
-                         mock.uuid() + "e",
-                         self.url,
-                         self.name,
-                         self.desc,
-                         self.date)
+                         self.typeName,
+                         self.modifiedAt)
 
     def testInsertInvalidUrl(self):
-        url = mock.randomText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
-        self.assertRaises(DataError, self.insertLink,
+        url = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
-                         self.catId,
                          url,
-                         self.name,
+                         self.title,
                          self.desc,
-                         self.date)
+                         self.typeName,
+                         self.modifiedAt)
         
-    def testInsertInvalidName(self):
-        name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertLink,
+    def testInsertInvalidTitle(self):
+        title = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
-                         self.catId,
                          self.url,
-                         name,
+                         title,
                          self.desc,
-                         self.date)
+                         self.typeName,
+                         self.modifiedAt)
         
     def testInsertInvaliddescription(self):
-        desc = mock.randomText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
-        self.assertRaises(DataError, self.insertLink,
+        desc = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
-                         self.catId,
                          self.url,
-                         self.name,
+                         self.title,
                          desc,
-                         self.date)
+                         self.typeName,
+                         self.modifiedAt)
         
-    def testInsertInvalidCreateDate(self):
-        date = mock.randomText(64)
-        self.assertRaises(OperationalError, self.insertLink,
+    def testInsertInvalidTypeName(self):
+        typeName = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
-                         self.catId,
                          self.url,
-                         self.name,
+                         self.title,
                          self.desc,
-                         date)
+                         typeName,
+                         self.modifiedAt)
+        
+    def testInsertInvalidModifiedAt(self):
+        self.assertRaisesRegexp(OperationalError, "Incorrect datetime value", self.insertLink,
+                         self.id,
+                         self.userId,
+                         self.url,
+                         self.title,
+                         self.desc,
+                         self.typeName,
+                         mock.randomText(64))
        
     
     """ NULL CONSTRAINS TESTS """ 
         
     def testInsertNoId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "link",
+        self.assertRaisesRegexp(OperationalError, "Field 'id' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link",
                           user_id=self.userId,
-                          category_id=self.catId,
                           url=self.url,
-                          name=self.name,
+                          title=self.title,
                           description=self.desc,
-                          create_date=self.date)
+                          type_name=self.typeName,
+                          modified_at=self.modifiedAt)
         
     def testInsertNoUserId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "link",
+        self.assertRaisesRegexp(OperationalError, "Field 'user_id' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link",
                           id=self.id,
-                          category_id=self.catId,
                           url=self.url,
-                          name=self.name,
+                          title=self.title,
                           description=self.desc,
-                          create_date=self.date)
+                          type_name=self.typeName,
+                          modified_at=self.modifiedAt)
                 
-    def testInsertNoCategoryId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "link",
-                          id=self.id,
-                          user_id=self.userId,
-                          url=self.url,
-                          name=self.name,
-                          description=self.desc,
-                          create_date=self.date)
-
     def testInsertNoUrl(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "link",
+        self.assertRaisesRegexp(OperationalError, "Field 'url' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link",
                           id=self.id,
                           user_id=self.userId,
-                          category_id=self.catId,
-                          name=self.name,
+                          title=self.title,
                           description=self.desc,
-                          create_date=self.date)
+                          type_name=self.typeName,
+                          modified_at=self.modifiedAt)
 
-    def testInsertNoName(self):
+    def testInsertNoTitle(self):
         db.insertToTable(self.conn, "link",
                          id=self.id,
                          user_id=self.userId,
-                         category_id=self.catId,
                          url=self.url,
                          description=self.desc,
-                         create_date=self.date)
+                         type_name=self.typeName,
+                         modified_at=self.modifiedAt)
     
     def testInsertNoDescription(self):
         db.insertToTable(self.conn, "link",
                          id=self.id,
                          user_id=self.userId,
-                         category_id=self.catId,
                          url=self.url,
-                         name=self.name,
-                         create_date=self.date)
+                         title=self.title,
+                         type_name=self.typeName,
+                         modified_at=self.modifiedAt)
         
-    def testInsertNoCreateDate(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "link",
+    
+    def testInsertNoTypeName(self):
+        db.insertToTable(self.conn, "link",
                           id=self.id,
                           user_id=self.userId,
-                          category_id=self.catId,
                           url=self.url,
-                          name=self.name,
-                          description=self.desc)
+                          title=self.title,
+                          description=self.desc,
+                          modified_at=self.modifiedAt)
+        
+    def testInsertNoModifiedAt(self):
+        self.assertRaisesRegexp(OperationalError, "Field 'modified_at' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link",
+                          id=self.id,
+                          user_id=self.userId,
+                          url=self.url,
+                          title=self.title,
+                          description=self.desc,
+                          type_name=self.typeName)
 
 
     """ UNIQUE CONSTRAINS TESTS """    
-    # FIXME: what's about UNIQUE constrains?
-        
+
     def testInsertDublicateId(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
         _id = self.id
         self.__initDependencies()
-        self.assertRaises(IntegrityError, self.insertLink,
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertLink,
                           _id,
                           self.userId,
-                          self.catId,
                           self.url,
-                          self.name,
+                          self.title,
                           self.desc,
-                          self.date)
+                          self.typeName,
+                          self.modifiedAt)
         
     def testInsertDublicateUserId(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
         userId = self.userId
         self.__initDependencies()
-        self.assertRaises(IntegrityError, self.insertLink,
-                          self.id,
-                          userId,
-                          self.catId,
-                          self.url,
-                          self.name,
-                          self.desc,
-                          self.date)
-        
-    def testInsertDublicateCatId(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
-        catId = self.catId
-        self.__initDependencies()
-        self.assertRaises(IntegrityError, self.insertLink,
-                          self.id,
-                          self.userId,
-                          catId,
-                          self.url,
-                          self.name,
-                          self.desc,
-                          self.date)
+        self.insertLink(self.id,
+                         userId,
+                         self.url,
+                         self.title,
+                         self.desc,
+                         self.typeName,
+                         self.modifiedAt)
         
     def testInsertDublicateUrl(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
         url = self.url
         self.__initDependencies()
         self.insertLink(self.id,
                         self.userId,
-                        self.catId,
                         url,
-                        self.name,
+                        self.title,
                         self.desc,
-                        self.date)
+                        self.typeName,
+                        self.modifiedAt)
     
-    def testInsertDublicateName(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
-        name = self.name
+    def testInsertDublicateTitle(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
+        title = self.title
         self.__initDependencies()
         self.insertLink(self.id,
                         self.userId,
-                        self.catId,
                         self.url,
-                        name,
+                        title,
                         self.desc,
-                        self.date)
+                        self.typeName,
+                        self.modifiedAt)
         
     def testInsertDublicateDescription(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
         desc = self.desc
         self.__initDependencies()
         self.insertLink(self.id,
                         self.userId,
-                        self.catId,
                         self.url,
-                        self.name,
+                        self.title,
                         desc,
-                        self.date)
+                        self.typeName,
+                        self.modifiedAt)
         
-    def testInsertDublicateCreateDate(self):
-        self.insertLink(self.id, self.userId, self.catId, self.url,
-                        self.name, self.desc, self.date)
-        date = self.date
+    def testInsertDublicateModifiedAt(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc,  self.typeName, self.modifiedAt)
+        modifiedAt = self.modifiedAt
         self.__initDependencies()
         self.insertLink(self.id,
                         self.userId,
-                        self.catId,
                         self.url,
-                        self.name,
+                        self.title,
                         self.desc,
-                        date)
+                        self.typeName,
+                        modifiedAt)

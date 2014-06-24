@@ -15,7 +15,7 @@ dbPw = "sahabe_test"
 database="sahabe_test"
 
 # FIXME: run initialize new tables 
-#sdbinit.run(host, dbUser, dbPw, database)
+# dbinit.run(host, dbUser, dbPw, database)
 
 class Tables(unittest.TestCase):
     
@@ -28,32 +28,43 @@ class Tables(unittest.TestCase):
     def initDBMockContents(self):
         entry = mock()
         self.user = entry.user
-        self.cat = entry.category
         self.link = entry.link
+        self.searchTable = entry.searchTable
         self.tag = entry.tag
-        self.tagMap = entry.tagMap
+        self.linkTagMap = entry.linkTagMap
+        self.group = entry.group
+        self.linkGroupMap = entry.linkGroupMap
+        self.metaData = entry.metaData
         self.pw = entry.pw
     
     def insertUser(self, _id, name, email):
         db.insertToTable(self.conn, "user",
                          id=_id, name=name, email=email)
             
-    def insertCategory(self, _id, userId, name):
-        db.insertToTable(self.conn, "category",
-                         id=_id, user_id=userId, name=name)
+    def insertLink(self, _id, userId, url, title, desc, typeName, modifiedAt):
+        db.insertToTable(self.conn, "link", id=_id, user_id=userId, url=url, title=title,
+                         description=desc, type_name=typeName, modified_at=modifiedAt)
     
-    def insertLink(self, _id, userId, catId, url, name, desc, createDate):
-        db.insertToTable(self.conn, "link", id=_id, user_id=userId,
-                         category_id=catId, url=url, name=name,
-                         description=desc, create_date=createDate)
+    def insertSearchTable(self, userId, linkId, groups, tags, text):
+        db.insertToTable(self.conn, "search_table",
+                         user_id=userId, link_id=linkId, groups=groups, tags=tags, text=text)
     
-    def insertTag(self, _id, userId, name, gTag):
-        db.insertToTable(self.conn, "tag", id=_id, user_id=userId,
-                         name=name, group_tag=str(gTag))
+    def insertTag(self, _id, name):
+        db.insertToTable(self.conn, "tag", id=_id, name=name)
     
-    def insertTagMap(self, linkId, tagId):
-        db.insertToTable(self.conn, "tag_map", link_id=linkId,
-                         tag_id=tagId)
+    def insertLinkTagMap(self, tagId, linkId):
+        db.insertToTable(self.conn, "link_tag_map", tag_id=tagId,
+                         link_id=linkId)
+        
+    def insertGroup(self, _id, name, public):
+        db.insertToTable(self.conn, "group", id=_id, name=name, public=str(public))
+    
+    def insertGroupTagMap(self, groupId, linkId):
+        db.insertToTable(self.conn, "link_group_map", group_id=groupId,
+                         link_id=linkId)
+    
+    def insertMetaData(self, _id, linkId, key, value):
+        db.insertToTable(self.conn, id=_id, link_id=linkId, v_key=key, value=value)
         
     def insertPW(self, userId, value, salt):
         db.insertToTable(self.conn, "pw_hash", user_id=userId,
@@ -77,13 +88,16 @@ class Tables(unittest.TestCase):
         self.conn.close()
 
     def testMockReferences(self):
-        self.assertEqual(self.user.id, self.link.userId)
-        self.assertEqual(self.user.id, self.tag.userId)
-        self.assertEqual(self.user.id, self.cat.userId)
-        self.assertEqual(self.user.id, self.pw.userId)
-        self.assertEqual(self.cat.id, self.link.catId)
-        self.assertEqual(self.link.id, self.tagMap.linkId)
-        self.assertEqual(self.tag.id, self.tagMap.tagId)
+        self.assertEqual(self.link.userId, self.user.id)
+        self.assertEqual(self.searchTable.userId, self.user.id)
+        self.assertEqual(self.searchTable.linkId, self.link.id)
+        self.assertEqual(self.linkTagMap.tagId, self.tag.id)
+        self.assertEqual(self.linkTagMap.linkId, self.link.id)
+        self.assertEqual(self.linkGroupMap.groupId, self.group.id)
+        self.assertEqual(self.linkGroupMap.linkId, self.link.id)
+        self.assertEqual(self.metaData.linkId, self.link.id)
+        self.assertEqual(self.pw.userId, self.user.id)
+
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'Test.testName']

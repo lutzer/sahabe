@@ -4,11 +4,6 @@ Created on Jun 15, 2014
 @author: maan al balkhi
 '''
 
-'''
-Created on Jun 14, 2014
-
-@author: maan al balkhi
-'''
 import Tables
 import test.MockModule as mock
 import impl.DBApiModule as db
@@ -27,76 +22,56 @@ class Tag(Tables.Tables):
     def __initDependencies(self):
         self.initDBMockContents()
         self.id = self.tag.id
-        self.userId = self.tag.userId
         self.name = self.tag.name
-        self.groupTag = self.tag.groupTag
-        self.insertUser(self.user.id, self.user.name, self.user.email)
     
     def setUp(self):
         self.connect()
-        self.initDBMockContents()
-        self.id = self.tag.id
-        self.userId = self.tag.userId
-        self.name = self.tag.name
-        self.groupTag = self.tag.groupTag
-        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.__initDependencies()
         
     def tearDown(self):
         self.conn.close()
     
     def testInsertion(self):
-        self.insertTag(self.id, self.userId, self.name, self.groupTag)
+        self.insertTag(self.id, self.name)
         
         rows = db.selectFrom(self.conn, "tag", "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
-        self.assertEqual(self.userId, rows[0][1])
-        self.assertEqual(self.name, rows[0][2])
-        self.assertEqual(self.groupTag, str(rows[0][3]))
+        self.assertEqual(self.name, rows[0][1])
 
     
     """ DATA TYPE TESTS """
     
     def testInsertInvalidId(self):
-        self.assertRaises(DataError, self.insertTag,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertTag,
                           self.id + "e",
-                          self.userId,
-                          self.name,
-                          self.groupTag)
+                          self.name)
         """ insert too short """
         # FIXME: what's about UUID length constrains? 
         """
         self.assertRaises(DataError, self.insertTag ,
                          self.id[:-13], self.name, self.email)
         """
-        
-    def testInsertInvalidUserId(self):
-        self.assertRaises(DataError, self.insertTag,
-                          self.id,
-                          self.userId + "e",
-                          self.name,
-                          self.groupTag)
             
     def testInsertInvalidName(self):
         name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertTag,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertTag,
                           self.id,
-                          self.userId,
-                          name,
-                          self.groupTag)
+                          name)
     
+    """
     def testInsertInvalidGroubTag_char(self):
         #FIXME: for TINYINT every short number that's greater than 0 has the value true  
         self.assertRaises(OperationalError, self.insertTag,
                           self.id,
                           self.userId,
-                          self.name,
+                          self.title,
                           "e" + self.groupTag)
         
         self.assertRaises(OperationalError, self.insertTag,
                           self.id,
                           self.userId,
-                          self.name,
+                          self.title,
                           self.groupTag + "e")
 
         def testInsertInvalidGroubTag_bigNum(self):
@@ -104,82 +79,40 @@ class Tag(Tables.Tables):
             self.assertRaises(DataError, self.insertTag,
                               self.id,
                               self.userId,
-                              self.name,
+                              self.title,
                               self.groupTag+"25")
-    
+    """                          
+
+
     """ NULL CONSTRAINS TESTS """    
         
     def testInsertNoId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "tag",
-                          user_id=self.userId,
-                          name=self.name,
-                          groub_tag=self.groupTag)
+        self.assertRaisesRegexp(OperationalError, "Field 'id' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "tag",
+                          name=self.name)
     
-    def testInsertNoUserId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "tag",
-                          id=self.id,
-                          name=self.name,
-                          groub_tag=self.groupTag)   
+     
     
     def testInsertNoName(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "tag",
-                          id=self.id,
-                          user_id=self.userId,
-                          groub_tag=self.groupTag)
-        
-    def testInsertNoGroupTag(self):
-        db.insertToTable(self.conn, "tag",
-                        id=self.id,
-                        user_id=self.userId,
-                        name=self.name)
-        
+        self.assertRaisesRegexp(OperationalError, "Field 'name' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "tag",
+                          id=self.id)
+
     
     """ UNIQUE CONSTRAINS TESTS """
-    # FIXME: what's about UNIQUE constrains?
     def testInsertDublicateId(self):
-        self.insertTag(self.id, self.userId, self.name, self.groupTag)
+        self.insertTag(self.id, self.name)
         _id = self.id
         self.__initDependencies()
-        self.assertRaises(IntegrityError, self.insertTag,
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertTag,
                           _id,
-                          self.userId,
-                          self.name,
-                          self.groupTag)
-        
-    def testInsertDublicateUserId(self):
-        self.insertTag(self.id, self.userId, self.name, self.groupTag)
-        userId = self.userId
-        self.__initDependencies()
-        self.assertRaises(IntegrityError, self.insertTag,
-                          self.id,
-                          userId,
-                          self.name,
-                          self.groupTag)
+                          self.name)
         
     def testInsertDublicateName(self):
-        self.insertTag(self.id, self.userId, self.name, self.groupTag)
+        self.insertTag(self.id, self.name)
         name = self.name
         self.__initDependencies()
         self.insertTag(self.id,
-                       self.userId,
-                       name,
-                       self.groupTag)
-                
-    def testInsertDublicateGroupTag(self):
-        self.insertTag(self.id, self.userId, self.name, self.groupTag)
-        groupTag = self.groupTag
-        self.__initDependencies()
-        self.insertTag(self.id,
-                       self.userId,
-                       self.name,
-                       groupTag)
-        
-   
-        
-        
-        
-        
-        
-        
-
-
+                       name)

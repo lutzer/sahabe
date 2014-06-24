@@ -41,7 +41,7 @@ class User(Tables.Tables):
     """ DATA TYPE TESTS """
     
     def testInsertInvalidId(self):
-        self.assertRaises(DataError, self.insertUser,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertUser,
                           self.id + "e",
                           self.name,
                           self.email)
@@ -54,14 +54,14 @@ class User(Tables.Tables):
         
     def testInsertInvalidName(self):
         name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertUser,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertUser,
                           self.id,
                           name,
                           self.email)
     
     def testInsertInvalidEmail(self):
         email = mock.randomEmail(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaises(DataError, self.insertUser,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertUser,
                           self.id,
                           self.name,
                           email)
@@ -71,17 +71,23 @@ class User(Tables.Tables):
     """ NULL CONSTRAINS TESTS """    
         
     def testInsertNoId(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+        self.assertRaisesRegexp(OperationalError, "Field 'id' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "user",
                           name=self.name,
                           email=self.email)
         
     def testInsertNoName(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+        self.assertRaisesRegexp(OperationalError, "Field 'name' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "user",
                           id=self.id,
                           email=self.email)
         
     def testInsertNoEmail(self):
-        self.assertRaises(OperationalError, db.insertToTable , self.conn, "user",
+        self.assertRaisesRegexp(OperationalError, "Field 'email' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "user",
                           id=self.id,
                           name=self.name)
         
@@ -90,21 +96,21 @@ class User(Tables.Tables):
         
     def testInsertDublicateId(self):
         self.insertUser(self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, self.insertUser,
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertUser,
                           self.id,
                           mock.randomName(),
                           mock.randomEmail())
         
     def testInsertDublicateName(self):
         self.insertUser(self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, self.insertUser,
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertUser,
                           mock.uuid(),
                           self.name,
                           mock.randomEmail())
         
     def testInsertDublicateEmail(self):
         self.insertUser(self.id, self.name, self.email)
-        self.assertRaises(IntegrityError, self.insertUser,
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertUser,
                           mock.uuid(),
                           mock.randomName(),
                           self.email)
