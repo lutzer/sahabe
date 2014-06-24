@@ -14,9 +14,15 @@ DB:		-MySQL is provided from Oracle under dual licenses system:
 			-Raik and Elrang: open source database that illustrates how to build large scale 
 			 systems using Erlang/OTP
 
+SQLApi:		-SQLAlchemy: SQLAlchemy is the Python SQL toolkit and Object Relational Mapper, 
+		 can be used in Python3
+
+Implementation:	-Python3
 
 RESTful:	-CherryPy: A Minimalist Python Web Framework	
 		-web.py: web framework for Python that is as simple as it is powerful.
 		-Bottle: simple and lightweight WSGI micro web-framework for Python
 		-Flask: microframework for Python based on Werkzeug, 
-		 Jinja 2 and good intentions. It's BSD licensed. 
+		 Jinja 2 and good intentions. It's BSD licensed.
+
+ 
