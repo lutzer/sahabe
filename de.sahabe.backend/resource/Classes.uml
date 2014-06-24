@@ -111,7 +111,7 @@
       </defaultValue>
     </ownedAttribute>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_TYfBIPu9EeONV6aU8dFjOA" name="Class1">
+  <packagedElement xmi:type="uml:Class" xmi:id="_TYfBIPu9EeONV6aU8dFjOA" name="link">
     <ownedAttribute xmi:type="uml:Property" xmi:id="_VPlFoPu9EeONV6aU8dFjOA" name="id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" aggregation="composite" association="_rDX2MPvKEeONV6aU8dFjOA">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_XBCcMPu9EeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_XBDDQPu9EeONV6aU8dFjOA" value="1"/>
@@ -178,7 +178,7 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_fY4LsvvPEeONV6aU8dFjOA" value="1"/>
     </ownedAttribute>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_2wYmAPvBEeONV6aU8dFjOA" name="group">
+  <packagedElement xmi:type="uml:Class" xmi:id="_2wYmAPvBEeONV6aU8dFjOA" name="link_group">
     <ownedAttribute xmi:type="uml:Property" xmi:id="_6o-BIPvBEeONV6aU8dFjOA" name="id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_63AdIPvBEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_63FVoPvBEeONV6aU8dFjOA" value="1"/>
@@ -219,7 +219,7 @@
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_cgPoIPvDEeONV6aU8dFjOA" name="key" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_cgPoIPvDEeONV6aU8dFjOA" name="v_key" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cu4hEPvDEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cu5IIPvDEeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_cu69UPvDEeONV6aU8dFjOA">
@@ -233,14 +233,14 @@
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_R9g28PvIEeONV6aU8dFjOA" name="link_group_map">
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_TtxToPvIEeONV6aU8dFjOA" name="link_id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_TtxToPvIEeONV6aU8dFjOA" name="group_id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ULM2gPvIEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ULOEoPvIEeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_ULPSwPvIEeONV6aU8dFjOA">
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_bpbioPvIEeONV6aU8dFjOA" name="group_id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_bpbioPvIEeONV6aU8dFjOA" name="link_id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_b4WIYPvIEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_b4XWgPvIEeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_b4YkoPvIEeONV6aU8dFjOA">
