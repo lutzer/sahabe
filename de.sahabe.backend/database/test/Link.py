@@ -17,6 +17,7 @@ class Link(Tables.Tables):
     - Test: inserting invalid modifiedAt
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
+    - Test: FOREIGN KEY CONSTRAINS
     """
     
     def __initDependencies(self):
@@ -288,3 +289,19 @@ class Link(Tables.Tables):
                         self.desc,
                         self.typeName,
                         modifiedAt)
+        
+        
+    """ FOREIGN KEY CONSTRAINS TESTS """
+    
+    def testInsertNonExistingUserId(self):
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLink,
+                                self.id,
+                                mock.uuid(),
+                                self.url,
+                                self.title,
+                                self.desc,
+                                self.typeName,
+                                self.modifiedAt)
+        
+    #TODO: implement update user.id tests
+    #TODO: implement drop user.id test

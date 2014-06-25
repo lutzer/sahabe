@@ -16,6 +16,7 @@ class SearchTable(Tables.Tables):
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
+    - Test: FOREIGN KEY CONSTRAINS
     """
     
     def __initDependencies(self):
@@ -185,17 +186,39 @@ class SearchTable(Tables.Tables):
         tags=self.tags
         self.__initDependencies()
         self.insertSearchTable(self.userId,
-                            self.linkId,
-                            self.groups,
-                            tags,
-                            self.text)
+                               self.linkId,
+                               self.groups,
+                               tags,
+                               self.text)
     
     def testInsertDoublicateText(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
         text=self.text
         self.__initDependencies()
         self.insertSearchTable(self.userId,
-                            self.linkId,
-                            self.groups,
-                            self.tags,
-                            text)
+                               self.linkId,
+                               self.groups,
+                               self.tags,
+                               text)
+        
+        
+    """ FOREIGN KEY CONSTRAINS TESTS """
+    
+    def testInsertNonExistingUserId(self):
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertSearchTable,
+                                mock.uuid(),
+                                self.linkId,
+                                self.groups,
+                                self.tags,
+                                self.text)
+        
+    def testInsertNonExistingLinkId(self):
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertSearchTable,
+                                self.userId,
+                                mock.uuid(),
+                                self.groups,
+                                self.tags,
+                                self.text)
+        
+    #TODO: implement update user.id tests
+    #TODO: implement drop user.id test
