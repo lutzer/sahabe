@@ -1,7 +1,7 @@
 '''
 Created on Jun 15, 2014
 
-@author: maan al balkhi
+@author: Maan Al Balkhi
 '''
 
 import Tables

@@ -1,7 +1,7 @@
 '''
 Created on Jun 14, 2014
 
-@author: maan al balkhi
+@author: Maan Al Balkhi
 '''
 import Tables
 import test.MockModule as mock

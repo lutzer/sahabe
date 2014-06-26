@@ -1,7 +1,7 @@
 '''
 Created on Jun 12, 2014
 
-@author: maan al balkhi
+@author: Maan Al Balkhi
 '''
 import DBApiModule
 from DBApiModule import DataTypes as dt

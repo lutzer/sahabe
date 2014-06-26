@@ -1,7 +1,7 @@
 '''
 Created on Jun 11, 2014
 
-@author: maan al balkhi
+@author: Maan Al Balkhi
 '''
 import sys
 import MySQLdb

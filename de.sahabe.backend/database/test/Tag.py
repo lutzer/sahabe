@@ -59,30 +59,6 @@ class Tag(Tables.Tables):
                           self.id,
                           name)
     
-    """
-    def testInsertInvalidGroubTag_char(self):
-        #FIXME: for TINYINT every short number that's greater than 0 has the value true  
-        self.assertRaises(OperationalError, self.insertTag,
-                          self.id,
-                          self.userId,
-                          self.title,
-                          "e" + self.groupTag)
-        
-        self.assertRaises(OperationalError, self.insertTag,
-                          self.id,
-                          self.userId,
-                          self.title,
-                          self.groupTag + "e")
-
-        def testInsertInvalidGroubTag_bigNum(self):
-            #FIXME: for TINYINT every short number that's greater than 0 has the value true  
-            self.assertRaises(DataError, self.insertTag,
-                              self.id,
-                              self.userId,
-                              self.title,
-                              self.groupTag+"25")
-    """                          
-
 
     """ NULL CONSTRAINS TESTS """    
         

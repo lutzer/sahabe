@@ -1,7 +1,7 @@
 '''
 Created on Jun 13, 2014
 
-@author: maan al balkhi
+@author: Maan Al Balkhi
 '''
 import string
 import random

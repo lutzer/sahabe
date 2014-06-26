@@ -39,7 +39,7 @@ class PassWord(Tables.Tables):
         
         rows = db.selectFrom(self.conn, "pw_hash", "*", user_id=self.userId)
         
-        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][0])
         self.assertEqual(self.value, rows[0][1])
         self.assertEqual(self.salt, rows[0][2])
     
