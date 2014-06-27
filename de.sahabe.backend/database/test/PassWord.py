@@ -134,4 +134,6 @@ class PassWord(Tables.Tables):
     #TODO: implement update user.id tests
     #TODO: implement drop user.id test
     
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test
     

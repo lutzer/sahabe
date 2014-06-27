@@ -119,3 +119,6 @@ class LinkGroupMap(Tables.Tables):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertGroupTagMap,
                                 self.groupId,
                                 mock.uuid())
+    
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test

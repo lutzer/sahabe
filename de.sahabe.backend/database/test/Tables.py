@@ -15,7 +15,7 @@ dbPw = "sahabe_test"
 database="sahabe_test"
 
 # FIXME: run initialize new tables 
-# dbinit.run(host, dbUser, dbPw, database)
+#dbinit.run(host, dbUser, dbPw, database)
 
 class Tables(unittest.TestCase):
     
@@ -63,8 +63,8 @@ class Tables(unittest.TestCase):
         db.insertToTable(self.conn, "link_group_map", group_id=groupId,
                          link_id=linkId)
     
-    def insertMetaData(self, _id, linkId, key, value):
-        db.insertToTable(self.conn, id=_id, link_id=linkId, v_key=key, value=value)
+    def insertMetaData(self, linkId, key, value):
+        db.insertToTable(self.conn, "meta_data",link_id=linkId, l_key=key, value=value)
         
     def insertPW(self, userId, value, salt):
         db.insertToTable(self.conn, "pw_hash", user_id=userId,

@@ -66,6 +66,7 @@ class SearchTable(Tables.Tables):
                          self.groups,
                          self.tags,
                          self.text)
+        
     def testInsertInvalidGroups(self):
         groups = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
@@ -137,7 +138,6 @@ class SearchTable(Tables.Tables):
     
     
     """ UNIQUE CONSTRAINS TESTS """
-    # FIXME: what's about UNIQUE constrains? 
         
     def testInsertDoublicateId(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
@@ -153,11 +153,13 @@ class SearchTable(Tables.Tables):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
         linkId=self.linkId
         self.__initDependencies()
-        self.insertSearchTable(self.userId,
-                               linkId,
-                               self.groups,
-                               self.tags,
-                               self.text)
+        # FIXME: a link belongs only to one user. insertion should throw ERROR
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertSearchTable,
+                                self.userId,
+                                linkId,
+                                self.groups,
+                                self.tags,
+                                self.text)
         
     def testInsertDoublicatUserAndLinkId(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
@@ -219,6 +221,13 @@ class SearchTable(Tables.Tables):
                                 self.groups,
                                 self.tags,
                                 self.text)
-        
+    
     #TODO: implement update user.id tests
     #TODO: implement drop user.id test
+    #TODO: implement update link.id tests
+    #TODO: implement drop link.id test
+    
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test    
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test

@@ -119,3 +119,11 @@ class LinkTagMap(Tables.Tables):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLinkTagMap,
                                 self.tagId,
                                 mock.uuid())
+    
+    #TODO: implement update tag.id tests
+    #TODO: implement drop tag.id test    
+    #TODO: implement update link.id tests
+    #TODO: implement drop link.id test
+    
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test

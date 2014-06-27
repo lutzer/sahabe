@@ -115,10 +115,5 @@ class User(Tables.Tables):
                           mock.randomName(),
                           self.email)
         
-   
-        
-        
-        
-        
-        
-        
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test

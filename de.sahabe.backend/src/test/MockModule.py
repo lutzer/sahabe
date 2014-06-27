@@ -122,12 +122,10 @@ class DBMock():
             self.linkId = link.id
             
     class MetaData():
-        id = ""
         linkId = ""
         key = ""
         value = ""       
         def __init__(self, link):   
-            self.id = uuid()
             self.linkId = link.id
             self.key = randomName()
             self.value = randomName()

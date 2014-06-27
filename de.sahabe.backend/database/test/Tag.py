@@ -92,3 +92,6 @@ class Tag(Tables.Tables):
         self.__initDependencies()
         self.insertTag(self.id,
                        name)
+
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test

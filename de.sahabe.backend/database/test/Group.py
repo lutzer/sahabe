@@ -141,3 +141,6 @@ class Group(Tables.Tables):
         self.insertGroup(self.id,
                          self.name,
                          public)
+    
+    #TODO: implement update entries tests
+    #TODO: implement drop entries test
