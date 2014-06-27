@@ -57,7 +57,7 @@ class Tables(unittest.TestCase):
                          link_id=linkId)
         
     def insertGroup(self, _id, name, public):
-        db.insertToTable(self.conn, "group", id=_id, name=name, public=str(public))
+        db.insertToTable(self.conn, "link_group", id=_id, name=name, public=str(public))
     
     def insertGroupTagMap(self, groupId, linkId):
         db.insertToTable(self.conn, "link_group_map", group_id=groupId,

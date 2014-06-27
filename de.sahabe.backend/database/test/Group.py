@@ -39,13 +39,13 @@ class Group(Tables.Tables):
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])
-        self.assertEqual(self.public, rows[0][2])
+        self.assertEqual(int(self.public), rows[0][2])
     
     """ DATA TYPE TESTS """
     
-    def testInsertInvalidUserId(self):
+    def testInsertInvalidId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertGroup,
-                          self.userId + "e",
+                          self.id + "e",
                           self.name,
                           self.public)
         """ insert too short """
@@ -62,28 +62,21 @@ class Group(Tables.Tables):
                           name,
                           self.public)
         
-    def testInsertInvalidPublic(self):
-        salt = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
-        self.assertRaisesRegexp(DataError, "Data too long", self.insertGroup,
-                          self.userId,
-                          self.value,
-                          salt)
-        
-    def testInsertInvalidGroubTag_char(self):
+    def testInsertInvalidPublic_char(self):
         self.assertRaises(OperationalError, self.insertGroup,
                           self.id,
                           self.name,
-                          "e")
+                          'e')
         self.assertRaises(OperationalError, self.insertGroup,
                           self.id,
                           self.name,
-                          "e" + self.public)
+                          'e' + self.public)
         self.assertRaises(OperationalError, self.insertGroup,
                           self.id,
                           self.name,
-                          self.public + "e")
+                          self.public + 'e')
 
-    def testInsertInvalidGroubTag_bigNum(self):
+    def testInsertInvalidPublic_bigNum(self):
         #FIXME: for TINYINT every short number that's greater than 0 has the value true  
         self.assertRaises(DataError, self.insertGroup,
                           self.id,
@@ -109,12 +102,16 @@ class Group(Tables.Tables):
                           public=self.public)
     
     def testInsertNoName(self):
-        db.insertToTable(self.conn, "link_group",
+        self.assertRaisesRegexp(OperationalError, "Field 'name' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link_group",
                           id=self.id,
                           public=self.public)
         
     def testInsertNoPublic(self):
-        db.insertToTable(self.conn, "link_group",
+        self.assertRaisesRegexp(OperationalError, "Field 'public' doesn't have a default value",
+                          db.insertToTable,
+                          self.conn, "link_group",
                          id=self.id,
                          name=self.name)
     

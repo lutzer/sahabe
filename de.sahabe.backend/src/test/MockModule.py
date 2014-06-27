@@ -108,11 +108,11 @@ class DBMock():
     class Group():
         id = ""
         name = ""
-        public = 0
+        public = "0"
         def __init__(self):
             self.id = uuid()
             self.name = randomName()      
-            self.public = 0
+            self.public = "0"
             
     class LinkGroupMap():
         groupId = ""

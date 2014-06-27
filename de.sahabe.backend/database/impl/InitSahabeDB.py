@@ -79,7 +79,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"id", "name", "public"},
                             {},
                             "id", "name", "public",
-                            id=dt.UUID, name=dt.VCHAR256, public=dt.BOOL)
+                            id=dt.UUID, name=dt.VCHAR64, public=dt.BOOL)
     
     """ link_group_map """
     DBApiModule.createTable(conn,

@@ -40,7 +40,7 @@ class SearchTable(Tables.Tables):
 
     def testInsertion(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
-        rows = db.selectFrom(self.conn, "search_table", "*", user_id=self.userId)
+        rows = db.selectFrom(self.conn, "search_table", "*", user_id=self.userId, link_id=self.linkId)
 
         self.assertEqual(self.user.id, rows[0][0])
         self.assertEqual(self.linkId, rows[0][1])

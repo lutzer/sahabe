@@ -135,6 +135,7 @@ def dropTable(conn, *tables):
         cursor.execute("DROP TABLE IF EXISTS " + table)
      
      
-     
+#TODO: implement update value in table
+#TODO:implement drop value from table     
      
 
