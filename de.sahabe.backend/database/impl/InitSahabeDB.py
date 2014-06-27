@@ -94,13 +94,12 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     """ meta_data """ 
     DBApiModule.createTable(conn,
                             "meta_data",
-                            "id",
+                            "link_id, l_key, value",
                             {},
-                            {"link_id", "v_key", "value"},
+                            {"link_id", "l_key", "value"},
                             {"link_id":"link.id"},
-                            "id", "link_id", "v_key", "value",
-                            id=dt.UUID, link_id=dt.UUID,
-                            v_key=dt.VCHAR64, value=dt.VCHAR64)
+                            "link_id", "l_key", "value",
+                            link_id=dt.UUID, l_key=dt.VCHAR64, value=dt.VCHAR64)
     
     """ pw_hash """
     DBApiModule.createTable(conn,
