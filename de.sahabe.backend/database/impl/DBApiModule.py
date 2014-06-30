@@ -128,14 +128,39 @@ def selectFrom(conn, table, *columns, **kwargs):
         rows.append(row)
     cursor.close()
     return rows
- 
-def dropTable(conn, *tables):
-    cursor = conn.cursor()
-    for table in tables:
-        cursor.execute("DROP TABLE IF EXISTS " + table)
-     
-     
-#TODO: implement update value in table
-#TODO:implement drop value from table     
-     
 
+def updateInTable(conn, colValueMap, *inTables, **kwargs):
+    '''
+    select from user
+    @param conn: MySQLbd connection object
+    @param *tables: <tables> tables to update   
+    @param **kwargs: <column>:<value> includes where statement. 
+        examples: column='value' or table1.column=table2.column or table.column='value'
+    '''
+    cursor = conn.cursor()
+    
+    columnValues = ""
+    for key, value in colValueMap.items():
+        columnValues += key + " = '" + value + "', "
+    columnValues = columnValues[:-2]
+    
+    tables = ""
+    for table in inTables:
+        tables += table + ", "
+    tables = tables[:-2]
+    
+    where = ""
+    if kwargs is not None:
+        where = " WHERE "
+        for col, val in kwargs.items():
+            where += col + "= '" + val + "' AND "
+        where = where[:-4]   
+    
+    query = "UPDATE " + tables + " SET " + columnValues + where
+    cursor.execute(query)
+    cursor.close()
+    # TODO: should commit() be moved to a higher abstraction level?
+    conn.commit()
+    return cursor.rowcount
+     
+#TODO:implement drop value from table     
