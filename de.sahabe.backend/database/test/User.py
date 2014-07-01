@@ -44,8 +44,87 @@ class User(Tables.Tables):
 
 
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-  
+
+    def testId(self):
+        self.insertUser(self.id, self.name, self.email)
+        _id = mock.uuid()
+        db.updateInTable(self.conn, {"id":_id}, "user", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"user"}, "*", id=_id)
+        
+        self.assertEqual(_id, rows[0][0])
+        self.assertEqual(self.name, rows[0][1])
+        self.assertEqual(self.email, rows[0][2])
+        
+    def testName(self):
+        self.insertUser(self.id, self.name, self.email)
+        name = mock.randomName()
+        db.updateInTable(self.conn, {"name":name}, "user", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"user"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(name, rows[0][1])
+        self.assertEqual(self.email, rows[0][2])
+        
+    def testEmail(self):
+        self.insertUser(self.id, self.name, self.email)
+        email = mock.randomName()
+        db.updateInTable(self.conn, {"email":email}, "user", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"user"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.name, rows[0][1])
+        self.assertEqual(email, rows[0][2])
+        
+    def testIdReferencedToLink(self):
+        self.insertUser(self.id, self.name, self.email)
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "user",
+                                id=self.id)
+        
+    def testIdReferencedToSearchTable(self):
+        self.insertUser(self.id, self.name, self.email)
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertSearchTable(self.searchTable.userId,
+                               self.searchTable.linkId,
+                               self.searchTable.groups,
+                               self.searchTable.tags,
+                               self.searchTable.text)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "user",
+                                id=self.id)
+        
+    def testIdReferencedToPW(self):
+        self.insertUser(self.id, self.name, self.email)
+        self.insertPW(self.pw.userId, self.pw.value, self.pw.salt)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "user",
+                                id=self.id)
+
   
     ''' DROP TESTS '''
         
@@ -103,7 +182,7 @@ class User(Tables.Tables):
         
         db.deleteFromTable(self.conn, "user", id=self.id)
         row = db.selectFrom(self.conn, {"tag"}, "*" , id=self.tag.id)
-        #FIXME: when a user is deleted all of his tags must be removed 
+        # FIXME: when a user is deleted all of his tags must be removed 
         self.assertEqual(row, [])
         
     def testDropGroupByUser(self):
@@ -112,7 +191,7 @@ class User(Tables.Tables):
         
         db.deleteFromTable(self.conn, "user", id=self.id)
         row = db.selectFrom(self.conn, {"link_group"}, "*" , id=self.group.id)
-        #FIXME: when a user is deleted all of his groups must be removed
+        # FIXME: when a user is deleted all of his groups must be removed
         self.assertEqual(row, [])
         
     def testDropLinkTagMapByUser(self):

@@ -45,8 +45,44 @@ class Tag(Tables.Tables):
         
         
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    
+        
+    def testUpdateId(self):
+        self.insertTag(self.id, self.name)
+        _id = mock.uuid()
+        db.updateInTable(self.conn, {"id":_id}, "tag", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"tag"}, "*", id=_id)
+        
+        self.assertEqual(_id, rows[0][0])
+        self.assertEqual(self.name, rows[0][1])
+        
+    def testUpdateName(self):
+        self.insertTag(self.id, self.name)
+        name = mock.randomName()
+        db.updateInTable(self.conn, {"name":name}, "tag", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"tag"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(name, rows[0][1])
+        
+    def testUpdateTagIdReferenceToLinkTagMap(self):
+        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertTag(self.id, self.name)
+        self.insertLinkTagMap(self.linkTagMap.tagId, self.linkTagMap.linkId)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "tag",
+                                id=self.id)
         
     ''' DROP TESTS '''
         

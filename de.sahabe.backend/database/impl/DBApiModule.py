@@ -106,7 +106,7 @@ def selectFrom(conn, selectedTables, *columns, **kwargs):
     @param *columns: <column> ordered set of columns  
     @param **kwargs: <column>:<value> includes where statement
         to select columns from multiple tables use the conventions __IN__,
-        examples: column__IN__table   
+        example: column__IN__table   
     '''
     cursor = conn.cursor()
     queryColumns = ""    
@@ -149,9 +149,10 @@ def updateInTable(conn, colValueMap, *inTables, **kwargs):
     '''
     select from user
     @param conn: MySQLbd connection object
-    @param *tables: <tables> tables to update   
+    @param colValueMap: {column:value}. SQL query: ..SET column='value' WHERE.... 
+    @param *inTables: <tables> tables to update   
     @param **kwargs: <column>:<value> includes where statement. 
-        examples: column='value' or table1.column=table2.column or table.column='value'
+        SQL query: column='value' or table1.column=table2.column or table.column='value'
     '''
     cursor = conn.cursor()
     
@@ -184,7 +185,7 @@ def deleteFromTable(conn, table, *referencedTables,**kwargs):
     select from user
     @param conn: MySQLbd connection object
     @param table: String -table name
-    @param *referencedTables: <tables> for multiple deletes example: DELETE table1, table2 FROM table1 WHERE... 
+    @param *referencedTables: <tables> for multiple deletes. SQL query: DELETE table1, table2 FROM table1 WHERE... 
     @param **kwargs: <column>:<value> includes where statement
         examples: column='value' or table1.column=table2.column or table.column='value'
     '''

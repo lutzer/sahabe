@@ -54,9 +54,93 @@ class SearchTable(Tables.Tables):
     
     
     ''' UPDATE TESTS '''
-    #TODO: implement update entries tests
-    #TODO: implement update user.id tests
-    #TODO: implement update link.id tests
+    
+    def testUpdateToExistingUserId(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        searchTable=self.searchTable
+        self.__initDependencies()
+        db.updateInTable(self.conn, {"user_id":self.userId}, "search_table", user_id=searchTable.userId)
+        
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
+
+        self.assertEqual(self.user.id, rows[0][0])
+        self.assertEqual(searchTable.linkId, rows[0][1])
+        self.assertEqual(searchTable.groups, rows[0][2])
+        self.assertEqual(searchTable.tags, rows[0][3])
+        self.assertEqual(searchTable.text, rows[0][4])
+      
+    def testUpdateToNonExistingUserId(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        userId=mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails",db.updateInTable,
+                                self.conn,
+                                {"user_id":userId},
+                                "search_table",
+                                user_id=self.userId)
+        
+        
+    def testUpdateToExistingLinkId(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        searchTable=self.searchTable
+        self.__initDependencies()
+        db.updateInTable(self.conn, {"link_id":self.linkId}, "search_table", user_id=searchTable.userId)
+        
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=searchTable.userId)
+
+        self.assertEqual(searchTable.userId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])
+        self.assertEqual(searchTable.groups, rows[0][2])
+        self.assertEqual(searchTable.tags, rows[0][3])
+        self.assertEqual(searchTable.text, rows[0][4])
+          
+    def testUpdateToNonExistingLinkId(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        linkId=mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"link_id":linkId},
+                                "search_table",
+                                user_id=self.userId)
+        
+    def testUpdateGroups(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        groups=mock.randomName()
+        db.updateInTable(self.conn, {"groups":groups}, "search_table", user_id=self.userId)
+        
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
+
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])
+        self.assertEqual(groups, rows[0][2])
+        self.assertEqual(self.tags, rows[0][3])
+        self.assertEqual(self.text, rows[0][4])
+        
+    def testUpdateTags(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        tags=mock.randomName()
+        db.updateInTable(self.conn, {"tags":tags}, "search_table", user_id=self.userId)
+        
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
+
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])
+        self.assertEqual(self.groups, rows[0][2])
+        self.assertEqual(tags, rows[0][3])
+        self.assertEqual(self.text, rows[0][4])
+        
+    def testUpdateText(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        text=mock.randomName()
+        db.updateInTable(self.conn, {"text":text}, "search_table", user_id=self.userId)
+        
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
+
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])
+        self.assertEqual(self.groups, rows[0][2])
+        self.assertEqual(self.tags, rows[0][3])
+        self.assertEqual(text, rows[0][4])
+
     
     ''' DROP TESTS '''
         

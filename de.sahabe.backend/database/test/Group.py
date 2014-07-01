@@ -48,8 +48,57 @@ class Group(Tables.Tables):
         
     
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    
+        
+    def testUpdateId(self):
+        self.insertGroup(self.id, self.name, self.public)
+        _id = mock.uuid()
+        db.updateInTable(self.conn, {"id":_id}, "link_group", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"link_group"}, "*", id=_id)
+        
+        self.assertEqual(_id, rows[0][0])
+        self.assertEqual(self.name, rows[0][1])
+        self.assertEqual(int(self.public), rows[0][2])
+        
+    def testUpdateName(self):
+        self.insertGroup(self.id, self.name, self.public)
+        name = mock.randomName()
+        db.updateInTable(self.conn, {"name":name}, "link_group", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"link_group"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(name, rows[0][1])
+        self.assertEqual(int(self.public), rows[0][2])
+        
+    def testUpdatePublic(self):
+        self.insertGroup(self.id, self.name, self.public)
+        db.updateInTable(self.conn, {"public":"1"}, "link_group", id=self.id)
+        
+        rows = db.selectFrom(self.conn, {"link_group"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.name, rows[0][1])
+        self.assertEqual(1, rows[0][2])
+        
+    def testUpdateIdReferencedToLinkGroupMap(self):
+        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertGroup(self.id, self.name, self.public)
+        self.insertLinkGroupMap(self.linkGroupMap.groupId, self.linkGroupMap.linkId)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "link_group",
+                                id=self.id)
+
         
     ''' DROP TESTS '''
         

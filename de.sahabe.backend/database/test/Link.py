@@ -60,9 +60,194 @@ class Link(Tables.Tables):
     
     
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    # TODO: implement update user.id tests
     
+    def testUpdateId(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        _id = mock.uuid()
+        db.updateInTable(self.conn, {"id":_id}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=_id)
+        
+        self.assertEqual(_id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
+
+    def testUpdateToExistingUserId(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        #save link data and reinit. 
+        link = self.link
+        self.__initDependencies()
+        db.updateInTable(self.conn, {"user_id":self.userId}, "link", id=link.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=link.id)
+        
+        self.assertEqual(link.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(link.url, rows[0][2])
+        self.assertEqual(link.title, rows[0][3])
+        self.assertEqual(link.description, rows[0][4])
+        self.assertEqual(link.typeName, rows[0][5])
+        self.assertEqual(link.modifiedAt, str(rows[0][6]))
+   
+    def testUpdateToNonExistingUserId(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        userId = mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails",db.updateInTable,
+                                self.conn,
+                                {"user_id":userId},
+                                "link",
+                                id=self.id)
+        
+    def testUpdateUrl(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        url = mock.randomName()
+        db.updateInTable(self.conn, {"url":url}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
+        
+    def testUpdateTitle(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        title = mock.randomName()
+        db.updateInTable(self.conn, {"title":title}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
+    
+    def testUpdateDescription(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        desc = mock.randomName()
+        db.updateInTable(self.conn, {"description":desc}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
+        
+    def testUpdateTypeName(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        typeName = mock.randomName()
+        db.updateInTable(self.conn, {"type_name":typeName}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(typeName, rows[0][5])
+        self.assertEqual(self.modifiedAt, str(rows[0][6]))
+         
+    def testUpdateModifietAt(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName, self.modifiedAt)
+        modifiedAt = mock.timeStamp()
+        db.updateInTable(self.conn, {"modified_at":modifiedAt}, "link", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        
+        self.assertEqual(self.id, rows[0][0])
+        self.assertEqual(self.user.id, rows[0][1])
+        self.assertEqual(self.url, rows[0][2])
+        self.assertEqual(self.title, rows[0][3])
+        self.assertEqual(self.desc, rows[0][4])
+        self.assertEqual(self.typeName, rows[0][5])
+        self.assertEqual(modifiedAt, str(rows[0][6]))
+        
+    def testUpdateIdReferencedToSearchTable(self):
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertSearchTable(self.searchTable.userId,
+                               self.searchTable.linkId,
+                               self.searchTable.groups,
+                               self.searchTable.tags,
+                               self.searchTable.text)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "link",
+                                id=self.id)
+    
+    def testUpdateIdReferencedToLinkTagMap(self):
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertTag(self.tag.id, self.tag.name)
+        self.insertLinkTagMap(self.linkTagMap.tagId, self.linkTagMap.linkId)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "link",
+                                id=self.id)
+        
+    def testUpdateIdReferencedToLinkGroupMap(self):
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertGroup(self.group.id, self.group.name, self.group.public)
+        self.insertLinkGroupMap(self.linkGroupMap.groupId, self.linkGroupMap.linkId)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "link",
+                                id=self.id)
+        
+    def testUpdateIdReferencedToMetaData(self):
+        self.insertLink(self.link.id,
+                        self.link.userId,
+                        self.link.url,
+                        self.link.title,
+                        self.link.description,
+                        self.link.typeName,
+                        self.link.modifiedAt)
+        self.insertMetaData(self.metaData.linkId, self.metaData.key, self.metaData.value)
+        
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"id":mock.uuid()},
+                                "link",
+                                id=self.id)    
+           
     
     ''' DROP TESTS '''
         

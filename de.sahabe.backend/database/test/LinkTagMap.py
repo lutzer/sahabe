@@ -51,9 +51,49 @@ class LinkTagMap(Tables.Tables):
 
 
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    # TODO: implement update tag.id tests
-    # TODO: implement update link.id tests
+    def testUpdateToExistingTagId(self):
+        self.insertLinkTagMap(self.tagId, self.linkId)
+        linkTagMap = self.linkTagMap
+        self.__initDependencies()
+        db.updateInTable(self.conn,
+                         {"tag_id":self.tagId},
+                         "link_tag_map",
+                         tag_id=linkTagMap.tagId)
+        rows = db.selectFrom(self.conn, {"link_tag_map"}, "*", tag_id=self.tagId)
+        
+        self.assertEqual(self.tagId, rows[0][0])
+        self.assertEqual(linkTagMap.linkId, rows[0][1])
+     
+    def testUpdateToExistingLinkId(self):
+        self.insertLinkTagMap(self.tagId, self.linkId)
+        linkTagMap = self.linkTagMap
+        self.__initDependencies()
+        db.updateInTable(self.conn,
+                         {"link_id":self.linkId},
+                         "link_tag_map",
+                         link_id=linkTagMap.linkId)
+        rows = db.selectFrom(self.conn, {"link_tag_map"}, "*", link_id=self.linkId)
+        
+        self.assertEqual(linkTagMap.tagId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])   
+    
+    def testUpdateToNonExistingTagId(self):
+        self.insertLinkTagMap(self.tagId, self.linkId)
+        tagId = mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"tag_id":tagId},
+                                "link_tag_map",
+                                tag_id=self.tagId)
+
+    def testUpdateToNonExistingLinkId(self):
+        self.insertLinkTagMap(self.tagId, self.linkId)
+        linkId = mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"link_id":linkId},
+                                "link_tag_map",
+                                link_id=self.linkId)
     
 
     ''' DROP TESTS '''

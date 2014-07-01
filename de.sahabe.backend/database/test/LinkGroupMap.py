@@ -51,10 +51,51 @@ class LinkGroupMap(Tables.Tables):
     
     
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    # TODO: implement update link.id
-    # TODO: implement update link_group.id
+        
+    def testUpdateToExistingGroupId(self):
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        linkGroupMap = self.linkGroupMap
+        self.__initDependencies()
+        db.updateInTable(self.conn,
+                         {"group_id":self.groupId},
+                         "link_group_map",
+                         group_id=linkGroupMap.groupId)
+        rows = db.selectFrom(self.conn, {"link_group_map"}, "*", group_id=self.groupId)
+        
+        self.assertEqual(self.groupId, rows[0][0])
+        self.assertEqual(linkGroupMap.linkId, rows[0][1])
+     
+    def testUpdateToExistingLinkId(self):
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        linkGroupMap = self.linkGroupMap
+        self.__initDependencies()
+        db.updateInTable(self.conn,
+                         {"link_id":self.linkId},
+                         "link_group_map",
+                         link_id=linkGroupMap.linkId)
+        rows = db.selectFrom(self.conn, {"link_group_map"}, "*", link_id=self.linkId)
+        
+        self.assertEqual(linkGroupMap.groupId, rows[0][0])
+        self.assertEqual(self.linkId, rows[0][1])   
     
+    def testUpdateToNonExistingGroupId(self):
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        groupId = mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"group_id":groupId},
+                                "link_group_map",
+                                group_id=self.groupId)
+
+    def testUpdateToNonExistingLinkId(self):
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        linkId = mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"link_id":linkId},
+                                "link_group_map",
+                                link_id=self.linkId)    
+            
     
     ''' DROP TESTS '''
         

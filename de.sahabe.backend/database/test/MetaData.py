@@ -50,9 +50,50 @@ class MetaData(Tables.Tables):
 
 
     ''' UPDATE TESTS '''
-    # TODO: implement update entries tests
-    # TODO: implement update link.id tests
+    
+    def testUpdateToExistingLinkId(self):
+        self.insertMetaData(self.linkId, self.key, self.value)
+        metaData = self.metaData
+        self.__initDependencies()
+        db.updateInTable(self.conn, {"link_id":self.linkId}, "meta_data", link_id=metaData.linkId)
+        
+        rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
+        
+        self.assertEqual(self.linkId, rows[0][0])
+        self.assertEqual(metaData.key, rows[0][1])
+        self.assertEqual(metaData.value, rows[0][2])
+ 
+    def testUpdateToNonExistingLinkId(self):
+        self.insertMetaData(self.linkId, self.key, self.value)
+        linkId= mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"link_id":linkId},
+                                "meta_data",
+                                link_id=self.linkId)
 
+    def testUpdateKey(self):
+        self.insertMetaData(self.linkId, self.key, self.value)
+        key = mock.randomName()
+        db.updateInTable(self.conn, {"l_key":key}, "meta_data", link_id=self.linkId)
+        
+        rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
+        
+        self.assertEqual(self.linkId, rows[0][0])
+        self.assertEqual(key, rows[0][1])
+        self.assertEqual(self.value, rows[0][2])
+    
+    def testUpdateValue(self):
+        self.insertMetaData(self.linkId, self.key, self.value)
+        value = mock.randomName()
+        db.updateInTable(self.conn, {"value":value}, "meta_data", link_id=self.linkId)
+        
+        rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
+        
+        self.assertEqual(self.linkId, rows[0][0])
+        self.assertEqual(self.key, rows[0][1])
+        self.assertEqual(value, rows[0][2])
+        
     
     ''' DROP TESTS '''
         

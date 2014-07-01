@@ -50,9 +50,50 @@ class PassWord(Tables.Tables):
     
     
     ''' UPDATE TESTS '''
-    #TODO: implement update entries tests
-    #TODO: implement update user.id tests
+        
+    def testUpdateToExistingUserId(self):
+        self.insertPW(self.userId, self.value, self.salt)
+        pw = self.pw
+        self.__initDependencies()
+        db.updateInTable(self.conn, {"user_id":self.userId}, "pw_hash", user_id=pw.userId)
+        
+        rows = db.selectFrom(self.conn, {"pw_hash"}, "*", user_id=self.userId)
+        
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(pw.value, rows[0][1])
+        self.assertEqual(pw.salt, rows[0][2])
+ 
+    def testUpdateToNonExistingUserId(self):
+        self.insertPW(self.userId, self.value, self.salt)
+        userId= mock.uuid()
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", db.updateInTable,
+                                self.conn,
+                                {"user_id":userId},
+                                "pw_hash",
+                                user_id=self.userId)
+   
+    def testUpdateValue(self):
+        self.insertPW(self.userId, self.value, self.salt)
+        value = mock.hashlib.sha256(mock.randomText(16)).hexdigest()
+        db.updateInTable(self.conn, {"value":value}, "pw_hash", user_id=self.userId)
+        
+        rows = db.selectFrom(self.conn, {"pw_hash"}, "*", user_id=self.userId)
+        
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(value, rows[0][1])
+        self.assertEqual(self.salt, rows[0][2])    
 
+    def testUpdateSalt(self):
+        self.insertPW(self.userId, self.value, self.salt)
+        salt = mock.hashlib.sha256(mock.randomText(16)).hexdigest()
+        db.updateInTable(self.conn, {"salt":salt}, "pw_hash", user_id=self.userId)
+        
+        rows = db.selectFrom(self.conn, {"pw_hash"}, "*", user_id=self.userId)
+        
+        self.assertEqual(self.userId, rows[0][0])
+        self.assertEqual(self.value, rows[0][1])
+        self.assertEqual(salt, rows[0][2])
+        
     
     ''' DROP TESTS '''
         
