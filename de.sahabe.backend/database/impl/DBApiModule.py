@@ -162,5 +162,38 @@ def updateInTable(conn, colValueMap, *inTables, **kwargs):
     # TODO: should commit() be moved to a higher abstraction level?
     conn.commit()
     return cursor.rowcount
-     
-#TODO:implement drop value from table     
+
+def deleteFromTable(conn, table, *referencedTables,**kwargs):
+    '''
+    select from user
+    @param conn: MySQLbd connection object
+    @param table: String -table name
+    @param *referencedTables: <tables> for multiple deletes example: DELETE table1, table2 FROM table1 WHERE... 
+    @param **kwargs: <column>:<value> includes where statement
+        examples: column='value' or table1.column=table2.column or table.column='value'
+    '''
+    cursor = conn.cursor()
+    
+    tables = ""
+    for tbl in referencedTables:
+        tables += tbl + ", "
+    tables = tables[:-2]
+    
+    where = ""
+    if kwargs is not None:
+        where = " WHERE "
+        for col, val in kwargs.items():
+            where += col + "= '" + val + "' AND "
+        where = where[:-4]   
+    
+    query = "DELETE " + tables +" FROM " + table + where
+    cursor.execute(query)
+    cursor.close()
+    # TODO: should commit() be moved to a higher abstraction level?
+    conn.commit()
+    return cursor.rowcount
+
+def dropTable(conn, *tables):
+    cursor = conn.cursor()
+    for table in tables:
+        cursor.execute("DROP TABLE IF EXISTS " + table)
