@@ -97,27 +97,44 @@ def insertToTable(conn, table, **kwargs):
     conn.commit()
     return cursor.rowcount
 
-def selectFrom(conn, table, *columns, **kwargs):
+# TODO: implement select from for string search "like"
+def selectFrom(conn, selectedTables, *columns, **kwargs):
     '''
     select from user
     @param conn: MySQLbd connection object
-    @param table: String -table name
+    @param selectedTables: [String] - represents selected tables
     @param *columns: <column> ordered set of columns  
     @param **kwargs: <column>:<value> includes where statement
+        to select columns from multiple tables use the conventions __IN__,
+        examples: column__IN__table   
     '''
     cursor = conn.cursor()
-    query_columns = ""    
+    queryColumns = ""    
     for column in columns:
-            query_columns += column + ", "
+            queryColumns += column + ", "
+    
+    tables = ""
+    for table in selectedTables:
+        tables += table + ", "
+    tables = tables[:-2]
     
     where = ""
-    if kwargs is not None:
+    if kwargs != {}:
         where = " WHERE "
-        for col, val in kwargs.items():
-            where += col + "= '" + val + "' AND "
+        for tColumn, val in kwargs.items():
+            if "__IN__" in tColumn:
+                tCol = tColumn.split("__IN__")
+                tColumn = tCol[1] + "." + tCol[0]
+            if "__IN__" in val:
+                tVal = val.split("__IN__")
+                val = tVal[1] + "." + tVal[0]
+                where += tColumn + " = " + val + " AND "
+            else:
+                where += tColumn + " = '" + val + "' AND "    
         where = where[:-4]
     
-    query = "SELECT " + query_columns[:-2] + " FROM " + table + where  
+    query = "SELECT " + queryColumns[:-2] + " FROM " + tables + where  
+    print query
     cursor.execute(query)
     
     rows = []
