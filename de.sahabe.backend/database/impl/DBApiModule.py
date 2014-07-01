@@ -68,7 +68,7 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     
     for key, value in forgenKeys.items():
         tColumn = value.split(".") 
-        query += "FOREIGN KEY (" + key + ") REFERENCES " + tColumn[0] + " (" + tColumn[1] + "), "
+        query += "FOREIGN KEY (" + key + ") REFERENCES " + tColumn[0] + " (" + tColumn[1] + ") ON DELETE CASCADE, "
     
     query = query[:-2] + ")"
     print "db-api: ", query
@@ -134,7 +134,6 @@ def selectFrom(conn, selectedTables, *columns, **kwargs):
         where = where[:-4]
     
     query = "SELECT " + queryColumns[:-2] + " FROM " + tables + where  
-    print query
     cursor.execute(query)
     
     rows = []
