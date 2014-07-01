@@ -39,7 +39,7 @@ class LinkTagMap(Tables.Tables):
     def testInsertion(self):
         self.insertLinkTagMap(self.tagId, self.linkId)
         
-        rows = db.selectFrom(self.conn, "link_tag_map", "*", tag_id=self.tagId, link_id=self.linkId)
+        rows = db.selectFrom(self.conn, {"link_tag_map"}, "*", tag_id=self.tagId, link_id=self.linkId)
         
         self.assertEqual(self.tag.id, rows[0][0])
         self.assertEqual(self.link.id, rows[0][1])

@@ -43,7 +43,7 @@ class Link(Tables.Tables):
         self.insertLink(self.id, self.userId, self.url, self.title,
                         self.desc, self.typeName ,self.modifiedAt)
         
-        rows = db.selectFrom(self.conn, "link", "*", id=self.id)
+        rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.user.id, rows[0][1])

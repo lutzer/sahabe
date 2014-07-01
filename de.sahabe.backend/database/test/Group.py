@@ -35,7 +35,7 @@ class Group(Tables.Tables):
     def testInsertion(self):
         self.insertGroup(self.id, self.name, self.public)
         
-        rows = db.selectFrom(self.conn, "link_group", "*", id=self.id)
+        rows = db.selectFrom(self.conn, {"link_group"}, "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])

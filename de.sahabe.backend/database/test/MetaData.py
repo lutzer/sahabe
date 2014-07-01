@@ -38,7 +38,7 @@ class MetaData(Tables.Tables):
 
     def testInsertion(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        rows = db.selectFrom(self.conn, "meta_data", "*", link_id=self.linkId)
+        rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
 
         self.assertEqual(self.linkId, rows[0][0])
         self.assertEqual(self.key, rows[0][1])

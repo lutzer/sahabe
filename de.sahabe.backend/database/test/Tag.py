@@ -34,7 +34,7 @@ class Tag(Tables.Tables):
     def testInsertion(self):
         self.insertTag(self.id, self.name)
         
-        rows = db.selectFrom(self.conn, "tag", "*", id=self.id)
+        rows = db.selectFrom(self.conn, {"tag"}, "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])

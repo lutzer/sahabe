@@ -37,7 +37,7 @@ class PassWord(Tables.Tables):
     def testInsertion(self):
         self.insertPW(self.userId, self.value, self.salt)
         
-        rows = db.selectFrom(self.conn, "pw_hash", "*", user_id=self.userId)
+        rows = db.selectFrom(self.conn, {"pw_hash"}, "*", user_id=self.userId)
         
         self.assertEqual(self.user.id, rows[0][0])
         self.assertEqual(self.value, rows[0][1])

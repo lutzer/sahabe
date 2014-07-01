@@ -39,7 +39,7 @@ class LinkGroupMap(Tables.Tables):
     def testInsertion(self):
         self.insertGroupTagMap(self.groupId, self.linkId)
         
-        rows = db.selectFrom(self.conn, "link_group_map", "*", group_id=self.groupId, link_id=self.linkId)
+        rows = db.selectFrom(self.conn, {"link_group_map"}, "*", group_id=self.groupId, link_id=self.linkId)
         
         self.assertEqual(self.group.id, rows[0][0])
         self.assertEqual(self.link.id, rows[0][1])

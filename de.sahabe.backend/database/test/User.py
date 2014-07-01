@@ -31,7 +31,7 @@ class User(Tables.Tables):
     def testInsertion(self):
         self.insertUser(self.id, self.name, self.email)
         
-        rows = db.selectFrom(self.conn, "user", "*", id=self.id)
+        rows = db.selectFrom(self.conn, {"user"}, "*", id=self.id)
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])
