@@ -13,6 +13,8 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 class Tag(Tables.Tables):
     """
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
@@ -30,6 +32,8 @@ class Tag(Tables.Tables):
         
     def tearDown(self):
         self.conn.close()
+        
+    ''' INSERTION TESTS '''
     
     def testInsertion(self):
         self.insertTag(self.id, self.name)
@@ -38,7 +42,31 @@ class Tag(Tables.Tables):
         
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])
-
+        
+        
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    
+        
+    ''' DROP TESTS '''
+        
+    def testDropTag(self):
+        self.insertTag(self.id, self.name)
+        db.deleteFromTable(self.conn, "tag", id=self.id)
+        rows = db.selectFrom(self.conn, {"tag"}, "*", id=self.id)
+        self.assertEquals(rows, [])
+        
+    def testDropLinkTagMapByTag(self):
+        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
+                        self.link.description, self.link.typeName , self.link.modifiedAt)
+        self.insertTag(self.id, self.name)
+        self.insertLinkTagMap(self.linkTagMap.tagId, self.linkTagMap.linkId)
+        
+        db.deleteFromTable(self.conn, "tag", id=self.id)
+        row = db.selectFrom(self.conn, {"link_tag_map"}, "*", tag_id=self.id)
+        self.assertEqual(row, [])
+        
     
     """ DATA TYPE TESTS """
     
@@ -92,6 +120,3 @@ class Tag(Tables.Tables):
         self.__initDependencies()
         self.insertTag(self.id,
                        name)
-
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

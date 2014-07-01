@@ -11,13 +11,15 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class Group(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
-    - Test: references.
+    - Test: update entry and its references
+    - Test: drop entry and its references
+    - Test: references
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
-    """ 
+    ''' 
 
     def __initDependencies(self):
         self.initDBMockContents()
@@ -32,6 +34,9 @@ class Group(Tables.Tables):
     def tearDown(self):
         self.conn.close()
     
+    
+    ''' INSERTION TESTS '''
+    
     def testInsertion(self):
         self.insertGroup(self.id, self.name, self.public)
         
@@ -40,20 +45,45 @@ class Group(Tables.Tables):
         self.assertEqual(self.id, rows[0][0])
         self.assertEqual(self.name, rows[0][1])
         self.assertEqual(int(self.public), rows[0][2])
+        
     
-    """ DATA TYPE TESTS """
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    
+        
+    ''' DROP TESTS '''
+        
+    def testDropGroup(self):
+        self.insertGroup(self.id, self.name, self.public)
+        db.deleteFromTable(self.conn, "link_group", id=self.id)
+        rows = db.selectFrom(self.conn, {"link_group"}, "*", id=self.id)
+        self.assertEquals(rows, [])
+        
+    def testDropLinkGroupMapByGroup(self):
+        self.insertUser(self.user.id, self.user.name, self.user.email)
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
+                        self.link.description, self.link.typeName , self.link.modifiedAt)
+        self.insertGroup(self.id, self.name, self.public)
+        self.insertLinkGroupMap(self.linkGroupMap.groupId, self.linkGroupMap.linkId)
+        
+        db.deleteFromTable(self.conn, "link_group", id=self.id)
+        row = db.selectFrom(self.conn, {"link_group_map"}, "*", group_id=self.id)
+        self.assertEqual(row, [])
+        
+    
+    ''' DATA TYPE TESTS '''
     
     def testInsertInvalidId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertGroup,
                           self.id + "e",
                           self.name,
                           self.public)
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertTag ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
             
     def testInsertInvalidName(self):
         name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
@@ -77,7 +107,7 @@ class Group(Tables.Tables):
                           self.public + 'e')
 
     def testInsertInvalidPublic_bigNum(self):
-        #FIXME: for TINYINT every short number that's greater than 0 has the value true  
+        # FIXME: for TINYINT every short number that's greater than 0 has the value true  
         self.assertRaises(DataError, self.insertGroup,
                           self.id,
                           self.name,
@@ -85,14 +115,14 @@ class Group(Tables.Tables):
         self.assertRaises(DataError, self.insertGroup,
                           self.id,
                           self.name,
-                          self.public+"25")
+                          self.public + "25")
         self.assertRaises(DataError, self.insertGroup,
                           self.id,
                           self.name,
-                          "25"+self.public)
+                          "25" + self.public)
 
 
-    """ NULL CONSTRAINS TESTS """    
+    ''' NULL CONSTRAINS TESTS '''    
         
     def testInsertNoId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'id' doesn't have a default value",
@@ -116,7 +146,7 @@ class Group(Tables.Tables):
                          name=self.name)
     
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
     def testInsertDublicateId(self):
         self.insertGroup(self.id, self.name, self.public)
         _id = self.id
@@ -141,6 +171,3 @@ class Group(Tables.Tables):
         self.insertGroup(self.id,
                          self.name,
                          public)
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

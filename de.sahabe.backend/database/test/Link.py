@@ -11,14 +11,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class Link(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid modifiedAt
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY CONSTRAINS
-    """
+    '''
     
     def __initDependencies(self):
         self.initDBMockContents()
@@ -39,9 +41,12 @@ class Link(Tables.Tables):
     def tearDown(self):
         self.conn.close()
     
+    
+    ''' INSERTION TESTS '''
+    
     def testInsertion(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc, self.typeName ,self.modifiedAt)
+                        self.desc, self.typeName , self.modifiedAt)
         
         rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
@@ -52,25 +57,79 @@ class Link(Tables.Tables):
         self.assertEqual(self.desc, rows[0][4])
         self.assertEqual(self.typeName, rows[0][5])
         self.assertEqual(self.modifiedAt, str(rows[0][6]))
-        
-        
     
     
-    """ DATA TYPE TESTS """
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    # TODO: implement update user.id tests
+    
+    
+    ''' DROP TESTS '''
+        
+    def testDropLink(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName , self.modifiedAt)
+        db.deleteFromTable(self.conn, "link", id=self.id) 
+        row = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
+        self.assertEqual(row, [])
+        
+    def testDropSearchTableByLink(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName , self.modifiedAt)
+        self.insertSearchTable(self.searchTable.userId,
+                               self.searchTable.linkId,
+                               self.searchTable.groups,
+                               self.searchTable.tags,
+                               self.searchTable.text)
+        db.deleteFromTable(self.conn, "link", id=self.id)
+        row = db.selectFrom(self.conn, {"search_table"}, "*" , link_id=self.searchTable.linkId)
+        self.assertEqual(row, [])
+        
+    def testDropLinkTagMapByLink(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName , self.modifiedAt)
+        self.insertTag(self.tag.id, self.tag.name)
+        self.insertLinkTagMap(self.linkTagMap.tagId, self.linkTagMap.linkId)
+        
+        db.deleteFromTable(self.conn, "link", id=self.id)
+        row = db.selectFrom(self.conn, {"link_tag_map"}, "*", link_id=self.linkTagMap.linkId)
+        self.assertEqual(row, [])
+        
+    def testDropLinkGroupMapByLink(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName , self.modifiedAt)
+        self.insertGroup(self.group.id, self.group.name, self.group.public)
+        self.insertLinkGroupMap(self.linkGroupMap.groupId, self.linkGroupMap.linkId)
+        
+        db.deleteFromTable(self.conn, "link", id=self.id)
+        row = db.selectFrom(self.conn, {"link_group_map"}, "*", link_id=self.linkGroupMap.linkId)
+        self.assertEqual(row, [])
+       
+    def testDropMetaDataByLink(self):
+        self.insertLink(self.id, self.userId, self.url, self.title,
+                        self.desc, self.typeName , self.modifiedAt)
+        self.insertMetaData(self.metaData.linkId, self.metaData.key, self.metaData.value)
+        
+        db.deleteFromTable(self.conn, "link", id=self.id)
+        row = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.metaData.linkId)
+        self.assertEqual(row, []) 
+        
+        
+    ''' DATA TYPE TESTS '''
 
     def testInsertInvalidId(self):
         self.assertRaises(DataError, self.insertLink ,
                          self.id + "e", self.userId, self.url, self.title,
                          self.desc, self.typeName, self.modifiedAt)
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertLink ,
                          self.id[:-13], self.title, self.email)
-        """
+        '''
         
     def testInsertInvalidUserId(self):
-        self.assertRaisesRegexp(DataError, "Data too long" ,self.insertLink,
+        self.assertRaisesRegexp(DataError, "Data too long" , self.insertLink,
                          self.id,
                          mock.uuid() + "e",
                          self.url,
@@ -134,7 +193,7 @@ class Link(Tables.Tables):
                          mock.randomText(64))
        
     
-    """ NULL CONSTRAINS TESTS """ 
+    ''' NULL CONSTRAINS TESTS ''' 
         
     def testInsertNoId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'id' doesn't have a default value",
@@ -209,11 +268,11 @@ class Link(Tables.Tables):
                           type_name=self.typeName)
 
 
-    """ UNIQUE CONSTRAINS TESTS """    
+    ''' UNIQUE CONSTRAINS TESTS '''    
 
     def testInsertDublicateId(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         _id = self.id
         self.__initDependencies()
         self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertLink,
@@ -227,7 +286,7 @@ class Link(Tables.Tables):
         
     def testInsertDublicateUserId(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         userId = self.userId
         self.__initDependencies()
         self.insertLink(self.id,
@@ -240,7 +299,7 @@ class Link(Tables.Tables):
         
     def testInsertDublicateUrl(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         url = self.url
         self.__initDependencies()
         self.insertLink(self.id,
@@ -253,7 +312,7 @@ class Link(Tables.Tables):
     
     def testInsertDublicateTitle(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         title = self.title
         self.__initDependencies()
         self.insertLink(self.id,
@@ -266,7 +325,7 @@ class Link(Tables.Tables):
         
     def testInsertDublicateDescription(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         desc = self.desc
         self.__initDependencies()
         self.insertLink(self.id,
@@ -279,7 +338,7 @@ class Link(Tables.Tables):
         
     def testInsertDublicateModifiedAt(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
-                        self.desc,  self.typeName, self.modifiedAt)
+                        self.desc, self.typeName, self.modifiedAt)
         modifiedAt = self.modifiedAt
         self.__initDependencies()
         self.insertLink(self.id,
@@ -291,7 +350,7 @@ class Link(Tables.Tables):
                         modifiedAt)
         
         
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
     
     def testInsertNonExistingUserId(self):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLink,
@@ -302,9 +361,3 @@ class Link(Tables.Tables):
                                 self.desc,
                                 self.typeName,
                                 self.modifiedAt)
-        
-    #TODO: implement update user.id tests
-    #TODO: implement drop user.id test
-
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

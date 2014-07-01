@@ -11,14 +11,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class LinkTagMap(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY CONSTRAINS
-    """ 
+    ''' 
     
     def __initDependencies(self):
         self.initDBMockContents()
@@ -26,7 +28,7 @@ class LinkTagMap(Tables.Tables):
         self.linkId = self.linkTagMap.linkId
         self.insertUser(self.user.id, self.user.name, self.user.email)
         self.insertTag(self.tag.id, self.tag.name)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title, 
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
                         self.link.description, self.link.typeName, self.link.modifiedAt)
     
     def setUp(self):
@@ -35,6 +37,9 @@ class LinkTagMap(Tables.Tables):
         
     def tearDown(self):
         self.conn.close()
+        
+    
+    ''' INSERTION TEST '''
     
     def testInsertion(self):
         self.insertLinkTagMap(self.tagId, self.linkId)
@@ -44,32 +49,47 @@ class LinkTagMap(Tables.Tables):
         self.assertEqual(self.tag.id, rows[0][0])
         self.assertEqual(self.link.id, rows[0][1])
 
+
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    # TODO: implement update tag.id tests
+    # TODO: implement update link.id tests
     
-    """ DATA TYPE TESTS """
+
+    ''' DROP TESTS '''
+        
+    def testLinkTagMap(self):
+        self.insertLinkTagMap(self.tagId, self.linkId)
+        db.deleteFromTable(self.conn, "link_tag_map", tag_id=self.tagId)
+        rows = db.selectFrom(self.conn, {"link_tag_map"}, "*", tag_id=self.tagId)
+        self.assertEquals(rows, [])
+
+    
+    ''' DATA TYPE TESTS '''
     
     def testInsertInvalidTagId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLinkTagMap,
                           self.tagId + "e",
                           self.linkId)
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertTag ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
             
     def testInsertInvalidLinkId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLinkTagMap,
                           self.tagId,
                           self.linkId + "e")
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertTag ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
 
-    """ NULL CONSTRAINS TESTS """    
+    ''' NULL CONSTRAINS TESTS '''    
         
     def testInsertNoTagId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'tag_id' doesn't have a default value",
@@ -86,7 +106,7 @@ class LinkTagMap(Tables.Tables):
                           tag_id=self.tagId)
 
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
     def testInsertDublicateTagId(self):
         self.insertLinkTagMap(self.tagId, self.linkId)
         tagId = self.tagId
@@ -108,7 +128,7 @@ class LinkTagMap(Tables.Tables):
                           self.linkId)
     
     
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
     
     def testInsertNonExistingTagId(self):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLinkTagMap,
@@ -119,11 +139,3 @@ class LinkTagMap(Tables.Tables):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLinkTagMap,
                                 self.tagId,
                                 mock.uuid())
-    
-    #TODO: implement update tag.id tests
-    #TODO: implement drop tag.id test    
-    #TODO: implement update link.id tests
-    #TODO: implement drop link.id test
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

@@ -11,14 +11,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class PassWord(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY Constrains
-    """ 
+    ''' 
 
     def __initDependencies(self):
         self.initDBMockContents()
@@ -33,6 +35,9 @@ class PassWord(Tables.Tables):
         
     def tearDown(self):
         self.conn.close()
+        
+        
+    ''' INSERTTION TESTS '''
     
     def testInsertion(self):
         self.insertPW(self.userId, self.value, self.salt)
@@ -43,19 +48,34 @@ class PassWord(Tables.Tables):
         self.assertEqual(self.value, rows[0][1])
         self.assertEqual(self.salt, rows[0][2])
     
-    """ DATA TYPE TESTS """
+    
+    ''' UPDATE TESTS '''
+    #TODO: implement update entries tests
+    #TODO: implement update user.id tests
+
+    
+    ''' DROP TESTS '''
+        
+    def testPW(self):
+        self.insertPW(self.userId, self.value, self.salt)
+        db.deleteFromTable(self.conn, "pw_hash", user_id=self.userId)
+        rows = db.selectFrom(self.conn, {"pw_hash"}, "*", user_id=self.userId)
+        self.assertEquals(rows, [])
+        
+    
+    ''' DATA TYPE TESTS '''
     
     def testInsertInvalidUserId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertPW,
                           self.userId + "e",
                           self.value,
                           self.salt)
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertTag ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
             
     def testInsertInvalidValue(self):
         value = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
@@ -72,7 +92,7 @@ class PassWord(Tables.Tables):
                           salt)
 
 
-    """ NULL CONSTRAINS TESTS """    
+    ''' NULL CONSTRAINS TESTS '''    
         
     def testInsertNoUserId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'user_id' doesn't have a default value",
@@ -96,7 +116,7 @@ class PassWord(Tables.Tables):
                           value=self.value)
     
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
     def testInsertDublicateUserId(self):
         self.insertPW(self.userId, self.value, self.salt)
         userId = self.userId
@@ -124,16 +144,9 @@ class PassWord(Tables.Tables):
                       salt)
         
     
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
     def testInsertNotExistingUserId(self):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertPW,
                           mock.uuid(),
                           self.value,
                           self.salt)
-        
-    #TODO: implement update user.id tests
-    #TODO: implement drop user.id test
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test
-    

@@ -11,14 +11,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class LinkGroupMap(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY CONSTRAINS
-    """ 
+    ''' 
     
     def __initDependencies(self):
         self.initDBMockContents()
@@ -26,7 +28,7 @@ class LinkGroupMap(Tables.Tables):
         self.linkId = self.linkGroupMap.linkId
         self.insertUser(self.user.id, self.user.name, self.user.email)
         self.insertGroup(self.group.id, self.group.name, self.group.public)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title, 
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
                         self.link.description, self.link.typeName, self.link.modifiedAt)
     
     def setUp(self):
@@ -35,41 +37,59 @@ class LinkGroupMap(Tables.Tables):
         
     def tearDown(self):
         self.conn.close()
+        
+        
+    ''' INSERTION TESTS '''
     
     def testInsertion(self):
-        self.insertGroupTagMap(self.groupId, self.linkId)
+        self.insertLinkGroupMap(self.groupId, self.linkId)
         
         rows = db.selectFrom(self.conn, {"link_group_map"}, "*", group_id=self.groupId, link_id=self.linkId)
         
         self.assertEqual(self.group.id, rows[0][0])
         self.assertEqual(self.link.id, rows[0][1])
-
     
-    """ DATA TYPE TESTS """
+    
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    # TODO: implement update link.id
+    # TODO: implement update link_group.id
+    
+    
+    ''' DROP TESTS '''
+        
+    def testLinkGroupMap(self):
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        db.deleteFromTable(self.conn, "link_group_map", group_id=self.groupId)
+        rows = db.selectFrom(self.conn, {"link_group_map"}, "*", group_id=self.groupId)
+        self.assertEquals(rows, [])
+    
+    
+    ''' DATA TYPE TESTS '''
     
     def testInsertInvalidGroupId(self):
-        self.assertRaisesRegexp(DataError, "Data too long", self.insertGroupTagMap,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLinkGroupMap,
                           self.groupId + "e",
                           self.linkId)
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertgroup ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
             
     def testInsertInvalidLinkId(self):
-        self.assertRaisesRegexp(DataError, "Data too long", self.insertGroupTagMap,
+        self.assertRaisesRegexp(DataError, "Data too long", self.insertLinkGroupMap,
                           self.groupId,
                           self.linkId + "e")
-        """ insert too short """
+        ''' insert too short '''
         # FIXME: what's about UUID length constrains? 
-        """
+        '''
         self.assertRaises(DataError, self.insertgroup ,
                          self.id[:-13], self.name, self.email)
-        """
+        '''
 
-    """ NULL CONSTRAINS TESTS """    
+    ''' NULL CONSTRAINS TESTS '''    
         
     def testInsertNogroupId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'group_id' doesn't have a default value",
@@ -86,39 +106,36 @@ class LinkGroupMap(Tables.Tables):
                           group_id=self.groupId)
 
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
     def testInsertDublicategroupId(self):
-        self.insertGroupTagMap(self.groupId, self.linkId)
+        self.insertLinkGroupMap(self.groupId, self.linkId)
         groupId = self.groupId
         self.__initDependencies()
-        self.insertGroupTagMap(groupId,
+        self.insertLinkGroupMap(groupId,
                        self.linkId)
         
     def testInsertDublicateLinkId(self):
-        self.insertGroupTagMap(self.groupId, self.linkId)
+        self.insertLinkGroupMap(self.groupId, self.linkId)
         linkId = self.linkId
         self.__initDependencies()
-        self.insertGroupTagMap(self.groupId,
+        self.insertLinkGroupMap(self.groupId,
                        linkId)
         
     def testInsertDublicategroupAndLinkId(self):
-        self.insertGroupTagMap(self.groupId, self.linkId)
-        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertGroupTagMap,
+        self.insertLinkGroupMap(self.groupId, self.linkId)
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertLinkGroupMap,
                           self.groupId,
                           self.linkId)
     
     
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
     
     def testInsertNonExistinggroupId(self):
-        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertGroupTagMap,
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLinkGroupMap,
                                 mock.uuid(),
                                 self.linkId)
         
     def testInsertNonExistingLinkId(self):
-        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertGroupTagMap,
+        self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertLinkGroupMap,
                                 self.groupId,
                                 mock.uuid())
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

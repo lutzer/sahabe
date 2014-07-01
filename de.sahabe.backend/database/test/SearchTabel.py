@@ -10,14 +10,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class SearchTable(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY CONSTRAINS
-    """
+    '''
     
     def __initDependencies(self):
         self.initDBMockContents()
@@ -38,6 +40,8 @@ class SearchTable(Tables.Tables):
         self.conn.close()
 
 
+    ''' INSERTTON TESTS '''
+
     def testInsertion(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
         rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId, link_id=self.linkId)
@@ -47,9 +51,23 @@ class SearchTable(Tables.Tables):
         self.assertEqual(self.groups, rows[0][2])
         self.assertEqual(self.tags, rows[0][3])
         self.assertEqual(self.text, rows[0][4])
+    
+    
+    ''' UPDATE TESTS '''
+    #TODO: implement update entries tests
+    #TODO: implement update user.id tests
+    #TODO: implement update link.id tests
+    
+    ''' DROP TESTS '''
+        
+    def testDropSearchTable(self):
+        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
+        db.deleteFromTable(self.conn, "search_table", user_id=self.userId)
+        rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
+        self.assertEquals(rows, [])
         
         
-    """ DATA TYPE TESTS """
+    ''' DATA TYPE TESTS '''
         
     def testInsertInvalidUserId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
@@ -95,7 +113,7 @@ class SearchTable(Tables.Tables):
                          text)
         
         
-    """ NULL CONSTRAINS TESTS """
+    ''' NULL CONSTRAINS TESTS '''
         
     def testInsertNoUserId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'user_id' doesn't have a default value",
@@ -137,7 +155,7 @@ class SearchTable(Tables.Tables):
                          tags=self.tags)
     
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
         
     def testInsertDoublicateId(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
@@ -204,7 +222,7 @@ class SearchTable(Tables.Tables):
                                text)
         
         
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
     
     def testInsertNonExistingUserId(self):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertSearchTable,
@@ -221,13 +239,3 @@ class SearchTable(Tables.Tables):
                                 self.groups,
                                 self.tags,
                                 self.text)
-    
-    #TODO: implement update user.id tests
-    #TODO: implement drop user.id test
-    #TODO: implement update link.id tests
-    #TODO: implement drop link.id test
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test

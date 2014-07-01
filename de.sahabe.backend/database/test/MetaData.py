@@ -10,14 +10,16 @@ from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 
 class MetaData(Tables.Tables):
-    """
+    '''
     - Test: insertion and fetching data from/to table
+    - Test: update entry and its references
+    - Test: drop entry and its references
     - Test: references.
     - Test: inserting invalid date
     - Test: NOT NULLS constrains
     - Test: UNIQUE constrains
     - Test: FOREIGN KEY CONSTRAINS
-    """
+    '''
     
     def __initDependencies(self):
         self.initDBMockContents()
@@ -25,7 +27,7 @@ class MetaData(Tables.Tables):
         self.key = self.metaData.key
         self.value = self.metaData.value
         self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title, 
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
                         self.link.description, self.link.typeName, self.link.modifiedAt)
     
     def setUp(self):
@@ -36,6 +38,8 @@ class MetaData(Tables.Tables):
         self.conn.close()
 
 
+    ''' INSERTION TESTS '''
+
     def testInsertion(self):
         self.insertMetaData(self.linkId, self.key, self.value)
         rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
@@ -43,9 +47,23 @@ class MetaData(Tables.Tables):
         self.assertEqual(self.linkId, rows[0][0])
         self.assertEqual(self.key, rows[0][1])
         self.assertEqual(self.value, rows[0][2])
+
+
+    ''' UPDATE TESTS '''
+    # TODO: implement update entries tests
+    # TODO: implement update link.id tests
+
+    
+    ''' DROP TESTS '''
         
+    def testMetaData(self):
+        self.insertMetaData(self.linkId, self.key, self.value)
+        db.deleteFromTable(self.conn, "meta_data", link_id=self.linkId)
+        rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
+        self.assertEquals(rows, [])
+            
         
-    """ DATA TYPE TESTS """
+    ''' DATA TYPE TESTS '''
         
     def testInsertInvalidLinkId(self):
         self.assertRaisesRegexp(DataError, "Data too long", self.insertMetaData,
@@ -68,7 +86,7 @@ class MetaData(Tables.Tables):
                          value)
         
         
-    """ NULL CONSTRAINS TESTS """
+    ''' NULL CONSTRAINS TESTS '''
         
     def testInsertNoLinkId(self):
         self.assertRaisesRegexp(OperationalError, "Field 'link_id' doesn't have a default value",
@@ -92,11 +110,11 @@ class MetaData(Tables.Tables):
                           l_key=self.key)
         
     
-    """ UNIQUE CONSTRAINS TESTS """
+    ''' UNIQUE CONSTRAINS TESTS '''
         
     def testInsertDoublicateLinkId(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        linkId=self.linkId
+        linkId = self.linkId
         self.__initDependencies()
         self.insertMetaData(linkId,
                             self.key,
@@ -104,7 +122,7 @@ class MetaData(Tables.Tables):
         
     def testInsertDoublicateKey(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        key=self.key
+        key = self.key
         self.__initDependencies()
         self.insertMetaData(self.linkId,
                             key,
@@ -112,7 +130,7 @@ class MetaData(Tables.Tables):
         
     def testInsertDoublicatevalue(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        value=self.value
+        value = self.value
         self.__initDependencies()
         self.insertMetaData(self.linkId,
                             self.key,
@@ -151,24 +169,16 @@ class MetaData(Tables.Tables):
         key = self.key
         value = self.value
         self.__initDependencies()
-        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertMetaData, 
+        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertMetaData,
                                 linkId,
                                 key,
                                 value)
         
         
-    """ FOREIGN KEY CONSTRAINS TESTS """
+    ''' FOREIGN KEY CONSTRAINS TESTS '''
         
     def testInsertNonExistingLinkId(self):
         self.assertRaisesRegexp(IntegrityError, "foreign key constraint fails", self.insertMetaData,
                                 mock.uuid(),
                                 self.key,
                                 self.value)
-    
-    #TODO: implement update link.id tests
-    #TODO: implement drop link.id test
-    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test    
-    #TODO: implement update entries tests
-    #TODO: implement drop entries test
