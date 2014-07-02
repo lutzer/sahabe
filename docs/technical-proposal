@@ -25,6 +25,21 @@ RESTful:	-CherryPy: A Minimalist Python Web Framework
 		-Flask: microframework for Python based on Werkzeug, 
 		 Jinja 2 and good intentions. It's BSD licensed.
 
+Flask installation:
+		-linux: sudo apt-get install python-flask
+		-(recommended):
+			-python-flask-autoindex: automatically generated index pages for Flask applications              
+			-python-flask-babel: internationalization and localization support for Flask                 
+			-python-flask-login: user session management for Flask                                       
+			-python-flask-migrate: SQLAlchemy database migrations for Flask applications using Alembic     
+			-python-flask-openid: OpenID support for Flask applications                                   
+			-python-flask-principal: identity management for Flask                                           
+			-python-flask-script: set of utilities for use with the Flask framework                       
+			-python-flask-silk: FamFamFam Silk icon set for Flask applications                          
+			-python-flask-sqlalchemy: adds SQLAlchemy support to your Flask application                       
+			-python-flaskext.wtf: Simple integration of Flask and WTForms           
+
+
 eclipse UML plugin ( papyrus for eclipse-kepler)
 		-update site: http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/kepler
 
