@@ -1,8 +1,8 @@
 DB: 
 	-MySql 5.6
 	-data base configuration:
-		- CREATE DATABASE sahabe;
-		- CREATE DATABASE sahabe_test;
+		- CREATE DATABASE sahabe CHARACTER SET utf8 COLLATE utf8_general_ci;
+		- CREATE DATABASE sahabe_test CHARACTER SET utf8 COLLATE utf8_general_ci;
 		- CREATE USER 'sahabe'@'localhost' IDENTIFIED BY 'sahabe';
 		- GRANT ALL PRIVILEGES ON sahabe.* TO sahabe@localhost; 
 		- CREATE USER 'sahabe_test'@'localhost' IDENTIFIED BY 'sahabe_test';
@@ -21,11 +21,21 @@ Backend:
 		 -$ cd MySQL-python-1.2.4
 		 -$ python setup.py build
 		 -$ python setup.py install
-		Mac: 
+		debian:
+		 -$ sudo apt-get install  python-mysqldb
+		Mac:
 		 -see http://mysql-python.blogspot.de/2012/11/is-mysqldb-hard-to-install.html
 
-	-RESTapi Django 1.6 see: http://www.django-rest-framework.org/#installation
-
+	-RESTapi: 
+		-Django 1.6 see: http://www.django-rest-framework.org/#installation
+		-flask:		
+		     	linux:
+                         $ sudo apt-get install python-flask
+                        -install Simple integration of Flask and WTForms
+                         $ sudo apt-get install python-flaskext.wtf
+                        -user session management for Flask
+                         -see https://flask-login.readthedocs.org/en/latest/
+                         $ sudo apt-get install python-flask-login
 Frontend:
 	-Web interface: 
 		-java script

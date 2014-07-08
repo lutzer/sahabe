@@ -26,19 +26,27 @@ RESTful:	-CherryPy: A Minimalist Python Web Framework
 		 Jinja 2 and good intentions. It's BSD licensed.
 
 Flask installation:
-		-linux: sudo apt-get install python-flask
+		-linux:	-install flask
+			 $ sudo apt-get install python-flask
+			-install Simple integration of Flask and WTForms
+			 $ sudo apt-get install python-flaskext.wtf
+			-user session management for Flask
+			 -see https://flask-login.readthedocs.org/en/latest/
+			 $ sudo apt-get install python-flask-login
 		-(recommended):
-			-python-flask-autoindex: automatically generated index pages for Flask applications              
-			-python-flask-babel: internationalization and localization support for Flask                 
-			-python-flask-login: user session management for Flask                                       
-			-python-flask-migrate: SQLAlchemy database migrations for Flask applications using Alembic     
-			-python-flask-openid: OpenID support for Flask applications                                   
-			-python-flask-principal: identity management for Flask                                           
-			-python-flask-script: set of utilities for use with the Flask framework                       
-			-python-flask-silk: FamFamFam Silk icon set for Flask applications                          
-			-python-flask-sqlalchemy: adds SQLAlchemy support to your Flask application                       
-			-python-flaskext.wtf: Simple integration of Flask and WTForms           
+			-python-flask-autoindex: automatically generated index pages for Flask applications
+			-python-flask-babel: internationalization and localization support for Flask
+			-python-flask-migrate: SQLAlchemy database migrations for Flask applications using Alembic
+			-python-flask-openid: OpenID support for Flask applications
+			-python-flask-principal: identity management for Flask
+			-python-flask-script: set of utilities for use with the Flask framework
+			-python-flask-silk: FamFamFam Silk icon set for Flask applications
+			-python-flask-sqlalchemy: adds SQLAlchemy support to your Flask application
 
+Authentication beside flask-login:
+		- openID
+		- OpenShift
+		- oAuth
 
 eclipse UML plugin ( papyrus for eclipse-kepler)
 		-update site: http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/kepler
