@@ -25,6 +25,13 @@ Backend:
 		 -$ sudo apt-get install  python-mysqldb
 		Mac:
 		 -see http://mysql-python.blogspot.de/2012/11/is-mysqldb-hard-to-install.html
+		 
+		 On Mac:
+		 -Download http://dev.mysql.com/downloads/mysql/
+		 -install mysql-xxx.pkg and prefpane, dont install startupitem
+		 -type nano ~/.bash_profile add 'export PATH=$PATH:/usr/local/mysql/bin'
+		 -type in terminal: 'sudo easy_install MySQL-python'
+		 
 
 	-RESTapi: 
 		-Django 1.6 see: http://www.django-rest-framework.org/#installation
