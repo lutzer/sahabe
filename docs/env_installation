@@ -29,9 +29,10 @@ Backend:
 		 On Mac:
 		 -Download http://dev.mysql.com/downloads/mysql/
 		 -install mysql-xxx.pkg and prefpane, dont install startupitem
-		 -type nano ~/.bash_profile add 'export PATH=$PATH:/usr/local/mysql/bin'
+		 -type nano ~/.bash_profile add 'export PATH=$PATH:/usr/local/mysql/bin' 
+		  and 'export DYLD_LIBRARY_PATH=/usr/local/mysql/lib/'
 		 -type in terminal: 'sudo easy_install MySQL-python'
-		 
+		 -test if it works: 'python' -> 'import MySQLdb'
 
 	-RESTapi: 
 		-Django 1.6 see: http://www.django-rest-framework.org/#installation
