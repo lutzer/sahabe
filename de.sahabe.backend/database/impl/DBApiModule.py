@@ -13,13 +13,18 @@ class DataTypes(object):
     VCHAR32 = "VARCHAR(32)"
     VCHAR64 = "VARCHAR(64)"
     VCHAR256 = "VARCHAR(256)"
+    VCHAR2048 = "VARCHAR(2048)"
+    VCHAR512 = "VARCHAR(512)"
     SHA_2 = "CHAR(64)"
+    MD5 = "CHAR(32)"
     DATE = "DATE"
     DATETIME = "DATETIME"
     BOOL = "TINYINT(1)"
+    TEXT = "TEXT"
+    
+CHARACTER_SET = "CHARACTER SET utf8 COLLATE utf8_unicode_ci"
 
-
-def connect(_host, _user, _passwd, _db):
+def connect(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     ''' 
     create connection to DBMS.
     connection must closed by developer, use close()
@@ -29,10 +34,12 @@ def connect(_host, _user, _passwd, _db):
     @param db: -string
     '''
     try:
-        conn = MySQLdb.Connect(host=_host,
-                       user=_user,
-                       passwd=_passwd,
-                       db=_db)
+        conn = MySQLdb.Connect(host=host,
+                       user=user,
+                       passwd=pw,
+                       db=db,
+                       use_unicode=False,
+                       charset="utf8")
     except MySQLdb.Error, e : 
         print "Error %d: %s" % (e.args[0], e.args[1])
         sys.exit(1)
@@ -44,7 +51,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     @param conn: connection object
     @param table: table name
     @param primaryKey: string -identify the primary key
-    @param uniqueList: String list{} of unique columns
+    @param uniqueList: String list{} of unique columns,
+        for combinations {"column1, column2"} for separated {"column1","column2"}
     @param notNulls: String list{} of not null columns
     @param forgenKeys: map of <column>:<<foreignTable>.<column>>   
     @param order: is a set of ordered keys 
@@ -56,6 +64,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     query = "CREATE TABLE " + table + " ("
     for key in order:
         query += key + " " + kwargs[key] 
+        if(str(kwargs[key]).startswith("CHAR") or str(kwargs[key]).startswith("VARCHAR")):
+            query += " " + CHARACTER_SET
         if any(key == s for s in notNulls):
             query += " NOT NULL"
         query += ", "
@@ -64,7 +74,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
         query += "PRIMARY KEY (" + primaryKey + "), "
     
     for key in uniqueList:
-        query += "UNIQUE KEY (" + key + "), "
+        #TODO: add a key name for combination column keys.
+        query += "UNIQUE KEY  (" + key + "), "
     
     for key, value in forgenKeys.items():
         tColumn = value.split(".") 
@@ -80,7 +91,6 @@ def insertToTable(conn, table, **kwargs):
     insert to table. 
     @param conn: connection object
     @param table: table name
-    @param order: is a set of ordered keys 
     @param kwargs: <column>=<value>
     '''
     cursor = conn.cursor()
@@ -92,9 +102,9 @@ def insertToTable(conn, table, **kwargs):
         values += "'" + value + "' , "
     query = "INSERT INTO " + table + " (" + columns[:-2] + ") VALUES (" + values[:-2] + ")" 
     cursor.execute(query)
-    cursor.close()
     # TODO: should commit() be moved to a higher abstraction level?
     conn.commit()
+    cursor.close()
     return cursor.rowcount
 
 # TODO: implement select from for string search "like"
@@ -175,9 +185,9 @@ def updateInTable(conn, colValueMap, *inTables, **kwargs):
     
     query = "UPDATE " + tables + " SET " + columnValues + where
     cursor.execute(query)
-    cursor.close()
     # TODO: should commit() be moved to a higher abstraction level?
     conn.commit()
+    cursor.close()
     return cursor.rowcount
 
 def deleteFromTable(conn, table, *referencedTables,**kwargs):
@@ -205,12 +215,13 @@ def deleteFromTable(conn, table, *referencedTables,**kwargs):
     
     query = "DELETE " + tables +" FROM " + table + where
     cursor.execute(query)
-    cursor.close()
     # TODO: should commit() be moved to a higher abstraction level?
     conn.commit()
+    cursor.close()
     return cursor.rowcount
 
 def dropTable(conn, *tables):
     cursor = conn.cursor()
     for table in tables:
         cursor.execute("DROP TABLE IF EXISTS " + table)
+    cursor.close()

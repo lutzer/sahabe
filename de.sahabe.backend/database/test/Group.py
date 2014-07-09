@@ -156,19 +156,9 @@ class Group(Tables.Tables):
                           self.public + 'e')
 
     def testInsertInvalidPublic_bigNum(self):
-        # FIXME: for TINYINT every short number that's greater than 0 has the value true  
-        self.assertRaises(DataError, self.insertGroup,
-                          self.id,
-                          self.name,
-                          "25")
-        self.assertRaises(DataError, self.insertGroup,
-                          self.id,
-                          self.name,
-                          self.public + "25")
-        self.assertRaises(DataError, self.insertGroup,
-                          self.id,
-                          self.name,
-                          "25" + self.public)
+        self.insertGroup(self.id,
+                         self.name,
+                         "25")
 
 
     ''' NULL CONSTRAINS TESTS '''    

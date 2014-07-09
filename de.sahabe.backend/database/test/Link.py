@@ -335,7 +335,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvalidTitle(self):
-        title = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        title = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,

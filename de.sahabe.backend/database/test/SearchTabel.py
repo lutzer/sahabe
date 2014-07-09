@@ -241,7 +241,7 @@ class SearchTable(Tables.Tables):
     
     ''' UNIQUE CONSTRAINS TESTS '''
         
-    def testInsertDoublicateId(self):
+    def testInsertDoublicateUserId(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
         userId=self.userId
         self.__initDependencies()
@@ -258,18 +258,6 @@ class SearchTable(Tables.Tables):
         # FIXME: a link belongs only to one user. insertion should throw ERROR
         self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertSearchTable,
                                 self.userId,
-                                linkId,
-                                self.groups,
-                                self.tags,
-                                self.text)
-        
-    def testInsertDoublicatUserAndLinkId(self):
-        self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
-        userId=self.userId
-        linkId=self.linkId
-        self.__initDependencies()
-        self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertSearchTable,
-                                userId,
                                 linkId,
                                 self.groups,
                                 self.tags,

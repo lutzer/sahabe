@@ -119,15 +119,22 @@
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_c5xKIPu9EeONV6aU8dFjOA" name="user_id" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_c5xKIPu9EeONV6aU8dFjOA" name="user_id: {unique with url}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tf5O4Pu9EeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tf518Pu9EeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_tf6dAPu9EeONV6aU8dFjOA">
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_dWJkIPu9EeONV6aU8dFjOA" name="url" visibility="public" type="_Da1jkPu7EeONV6aU8dFjOA" isUnique="false"/>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_d3QtIPu9EeONV6aU8dFjOA" name="title" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_dWJkIPu9EeONV6aU8dFjOA" name="url: {unique with user_id}" visibility="public" type="_AxzLcAaVEeSQb6Xk-Hk_VA" isUnique="false"/>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_-mTpoAanEeSQb6Xk-Hk_VA" name="url_hash" visibility="public" type="_MyzkkAaoEeSQb6Xk-Hk_VA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__ApcQAanEeSQb6Xk-Hk_VA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__AqDUAanEeSQb6Xk-Hk_VA" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="__AqqYAanEeSQb6Xk-Hk_VA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_d3QtIPu9EeONV6aU8dFjOA" name="title" type="_Da1jkPu7EeONV6aU8dFjOA" isUnique="false"/>
     <ownedAttribute xmi:type="uml:Property" xmi:id="_fCQgoPu9EeONV6aU8dFjOA" name="description" type="_Da1jkPu7EeONV6aU8dFjOA" isUnique="false"/>
     <ownedAttribute xmi:type="uml:Property" xmi:id="_fRl9IPu9EeONV6aU8dFjOA" name="type_name" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false"/>
     <ownedAttribute xmi:type="uml:Property" xmi:id="_flqIoPu9EeONV6aU8dFjOA" name="modified_at" type="_hwDZEPu8EeONV6aU8dFjOA" isUnique="false"/>
@@ -137,7 +144,7 @@
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_120LoPu_EeONV6aU8dFjOA" name="search_table">
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_f2bBIPvAEeONV6aU8dFjOA" name="user_id: {PK}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_f2bBIPvAEeONV6aU8dFjOA" name="user_id" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kVt28PvAEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kVueAPvAEeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_kVvsIPvAEeONV6aU8dFjOA">
@@ -399,5 +406,25 @@
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_8ReutfvPEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_8ReutvvPEeONV6aU8dFjOA" value="*"/>
     </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_AxzLcAaVEeSQb6Xk-Hk_VA" name="TEXT">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_Kw_YcAaVEeSQb6Xk-Hk_VA" name="value" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_LAhpQAaVEeSQb6Xk-Hk_VA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_LAjecAaVEeSQb6Xk-Hk_VA" value="*"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_LAkskAaVEeSQb6Xk-Hk_VA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:DataType" xmi:id="_MyzkkAaoEeSQb6Xk-Hk_VA" name="MD5">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_QGEsIAaoEeSQb6Xk-Hk_VA" name="value" visibility="public">
+      <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Qt9LgAaoEeSQb6Xk-Hk_VA" value="36"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Qt9ykAaoEeSQb6Xk-Hk_VA" value="36"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_Qt_AsAaoEeSQb6Xk-Hk_VA">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
   </packagedElement>
 </uml:Model>

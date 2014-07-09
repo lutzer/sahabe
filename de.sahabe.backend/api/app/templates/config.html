@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Configuration</h1>
+{% for config in configs %}
+<div><p>{{config.0}} = <b>{{config.1}}</b></p></div>
+{% endfor %}
+{% endblock %}

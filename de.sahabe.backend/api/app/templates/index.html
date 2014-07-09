@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Hi, {{user.nickname}}!</h1>
+{% for link in links %}
+<div><p> <img src={{link.logo}} alt="logo"> <a href={{link.uri}}>{{link.title}}</a></p></div>
+{% endfor %}
+{% endblock %}

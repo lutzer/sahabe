@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Load form Firfox json file</h1>
+<form action="" method="post" name="load_links" enctype="multipart/form-data">
+    {{form.hidden_tag()}}
+    <p>
+        path:
+        {{form.filename}}
+    </p>
+    <p><input type="submit" value="load"></p>
+</form>
+{% endblock %}

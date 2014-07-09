@@ -15,7 +15,7 @@ dbPw = "sahabe_test"
 database="sahabe_test"
 
 # FIXME: run initialize new tables 
-#dbinit.run(host, dbUser, dbPw, database)
+# dbinit.run(host, dbUser, dbPw, database)
 
 class Tables(unittest.TestCase):
     

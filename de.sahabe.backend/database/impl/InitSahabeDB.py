@@ -33,17 +33,17 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     DBApiModule.createTable(conn,
                             "link",
                             "id",
-                            {},
-                            {"id", "user_id", "url", "modified_at"},
+                            {"user_id , url_hash"},
+                            {"id", "user_id", "url", "url_hash","modified_at"},
                             {"user_id":"user.id"},
-                            "id", "user_id", "url", "title", "description", "type_name", "modified_at",
-                            id=dt.UUID, user_id=dt.UUID, url=dt.VCHAR256, title=dt.CHAR64,
+                            "id", "user_id", "url", "url_hash","title", "description", "type_name", "modified_at",
+                            id=dt.UUID, user_id=dt.UUID, url=dt.TEXT, url_hash=dt.MD5 ,title=dt.VCHAR256,
                             description=dt.VCHAR256, type_name=dt.VCHAR64 ,modified_at=dt.DATETIME)
     
     """ search_table """ 
     DBApiModule.createTable(conn,
                             "search_table",
-                            "user_id, link_id",
+                            "link_id",
                             {},
                             {"user_id", "link_id"},
                             {"user_id":"user.id", "link_id":"link.id"},

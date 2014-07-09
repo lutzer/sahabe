@@ -10,13 +10,13 @@ import hashlib
 import datetime
 
 
-def randomName(size=32, chars=string.ascii_lowercase):
+def randomText(size=64 , chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(random.randint(5, size)))
 
-def randomEmail(size=32): 
+def randomEmail(size=64): 
     return randomText(size - 10) + "@sahabe.de"
     
-def randomText(size=64, chars=string.ascii_letters + string.digits):
+def randomFixedLengthText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 def uuid():
@@ -25,7 +25,6 @@ def uuid():
 def timeStamp():
     timeStamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return str(timeStamp)
-
 
 class DBMock():
     """
@@ -58,7 +57,7 @@ class DBMock():
         email = ""
         def __init__(self):
             self.id = uuid()
-            self.name = randomName()
+            self.name = randomText()
             self.email = self.name + "@sahabe.de"
     
     class Link():
@@ -72,10 +71,10 @@ class DBMock():
         def __init__(self, user):
             self.id = uuid()
             self.userId = user.id
-            self.url = randomText(64)
-            self.title = randomName()
-            self.desciption = randomText(32)
-            self.typeName = randomName()
+            self.url = randomText(2048)
+            self.title = randomText()
+            self.desciption = randomText()
+            self.typeName = randomText()
             self.modifiedAt = timeStamp()
             
     class SearchTable():
@@ -87,16 +86,16 @@ class DBMock():
         def __init__(self, user, link):
             self.userId = user.id
             self.linkId = link.id
-            self.groups = randomText(64)
-            self.tags = randomText(64)
-            self.text = randomText(64)
+            self.groups = randomText()
+            self.tags = randomText()
+            self.text = randomText()
             
     class Tag():
         id = ""
         name = ""
         def __init__(self):
             self.id = uuid()
-            self.name = randomName()
+            self.name = randomText()
     
     class LinkTagMap():
         tagId = ""
@@ -111,7 +110,7 @@ class DBMock():
         public = "0"
         def __init__(self):
             self.id = uuid()
-            self.name = randomName()      
+            self.name = randomText()      
             self.public = "0"
             
     class LinkGroupMap():
@@ -127,8 +126,8 @@ class DBMock():
         value = ""       
         def __init__(self, link):   
             self.linkId = link.id
-            self.key = randomName()
-            self.value = randomName()
+            self.key = randomText()
+            self.value = randomText()
     
     class PWHash():
         userId = "" 

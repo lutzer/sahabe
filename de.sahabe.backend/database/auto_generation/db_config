@@ -1,0 +1,62 @@
+__START__
+name=user
+column__id     =UUID
+column__name=VCHAR(64)
+column__email=VCHAR(64)
+primary_key=id
+unique_key=name, email
+not_null=id, name, email
+__END__
+
+
+__START__
+name=link
+column__id=UUID
+column__user_id=UUID
+column__url=TEXT
+column__url_hash=MD5
+column__title=VCHAR(256)
+column__description=VCHAR(256)
+column__type_name=VCHAR(64)
+column__modified_at=DATETIME
+primary_key=id
+unique_key=user_id AND url_hash
+not_null=id, user_id, url, url_hash, modified_at
+foreign_key=user_id+user.id
+__END__
+
+
+__START__
+name = search_table
+column__user_id = UUID
+column__link_id =  UUID
+column__groups = VCHAR(256) 
+column__tags = VCHAR(256)
+column__text = TEXT
+primary_key=link_id
+not_null=link_id, user_id
+foreign_key=user_id+user.id, link_id+link.id
+__END__
+
+
+__START__
+name=tag
+column__id=UUID
+column__name=VCHAR(64)
+primary_key=id
+not_null=id, name
+__END__
+
+
+__START__
+name=link_tag_map
+column__tag_id=UUID
+column__link_id=UUID
+primary_key=tag_id, link_id
+not_null=tag_id, link_id
+foreign_key=tag_id+tag.id, link_id+link.id
+__END__
+
+
+
+
