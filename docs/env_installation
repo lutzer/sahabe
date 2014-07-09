@@ -42,6 +42,11 @@ Backend:
                         -user session management for Flask
                          -see https://flask-login.readthedocs.org/en/latest/
                          $ sudo apt-get install python-flask-login
+                         
+                        On Mac:
+                         - type 'sudo easy_install Flask'
+                         - sudo easy_install flask-login
+                         
 Frontend:
 	-Web interface: 
 		-java script
