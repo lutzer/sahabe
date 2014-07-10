@@ -8,10 +8,9 @@ define([
 	var HomeView = BaseView.extend({
 
 		render: function(){
-			alert("test");
-			//var compiledTemplate = _.template( homeTemplate, {} );
+			var compiledTemplate = _.template( homeTemplate, {} );
 			// Append our compiled template to this Views "el"
-			//this.$el.html( compiledTemplate );
+			this.$el.html( compiledTemplate );
 			return this;
 		}
 	});
