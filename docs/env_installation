@@ -8,7 +8,7 @@ DB:
 		- CREATE USER 'sahabe_test'@'localhost' IDENTIFIED BY 'sahabe_test';
 		- GRANT ALL PRIVILEGES ON sahabe_test.* TO sahabe_test@localhost;
 		- modify /etc/mysql/my.cnf, under section [mysqld] add:
-		  sql-mode=STRICT_ALL_TABLES,STRICT_TRANS_TABLES	
+		  sql_mode=STRICT_ALL_TABLES,STRICT_TRANS_TABLES	
 	
 
 
