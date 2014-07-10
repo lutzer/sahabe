@@ -27,8 +27,8 @@ class MetaData(Tables.Tables):
         self.key = self.metaData.key
         self.value = self.metaData.value
         self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
-                        self.link.description, self.link.typeName, self.link.modifiedAt)
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.urlHash,
+                        self.link.title, self.link.description, self.link.typeName, self.link.modifiedAt)
     
     def setUp(self):
         self.connect()

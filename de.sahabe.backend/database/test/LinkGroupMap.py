@@ -28,8 +28,8 @@ class LinkGroupMap(Tables.Tables):
         self.linkId = self.linkGroupMap.linkId
         self.insertUser(self.user.id, self.user.name, self.user.email)
         self.insertGroup(self.group.id, self.group.name, self.group.public)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
-                        self.link.description, self.link.typeName, self.link.modifiedAt)
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.urlHash,
+                        self.link.title, self.link.description, self.link.typeName, self.link.modifiedAt)
     
     def setUp(self):
         self.connect()

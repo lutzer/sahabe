@@ -72,6 +72,7 @@ class DBMock():
             self.id = uuid()
             self.userId = user.id
             self.url = randomText(2048)
+            self.urlHash = hashlib.md5(self.url).hexdigest()
             self.title = randomText()
             self.desciption = randomText()
             self.typeName = randomText()

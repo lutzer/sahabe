@@ -71,6 +71,7 @@ class Tag(Tables.Tables):
         self.insertLink(self.link.id,
                         self.link.userId,
                         self.link.url,
+                        self.link.urlHash, 
                         self.link.title,
                         self.link.description,
                         self.link.typeName,
@@ -94,7 +95,7 @@ class Tag(Tables.Tables):
         
     def testDropLinkTagMapByTag(self):
         self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.urlHash, self.link.title,
                         self.link.description, self.link.typeName , self.link.modifiedAt)
         self.insertTag(self.id, self.name)
         self.insertLinkTagMap(self.linkTagMap.tagId, self.linkTagMap.linkId)

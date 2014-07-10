@@ -86,6 +86,7 @@ class Group(Tables.Tables):
         self.insertLink(self.link.id,
                         self.link.userId,
                         self.link.url,
+                        self.link.urlHash, 
                         self.link.title,
                         self.link.description,
                         self.link.typeName,
@@ -110,7 +111,7 @@ class Group(Tables.Tables):
         
     def testDropLinkGroupMapByGroup(self):
         self.insertUser(self.user.id, self.user.name, self.user.email)
-        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.title,
+        self.insertLink(self.link.id, self.link.userId, self.link.url, self.link.urlHash, self.link.title,
                         self.link.description, self.link.typeName , self.link.modifiedAt)
         self.insertGroup(self.id, self.name, self.public)
         self.insertLinkGroupMap(self.linkGroupMap.groupId, self.linkGroupMap.linkId)

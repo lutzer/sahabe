@@ -41,9 +41,9 @@ class Tables(unittest.TestCase):
         db.insertToTable(self.conn, "user",
                          id=_id, name=name, email=email)
             
-    def insertLink(self, _id, userId, url, title, desc, typeName, modifiedAt):
-        db.insertToTable(self.conn, "link", id=_id, user_id=userId, url=url, title=title,
-                         description=desc, type_name=typeName, modified_at=modifiedAt)
+    def insertLink(self, _id, userId, url, urlHash, title, desc, typeName, modifiedAt):
+        db.insertToTable(self.conn, "link", id=_id, user_id=userId, url=url, url_hash=urlHash,
+                         title=title, description=desc, type_name=typeName, modified_at=modifiedAt)
     
     def insertSearchTable(self, userId, linkId, groups, tags, text):
         db.insertToTable(self.conn, "search_table",
