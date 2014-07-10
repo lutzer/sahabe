@@ -8,7 +8,7 @@ DB:
 		- CREATE USER 'sahabe_test'@'localhost' IDENTIFIED BY 'sahabe_test';
 		- GRANT ALL PRIVILEGES ON sahabe_test.* TO sahabe_test@localhost;
 		- modify /etc/mysql/my.cnf, under section [mysqld] add:
-		  sql-mode=STRICT_ALL_TABLES,STRICT_TRANS_TABLES	
+		  sql_mode=STRICT_ALL_TABLES,STRICT_TRANS_TABLES	
 	
 
 
@@ -78,3 +78,7 @@ IDE ( eclipse Kepler ):
 	 org.gnome.desktop.interface buttons-have-icons to true or use the command:
 	 gsettings set org.gnome.desktop.interface menus-have-icons true
 	 gsettings set org.gnome.desktop.interface buttons-have-icons true
+	 
+SETUP ECLIPSE PROJECT:
+	On Mac:
+	 - configure python intepreter -> add Environment Variable: DYLD_LIBRARY_PATH : /usr/local/mysql/lib
