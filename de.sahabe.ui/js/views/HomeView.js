@@ -2,13 +2,13 @@ define([
 	'jquery',
 	'underscore',
 	'views/BaseView',
-	'text!templates/homeTemplate.html'
-], function($, _, BaseView, homeTemplate){
+	'text!templates/homeViewTemplate.html'
+], function($, _, BaseView, homeViewTemplate){
 	
 	var HomeView = BaseView.extend({
 
 		render: function(){
-			var compiledTemplate = _.template( homeTemplate, {} );
+			var compiledTemplate = _.template( homeViewTemplate, {} );
 			// Append our compiled template to this Views "el"
 			this.$el.html( compiledTemplate );
 			return this;
