@@ -13,10 +13,9 @@ from impl import DBApiModule as db
 
 from flask import render_template, flash, redirect, session, url_for, request, g, json
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, lm, oid
-from entries import User
+from app import app, lm  #, oid
 import entries
-from werkzeug import secure_filename
+#from werkzeug import secure_filename
 import datetime
 
 @app.route("/")
