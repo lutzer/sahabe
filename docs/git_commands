@@ -1,0 +1,109 @@
+$ git config 	      : changes the current repository .git/config 
+	     --global : global for user 
+	     --system : global for the system 
+				
+ 
+$ git config --global user.name <String> : set user name
+$ git config --global user.email <String> :set e-mail address
+$ git config --list <Item>/"null for all" : list all the settings Git can find at that point
+
+
+$ git init : create .git folder 
+
+$ git add : add to working tree, and mark as tracked and staged
+
+$ git reset HEAD <file> : unstage the file, mark as untracked and unstaged
+
+$ git rm <file>: remove from the directory and from git and stage this 
+		--cached remove only from git and stage that
+
+$ git commit -m ''
+$ git commit --amend : overwrites the previous commit
+
+
+$ git clone [URL] [DIRECTORY]: is the checkout for subversion, clones the server
+		URL= 	user@server:/path.git for ssh
+			http(s)://
+			git://
+
+
+$ git diff : only changes that are still unstaged "changes between stagen and unstaged"
+$ git diff --cached: diffrence between last commit and stage
+
+$ git stash : revert to HEAD "Stash the changes in a dirty working directory away"
+
+$ git mv : move
+
+$ git log --graph :  as a tree
+	  -p :diff changes 
+	  -<number> : last <number> commits
+	  -stat: statistic about the files
+	  
+
+$ gitk : start grafical hestory interface
+
+$ git checkout -- <file> : revert modified files "unstaged files" 
+
+	
+$ git remote : list name of the remote repos
+
+$ git remote 	add <hortname> <URL> : add remote
+		show <shortname> : inspect remote
+		rename <shortname> : rename remote
+		rm <shortname]> : remove remote
+
+$ git fetch [shortname] : pulls down all the data from that remote project that you don’t have yet "references"
+
+$ git pull ;automatically fetch and then merge a remote branch into your current branch.
+
+$ git tag : list tags 
+
+$ git branch --set-upstream-to=<remote-name>/<branch> master : set tranking information for this branch
+
+$ git pull <remote> <branch> : specify which branch you want merge with.
+
+$ git config --global push.default [matching OR simple] : changes push behavior  
+
+$ git remote set-url --push <remote-name> [string]/no-pushing : changes the url of --push, to diactivate the pushing write no-pushing
+
+$ git reset --hard HEAD~1 : removes last commit
+		   <commit hash id> : removes commit
+
+$git reflog show origin/master : shows history of pushes and pulls 
+
+$ git diff --stat [remote/branch]: shows the diffs between remote and repo
+
+$ git branch : list all branches
+
+$ git branch [commit hash id] : create brach from this commit
+
+$ git branch -m <old name> <new name> : rename branch
+
+$ git checkout <branch name> : switch to branch
+
+$ git push <remote> <local branch> : pushes to a branch and create it if it not exists
+
+$ git symbolic-ref HEAD refs/heads/mybranch : switch bare repo HEAD to specifec branch
+
+$ ssh-keygen rsa : create key paar
+
+$ ssh-add <path> : add new key to ssh-agent
+
+$ git config color.ui true : sets highlight on
+
+$ git checkout --orphan <branch name> : creates new empty branch 
+
+$ git push --set-upstream <remote name> <branch> : set push stream
+
+$ git branch --unset-upstream : un set branch upstream
+
+$ git show-branch : show info about a branch 
+
+$ 
+
+
+
+
+ 
+
+	
