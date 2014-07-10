@@ -55,8 +55,10 @@ Frontend:
 IDE ( eclipse Kepler ):
 	-plugin JSDT : javascript development tool
 	-plugin PyDev: python IDE for Eclipse 
-	-plugin UML Designer: edit UML 2.4
-	-Plugin luna: html editor 	
+		Mac: install new software: from 'http://pydev.org/updates/', select pydev 2.82 and mylin integration
+	-plugin Papyrus: http://download.eclipse.org/modeling/mdt/papyrus/updates/releases/kepler
+		
+	-html editor: plugin luna or eclipse web developper tools (WDT)
 
 	(linux gnome shell 3)
 	-To add an app entry and show its icon in the
