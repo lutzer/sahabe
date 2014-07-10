@@ -78,3 +78,7 @@ IDE ( eclipse Kepler ):
 	 org.gnome.desktop.interface buttons-have-icons to true or use the command:
 	 gsettings set org.gnome.desktop.interface menus-have-icons true
 	 gsettings set org.gnome.desktop.interface buttons-have-icons true
+	 
+SETUP ECLIPSE PROJECT:
+	On Mac:
+	 - configure python intepreter -> add Environment Variable: DYLD_LIBRARY_PATH : /usr/local/mysql/lib
