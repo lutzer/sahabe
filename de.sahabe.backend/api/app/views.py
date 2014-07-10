@@ -9,13 +9,11 @@ import string
 import uuid as uid
 import re
 
-
 from impl import DBApiModule as db
 
 from flask import render_template, flash, redirect, session, url_for, request, g, json
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, lm, oid
-from forms import SignUpForm, LoginForm, OpenIDLoginForm, LoadForm
 from entries import User
 import entries
 from werkzeug import secure_filename
@@ -41,134 +39,138 @@ def index():
                            title = 'Home',
                            user = user,
                            links = links)
-    
+
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
-    form = SignUpForm()
-    if form.validate_on_submit():
-        userId = str(uid.uuid4())
-        userName = form.username.data
-        email = form.email.data
-        
-        pw = form.password.data
-        pwHash = hashlib.sha256(pw).hexdigest()
-        salt = hashlib.sha256(randomText()).hexdigest()
-        
-        conn = db.connect()
-        db.insertToTable(conn, "user", id = userId, name = userName, email = email)
-        
-        db.insertToTable(conn, "pw_hash", user_id = userId, value = pwHash, salt = salt)
-        flash("You signed up successfully.")
-        return redirect(request.args.get("next") or url_for("sign_up"))
     return render_template('sign_up.html',
-                           title = 'Sign Up',
-                           form = form)
+                           title = 'Sign Up')
     
+@app.route("/submit_sign_up", methods=["GET", "POST"])
+def submit_sign_up():
+    userId = str(uid.uuid4())
+    userName = request.form["username"]
+    email = request.form["email"]
+    
+    pw = request.form["password"]
+    pwHash = hashlib.sha256(pw).hexdigest()
+    salt = hashlib.sha256(randomText()).hexdigest()
+    
+    conn = db.connect()
+    db.insertToTable(conn, "user", id = userId, name = userName, email = email)
+    
+    db.insertToTable(conn, "pw_hash", user_id = userId, value = pwHash, salt = salt)
+    flash("You signed up successfully.")
+    return redirect(request.args.get("next") or url_for("sign_up"))
+
 @app.route("/load_links", methods=["GET", "POST"])
 @login_required
 def load_links():
-    form = LoadForm()
-    
-    if form.validate_on_submit():
-        fileName = form.filename.data
-        #jsonData = open(fileName)
-        data = json.load(fileName)
-        
-        linksData = data["children"][0]["children"]
-        count = 0
-        links = []
-        for i in range(4, len(linksData)):
-            if linksData[i].has_key("title") and linksData[i].has_key("uri"): 
-                title =  linksData[i]["title"].replace("'", "")
-                uri = linksData[i]["uri"]
-                modified = linksData[i]["lastModified"]/1000000
-                formated_modified = str(datetime.datetime.fromtimestamp(modified))
-                
-                m = re.search("(http(:|s:)//(.+?)/)", uri)
-                iconUri = m.group(1)+"favicon.ico"
-                
-                links.append({"title" :title , "uri":uri, "logo":iconUri})
-                conn = db.connect()
-                linkId = str(uid.uuid4())
-                db.insertToTable(conn, "link",
-                                 id = linkId,
-                                 user_id = g.user.id,
-                                 title = title,
-                                 url = uri,
-                                 url_hash = hashlib.md5(uri).hexdigest(),
-                                 modified_at = formated_modified)
-                count += 1
-        user = g.user
-        flash(str(count) + " links were added.")
-        return render_template('index.html',
-                                title = 'Home',
-                                user = user,
-                                links = links)
-                
     return render_template('load_links.html',
-                           title = 'Load links',
-                           form = form)
+                           title = 'Load links')
 
-@app.route('/openid_login', methods = ['GET','POST'])
-@oid.loginhandler
-def openid_login():
-    if g.user is not None and g.user.is_authenticated():
-        return redirect(url_for('index'))
-    form = OpenIDLoginForm()
-    if form.validate_on_submit():
-        session['remember_me'] = form.remember_me.data
-        return oid.try_login(form.openid.data, ask_for = ['nickname', 'email'])
-    return render_template('openid_login.html',
-                           title = 'Sign In',
-                           form = form,
-                           providers = app.config['OPENID_PROVIDERS'])
+    
+@app.route("/submit_load_links", methods=["GET", "POST"])
+@login_required
+def submit_load_links():
+    fileName = request.files["file"]
+    #jsonData = open(fileName)
+    print fileName
+    data = json.load(fileName)
+    
+    linksData = data["children"][0]["children"]
+    count = 0
+    links = []
+    for i in range(4, len(linksData)):
+        if linksData[i].has_key("title") and linksData[i].has_key("uri"): 
+            title =  linksData[i]["title"].replace("'", "")
+            uri = linksData[i]["uri"]
+            modified = linksData[i]["lastModified"]/1000000
+            formated_modified = str(datetime.datetime.fromtimestamp(modified))
+            
+            m = re.search("(http(:|s:)//(.+?)/)", uri)
+            iconUri = m.group(1)+"favicon.ico"
+            
+            links.append({"title" :title , "uri":uri, "logo":iconUri})
+            conn = db.connect()
+            linkId = str(uid.uuid4())
+            db.insertToTable(conn, "link",
+                             id = linkId,
+                             user_id = g.user.id,
+                             title = title,
+                             url = uri,
+                             url_hash = hashlib.md5(uri).hexdigest(),
+                             modified_at = formated_modified)
+            count += 1
+    user = g.user
+    flash(str(count) + " links were added.")
+    return render_template('index.html',
+                            title = 'Home',
+                            user = user,
+                            links = links)
+
+
+# @app.route('/openid_login', methods = ['GET','POST'])
+# @oid.loginhandler
+# def openid_login():
+#     if g.user is not None and g.user.is_authenticated():
+#         return redirect(url_for('index'))
+#     form = OpenIDLoginForm()
+#     if form.validate_on_submit():
+#         session['remember_me'] = form.remember_me.data
+#         return oid.try_login(form.openid.data, ask_for = ['nickname', 'email'])
+#     return render_template('openid_login.html',
+#                            title = 'Sign In',
+#                            form = form,
+#                            providers = app.config['OPENID_PROVIDERS'])
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        name = form.username.data
-        user = entries.get_user_by_name(name)
-        
-        pw = hashlib.sha256(form.password.data).hexdigest()
-        savedPw = entries.get_pw_hash_by_user_id(user.id)
-        
-        if pw == savedPw:
-            remember_me = form.remember_me.data
-            session['remember_me'] = form.remember_me.data
-        
-            login_user(user, remember = remember_me)
-            flash("Logged in successfully.")
-            return redirect(request.args.get("next") or url_for("index"))
-        else:
-            flash("incorrect password or username.")
-            render_template("login.html",
-                           title = "Login",
-                           form = form)
     return render_template("login.html",
-                           title = "Login",
-                           form = form)
-     
-@oid.after_login
-def after_login(resp):
-    if resp.email is None or resp.email == "":
-        flash('Invalid login. Please try again.')
-        return redirect(url_for('openid_login'))
-    user = entries.get_user_by_name(resp.nickname)
+                           title = "Login")
+
+@app.route("/submit_login", methods=["GET", "POST"])
+def submit_login():
+    name = request.form["username"]
+    user = entries.get_user_by_name(name)
     
-    if user is None:
-        name = resp.nickname
-        if name is None or name == "":
-            name = resp.email.split('@')[0]
-        user = User(id , name ,resp.email)
-        user.add_user()
-    remember_me = False
-    if 'remember_me' in session:
-        remember_me = session['remember_me']
-        session.pop('remember_me', None)
-    login_user(user, remember = remember_me)
-    return redirect(request.args.get('next') or url_for('index'))
+    pw = hashlib.sha256(request.form["password"]).hexdigest()
+    savedPw = entries.get_pw_hash_by_user_id(user.id)
+    if pw == savedPw:
+        remember_me = False
+        for checkbox in request.form.getlist("remember_me"):
+            if checkbox == "on":
+                remember_me = True
+        session['remember_me'] = remember_me
+        login_user(user, remember_me)
+        flash("Logged in successfully.")
+        return redirect(request.args.get("next") or url_for("index"))
+    else:
+        flash("incorrect password or username.")
+        render_template("login.html",
+                       title = "Login")
+    return render_template("login.html",
+                           title = "Login")
+     
+# @oid.after_login
+# def after_login(resp):
+#     if resp.email is None or resp.email == "":
+#         flash('Invalid login. Please try again.')
+#         return redirect(url_for('openid_login'))
+#     user = entries.get_user_by_name(resp.nickname)
+#     
+#     if user is None:
+#         name = resp.nickname
+#         if name is None or name == "":
+#             name = resp.email.split('@')[0]
+#         user = User(id , name ,resp.email)
+#         user.add_user()
+#     remember_me = False
+#     if 'remember_me' in session:
+#         remember_me = session['remember_me']
+#         session.pop('remember_me', None)
+#     login_user(user, remember = remember_me)
+#     return redirect(request.args.get('next') or url_for('index'))
     
 @lm.user_loader
 def load_user(_id):
