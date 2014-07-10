@@ -74,7 +74,7 @@ class MetaData(Tables.Tables):
 
     def testUpdateKey(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        key = mock.randomName()
+        key = mock.randomText()
         db.updateInTable(self.conn, {"l_key":key}, "meta_data", link_id=self.linkId)
         
         rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
@@ -85,7 +85,7 @@ class MetaData(Tables.Tables):
     
     def testUpdateValue(self):
         self.insertMetaData(self.linkId, self.key, self.value)
-        value = mock.randomName()
+        value = mock.randomText()
         db.updateInTable(self.conn, {"value":value}, "meta_data", link_id=self.linkId)
         
         rows = db.selectFrom(self.conn, {"meta_data"}, "*", link_id=self.linkId)
@@ -113,14 +113,14 @@ class MetaData(Tables.Tables):
                          self.value)
         
     def testInsertInvalidKey(self):
-        key = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        key = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertMetaData,
                          self.linkId,
                          key,
                          self.value)
         
     def testInsertInvalidValue(self):
-        value = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        value = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertMetaData,
                          self.linkId,
                          self.key,

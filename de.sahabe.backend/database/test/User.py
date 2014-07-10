@@ -58,7 +58,7 @@ class User(Tables.Tables):
         
     def testName(self):
         self.insertUser(self.id, self.name, self.email)
-        name = mock.randomName()
+        name = mock.randomText()
         db.updateInTable(self.conn, {"name":name}, "user", id=self.id)
         
         rows = db.selectFrom(self.conn, {"user"}, "*", id=self.id)
@@ -69,7 +69,7 @@ class User(Tables.Tables):
         
     def testEmail(self):
         self.insertUser(self.id, self.name, self.email)
-        email = mock.randomName()
+        email = mock.randomText()
         db.updateInTable(self.conn, {"email":email}, "user", id=self.id)
         
         rows = db.selectFrom(self.conn, {"user"}, "*", id=self.id)
@@ -257,14 +257,14 @@ class User(Tables.Tables):
         '''
         
     def testInsertInvalidName(self):
-        name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        name = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertUser,
                           self.id,
                           name,
                           self.email)
     
     def testInsertInvalidEmail(self):
-        email = mock.randomEmail(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        email = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertUser,
                           self.id,
                           self.name,
@@ -302,7 +302,7 @@ class User(Tables.Tables):
         self.insertUser(self.id, self.name, self.email)
         self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertUser,
                           self.id,
-                          mock.randomName(),
+                          mock.randomText(),
                           mock.randomEmail())
         
     def testInsertDublicateName(self):
@@ -316,5 +316,5 @@ class User(Tables.Tables):
         self.insertUser(self.id, self.name, self.email)
         self.assertRaisesRegexp(IntegrityError, "Duplicate entry", self.insertUser,
                           mock.uuid(),
-                          mock.randomName(),
+                          mock.randomText(),
                           self.email)

@@ -106,7 +106,7 @@ class Link(Tables.Tables):
     def testUpdateUrl(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
                         self.desc, self.typeName, self.modifiedAt)
-        url = mock.randomName()
+        url = mock.randomText()
         db.updateInTable(self.conn, {"url":url}, "link", id=self.id)
         rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
@@ -121,7 +121,7 @@ class Link(Tables.Tables):
     def testUpdateTitle(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
                         self.desc, self.typeName, self.modifiedAt)
-        title = mock.randomName()
+        title = mock.randomText()
         db.updateInTable(self.conn, {"title":title}, "link", id=self.id)
         rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
@@ -136,7 +136,7 @@ class Link(Tables.Tables):
     def testUpdateDescription(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
                         self.desc, self.typeName, self.modifiedAt)
-        desc = mock.randomName()
+        desc = mock.randomText()
         db.updateInTable(self.conn, {"description":desc}, "link", id=self.id)
         rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
@@ -151,7 +151,7 @@ class Link(Tables.Tables):
     def testUpdateTypeName(self):
         self.insertLink(self.id, self.userId, self.url, self.title,
                         self.desc, self.typeName, self.modifiedAt)
-        typeName = mock.randomName()
+        typeName = mock.randomText()
         db.updateInTable(self.conn, {"type_name":typeName}, "link", id=self.id)
         rows = db.selectFrom(self.conn, {"link"}, "*", id=self.id)
         
@@ -324,7 +324,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
 
     def testInsertInvalidUrl(self):
-        url = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        url = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
@@ -335,7 +335,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvalidTitle(self):
-        title = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        title = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
@@ -346,7 +346,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvaliddescription(self):
-        desc = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        desc = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
@@ -357,7 +357,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvalidTypeName(self):
-        typeName = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        typeName = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,

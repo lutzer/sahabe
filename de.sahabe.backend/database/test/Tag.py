@@ -58,7 +58,7 @@ class Tag(Tables.Tables):
         
     def testUpdateName(self):
         self.insertTag(self.id, self.name)
-        name = mock.randomName()
+        name = mock.randomText()
         db.updateInTable(self.conn, {"name":name}, "tag", id=self.id)
         
         rows = db.selectFrom(self.conn, {"tag"}, "*", id=self.id)
@@ -118,7 +118,7 @@ class Tag(Tables.Tables):
         """
             
     def testInsertInvalidName(self):
-        name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        name = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertTag,
                           self.id,
                           name)

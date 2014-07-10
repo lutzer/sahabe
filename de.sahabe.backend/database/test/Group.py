@@ -62,7 +62,7 @@ class Group(Tables.Tables):
         
     def testUpdateName(self):
         self.insertGroup(self.id, self.name, self.public)
-        name = mock.randomName()
+        name = mock.randomText()
         db.updateInTable(self.conn, {"name":name}, "link_group", id=self.id)
         
         rows = db.selectFrom(self.conn, {"link_group"}, "*", id=self.id)
@@ -135,7 +135,7 @@ class Group(Tables.Tables):
         '''
             
     def testInsertInvalidName(self):
-        name = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        name = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertGroup,
                           self.id,
                           name,

@@ -119,14 +119,14 @@ class PassWord(Tables.Tables):
         '''
             
     def testInsertInvalidValue(self):
-        value = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        value = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertPW,
                           self.userId,
                           value,
                           self.salt)
         
     def testInsertInvalidSalt(self):
-        salt = mock.randomText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
+        salt = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR64) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertPW,
                           self.userId,
                           self.value,

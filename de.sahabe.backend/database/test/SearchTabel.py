@@ -104,7 +104,7 @@ class SearchTable(Tables.Tables):
         
     def testUpdateGroups(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
-        groups=mock.randomName()
+        groups=mock.randomText()
         db.updateInTable(self.conn, {"groups":groups}, "search_table", user_id=self.userId)
         
         rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
@@ -117,7 +117,7 @@ class SearchTable(Tables.Tables):
         
     def testUpdateTags(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
-        tags=mock.randomName()
+        tags=mock.randomText()
         db.updateInTable(self.conn, {"tags":tags}, "search_table", user_id=self.userId)
         
         rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
@@ -130,7 +130,7 @@ class SearchTable(Tables.Tables):
         
     def testUpdateText(self):
         self.insertSearchTable(self.userId, self.linkId, self.groups, self.tags, self.text)
-        text=mock.randomName()
+        text=mock.randomText()
         db.updateInTable(self.conn, {"text":text}, "search_table", user_id=self.userId)
         
         rows = db.selectFrom(self.conn, {"search_table"}, "*", user_id=self.userId)
@@ -170,7 +170,7 @@ class SearchTable(Tables.Tables):
                          self.text)
         
     def testInsertInvalidGroups(self):
-        groups = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        groups = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,
@@ -179,7 +179,7 @@ class SearchTable(Tables.Tables):
                          self.text)
         
     def testInsertInvalidTags(self):
-        tags = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        tags = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,
@@ -188,7 +188,7 @@ class SearchTable(Tables.Tables):
                          self.text)
     
     def testInsertInvalidText(self):
-        text = mock.randomText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        text = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,

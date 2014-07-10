@@ -58,7 +58,7 @@ class DBMock():
         def __init__(self):
             self.id = uuid()
             self.name = randomText()
-            self.email = self.name + "@sahabe.de"
+            self.email = randomEmail()
     
     class Link():
         id = ""
