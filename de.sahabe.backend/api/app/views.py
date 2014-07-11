@@ -8,15 +8,17 @@ import random
 import string
 import uuid as uid
 import re
+from lxml import etree 
 
 from impl import DBApiModule as db
 
-from flask import render_template, flash, redirect, session, url_for, request, g, json
+from flask import render_template, flash, redirect, session, url_for, request, g, json, Response
 from flask_login import login_user, logout_user, current_user, login_required
 from app import app, lm  #, oid
 import entries
 #from werkzeug import secure_filename
 import datetime
+import urllib2
 
 @app.route("/")
 @app.route("/index")
@@ -73,8 +75,17 @@ def load_links():
 def submit_load_links():
     fileName = request.files["file"]
     #jsonData = open(fileName)
-    print fileName
-    data = json.load(fileName)
+    data = ""
+    dataFormat = fileName.content_type 
+    if dataFormat == "text/html":
+        with open(fileName.filename, "r") as html:
+            for line in html:
+                print line
+    elif fileName.content_type == "application/json":
+        data = json.load(fileName)
+    else:
+        Exception(dataFormat+ " data formats is not supported ") 
+    
     
     linksData = data["children"][0]["children"]
     count = 0
@@ -123,33 +134,135 @@ def submit_load_links():
 #                            providers = app.config['OPENID_PROVIDERS'])
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    return render_template("login.html",
-                           title = "Login")
-
-@app.route("/submit_login", methods=["GET", "POST"])
-def submit_login():
-    name = request.form["username"]
-    user = entries.get_user_by_name(name)
+@app.route("/link/add", methods=["PUT"])
+@login_required
+def addLink():
+    linkId = str(uid.uuid4())
+    kwargs ={}
+    kwargs["id"] = linkId
+    kwargs["user_id"] = g.user.id
+    if request.form.has_key("url") :
+        kwargs["url"]=request.form["url"]
+        kwargs["url_hash"] = hashlib.md5(kwargs["url"]).hexdigest() 
+    else:
+        js = json.dumps({"message":"an url must be added"})
+        #FIXME: change the return status
+        return Response(js, status=400, mimetype='application/json')
+    if request.form.has_key("title"): 
+        kwargs["title"]=request.form["title"] 
+    if request.form.has_key("description"):
+        kwargs["description"]=request.form["description"]
+    if request.form.has_key("typeName"):
+        kwargs["type_name"]=request.form["typeName"]
+    kwargs["modified_at"]=timeStamp()
+    conn = db.connect()
+    #FIXME: use another algorithm
+    html =urllib2.urlopen(kwargs["url"]).read()
+    xPath = etree.XPath("//link[@rel = 'shortcut icon']/@href")
+    parsedHtml = etree.HTML(html)
+    selected = xPath(parsedHtml)
+    iconUrl = "not_found"
+    if selected != []:
+        iconUrl = selected[0]
+    try:
+        db.insertToTable(conn,
+                     "link",
+                    **kwargs)
+        db.insertToTable(conn,
+                         "meta_data",
+                         link_id=linkId,
+                         l_key="logo",
+                         value=iconUrl)
+    except Exception, e: 
+        js = json.dumps({"message":"Error %s" %(e)})
+        #FIXME: http status 401 is not the correct one. 
+        resp = Response(js, status=400, mimetype='application/json')
+        return resp 
     
+    js = json.dumps({"message":"link added successfully"})
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+    
+    
+    
+    
+    
+
+@app.route("/links", methods=["GET", "POST"])
+@login_required
+def getAllLinks():
+    user = g.user
+    conn = db.connect()
+    dbLinks = db.selectFrom(conn, {"link"} ,"id", "title", "url", "modified_at", user_id=user.id)
+    
+    links = []
+    for i in range(len(dbLinks)):
+        url = dbLinks[i][2]
+        m = re.search("(http(:|s:)//(.+?)/)", url)
+        iconUrl =""
+        if m is not None:
+            iconUrl = m.group(1)+"favicon.ico"
+        else:
+            iconUrl = "not_found"
+        links.append({"id":dbLinks[i][0],
+                      "title":dbLinks[i][1] ,
+                      "url":url,
+                      "iconUrl":iconUrl ,
+                      "modifiedAt":dbLinks[i][3]})  
+    js = json.dumps(links)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+
+
+@app.route("/login", methods=["POST"])
+def login():
+    name = request.form["username"]
+    user = ""
+    
+    try:
+        user = entries.get_user_by_name(name)
+    except Exception : 
+        js = json.dumps({"message":"incorrect password or user name."})
+        resp = Response(js, status=401, mimetype='application/json')
+        return resp 
+
     pw = hashlib.sha256(request.form["password"]).hexdigest()
     savedPw = entries.get_pw_hash_by_user_id(user.id)
     if pw == savedPw:
-        remember_me = False
-        for checkbox in request.form.getlist("remember_me"):
-            if checkbox == "on":
-                remember_me = True
+        remember_me = request.form["remember"].title()
         session['remember_me'] = remember_me
         login_user(user, remember_me)
-        flash("Logged in successfully.")
-        return redirect(request.args.get("next") or url_for("index"))
+        
+        js = json.dumps({"message":"Logged in successfully.", "userId":user.id})
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp 
     else:
-        flash("incorrect password or username.")
-        render_template("login.html",
-                       title = "Login")
-    return render_template("login.html",
-                           title = "Login")
+        js = json.dumps({"message":"incorrect password or user name."})
+        resp = Response(js, status=401, mimetype='application/json')
+        return resp
+
+# @app.route("/submit_login", methods=["GET", "POST"])
+# def submit_login():
+#     name = request.form["username"]
+#     user = entries.get_user_by_name(name)
+#     
+#     pw = hashlib.sha256(request.form["password"]).hexdigest()
+#     savedPw = entries.get_pw_hash_by_user_id(user.id)
+#     if pw == savedPw:
+#         remember_me = False
+#         for checkbox in request.form.getlist("remember_me"):
+#             if checkbox == "on":
+#                 remember_me = True
+#         session['remember_me'] = remember_me
+#         login_user(user, remember_me)
+#         flash("Logged in successfully.")
+#         return redirect(request.args.get("next") or url_for("index"))
+#     else:
+#         flash("incorrect password or username.")
+#         render_template("login.html",
+#                        title = "Login")
+#     return render_template("login.html",
+#                            title = "Login")
      
 # @oid.after_login
 # def after_login(resp):
@@ -191,8 +304,13 @@ def before_request():
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    js = json.dumps({"message":"logout was successful"})
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
+def timeStamp():
+    timeStamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return str(timeStamp)
     
 def randomText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))

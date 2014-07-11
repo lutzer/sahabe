@@ -15,6 +15,8 @@ def get_user_by_id(_id):
 def get_user_by_name(name):
     conn = db.connect()
     rows = db.selectFrom(conn, {"user"}, "*", name = name)
+    if rows == []:
+        raise Exception("user not found")
     return User(rows[0][0], rows[0][1], rows[0][2])
 
 def get_pw_hash_by_user_id(userId):
