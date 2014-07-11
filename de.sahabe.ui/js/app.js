@@ -48,8 +48,32 @@ define([
 
 		Backbone.history.start();
 	};
+	
+	//setup credentials to allow cross origin access
+	$.ajaxSetup({
+		cache: false,
+		crossDomain: true,
+		xhrFields: {
+	        withCredentials : true
+	    }
+	});
+	/*var proxiedSync = Backbone.sync;
+	Backbone.sync = function(method, model, options) {
+		options || (options = {});
+		
+		if (!options.crossDomain)
+		  options.crossDomain = true;
+		if (!options.xhrFields)
+		  options.xhrFields = {withCredentials:true};
+		
+		return proxiedSync(method, model, options);
+	};
+	$.support.cors=true;*/
+	
+	
 
 	return {
 		initialize: initialize
 	};
+	
 });
