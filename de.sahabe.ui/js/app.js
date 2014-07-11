@@ -2,16 +2,17 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'models/UserModel',
 	'views/HomeView',
 	'views/LoginView',
-	'views/UserView'
-], function($, _, Backbone, UserModel, HomeView, LoginView, UserView){
+	'views/UserView',
+	'views/LinkAddView'
+], function($, _, Backbone, HomeView, LoginView, UserView, LinkAddView){
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			'login' : 'login',
 			'user/:username' : 'user',
+			'link/add' : 'linkAdd',
 			'*actions' : 'default'
 		},
 	});
@@ -30,9 +31,6 @@ define([
 
 	var initialize = function(){
 		
-		//global models
-		var user = new UserModel();
-		
 		//setup routes
 		var app_router = new AppRouter;
 		app_router.on('route:default', function(actions){
@@ -43,6 +41,9 @@ define([
 		});
 		app_router.on('route:user', function(actions){
 			AppView.showView(new UserView({username: actions}));
+		});
+		app_router.on('route:linkAdd', function(actions){
+			AppView.showView(new LinkAddView());
 		});
 
 		Backbone.history.start();

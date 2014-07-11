@@ -1,0 +1,29 @@
+
+/* OVERLAY STYLES */
+
+#overlay {
+    position:fixed;
+    top:0px;
+    left:0px;
+    height:100%;
+    width:100%;
+    background-color:rgba(0,0,0,0.6);
+    z-index:998;
+}
+
+.popup {
+    position:relative;
+    top:15%;
+    margin-left:auto;
+    margin-right:auto;
+    padding:30px;
+    width:70%;
+    background-color:#000000;
+    color:#ffffff;
+    border-radius:5px;
+    z-index:999;
+}
+
+.popup p {
+    font-size: 80%;
+}

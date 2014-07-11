@@ -1,11 +1,14 @@
 define([
         'underscore',
         'backbone',
-        'models/LinkModel'
-], function(_, Backbone, LinkModel){
+        'models/LinkModel',
+        'values/constants'
+], function(_, Backbone, LinkModel, constants){
 	
 	LinkCollection = Backbone.Collection.extend({
-		model: LinkModel
+		
+		model: LinkModel,
+		url : constants.settings.webServiceUrl+"/links"
 		
 	});
 	

@@ -14,8 +14,13 @@ define([
 		//assigns a subview
 		assign : function (view, selector) {
 			this.addChildView(view);
-			//console.log(this.subviews);
 		    view.setElement(this.$(selector)).render();
+		},
+		
+		//appends a subview
+		append : function (view, selector) {
+			this.addChildView(view);
+			this.$(selector).append(view.render().el);
 		},
 		
 		close: function() {
