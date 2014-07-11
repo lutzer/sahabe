@@ -5,7 +5,7 @@ define([
 	'values/constants',
 	'models/UserModel',
 	'text!templates/loginTemplate.html'
-], function($, _, BaseView, constants, UserModel, TheUser, loginTemplate){
+], function($, _, BaseView, constants, UserModel, loginTemplate){
 	
 	var LoginView = BaseView.extend({
 		
