@@ -137,6 +137,7 @@ def submit_load_links():
 @app.route("/link/add", methods=["PUT"])
 @login_required
 def addLink():
+    print "asdasdasd"
     linkId = str(uid.uuid4())
     kwargs ={}
     kwargs["id"] = linkId
@@ -147,7 +148,11 @@ def addLink():
     else:
         js = json.dumps({"message":"an url must be added"})
         #FIXME: change the return status
-        return Response(js, status=400, mimetype='application/json')
+        resp = Response(js, status=400, mimetype='application/json')
+        resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+        resp.headers.add("Access-Control-Allow-Methods","*")
+        resp.headers.add("Access-Control-Allow-Credentials","true")
+        return resp
     if request.form.has_key("title"): 
         kwargs["title"]=request.form["title"] 
     if request.form.has_key("description"):
@@ -177,10 +182,16 @@ def addLink():
         js = json.dumps({"message":"Error %s" %(e)})
         #FIXME: http status 401 is not the correct one. 
         resp = Response(js, status=400, mimetype='application/json')
+        resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+        resp.headers.add("Access-Control-Allow-Methods","*")
+        resp.headers.add("Access-Control-Allow-Credentials","true")
         return resp 
     
     js = json.dumps({"message":"link added successfully"})
     resp = Response(js, status=200, mimetype='application/json')
+    resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+    resp.headers.add("Access-Control-Allow-Methods","*")
+    resp.headers.add("Access-Control-Allow-Credentials","true")
     return resp
     
     
@@ -211,7 +222,19 @@ def getAllLinks():
                       "modifiedAt":dbLinks[i][3]})  
     js = json.dumps(links)
     resp = Response(js, status=200, mimetype='application/json')
+    resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+    resp.headers.add("Access-Control-Allow-Methods","*")
+    resp.headers.add("Access-Control-Allow-Credentials","true")
     return resp
+
+@app.route("/loginRequired", methods=["GET" , "POST", "PUT"])
+def requiredLoginResponse():
+    js = json.dumps({"message":"login required"})
+    resp = Response(js, status=401, mimetype='application/json')
+    resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+    resp.headers.add("Access-Control-Allow-Methods","*")
+    resp.headers.add("Access-Control-Allow-Credentials","true")
+    return resp 
 
 
 @app.route("/login", methods=["POST"])
@@ -224,6 +247,9 @@ def login():
     except Exception : 
         js = json.dumps({"message":"incorrect password or user name."})
         resp = Response(js, status=401, mimetype='application/json')
+        resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+        resp.headers.add("Access-Control-Allow-Methods","*")
+        resp.headers.add("Access-Control-Allow-Credentials","true")
         return resp 
 
     pw = hashlib.sha256(request.form["password"]).hexdigest()
@@ -235,10 +261,16 @@ def login():
         
         js = json.dumps({"message":"Logged in successfully.", "userId":user.id})
         resp = Response(js, status=200, mimetype='application/json')
+        resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+        resp.headers.add("Access-Control-Allow-Methods","*")
+        resp.headers.add("Access-Control-Allow-Credentials","true")
         return resp 
     else:
         js = json.dumps({"message":"incorrect password or user name."})
         resp = Response(js, status=401, mimetype='application/json')
+        resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+        resp.headers.add("Access-Control-Allow-Methods","*")
+        resp.headers.add("Access-Control-Allow-Credentials","true")
         return resp
 
 # @app.route("/submit_login", methods=["GET", "POST"])
@@ -306,6 +338,9 @@ def logout():
     logout_user()
     js = json.dumps({"message":"logout was successful"})
     resp = Response(js, status=200, mimetype='application/json')
+    resp.headers.add("Access-Control-Allow-Origin","http://0.0.0.0:8000")
+    resp.headers.add("Access-Control-Allow-Methods","*")
+    resp.headers.add("Access-Control-Allow-Credentials","true")
     return resp
 
 def timeStamp():
