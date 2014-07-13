@@ -5,12 +5,15 @@ Created on Jul 4, 2014
 @attention: this script runs a development web server with the application.
 '''
 
+import config
+
 from ws.main.app import app
+
 '''
 Start a web server with port 5000 on local host.
 For specific address and port add the parameters host = xxx and port = xxx    
 ''' 
-app.run(debug = True, host="0.0.0.0")
+app.run(debug = config.debug , host="0.0.0.0")
 
 
 

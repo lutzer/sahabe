@@ -12,9 +12,19 @@ import qm.main.Link as linkQM
 import common.main.converter.Link as linkConv
 import common.main.utils as utils
 
-from flask import request, g
+from flask import session, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from ws.main.app import app, lm
+
+
+@lm.user_loader
+def load_user(_id):
+    return userQM.getUserById(_id)
+
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 
 @app.route("/")
@@ -29,6 +39,7 @@ def index():
     except Exception, e:
         return response.send400("Error %s" %(e))
 
+
 @app.route("/sign_up", methods=["GET", "POST"])
 def sign_up():
     try:
@@ -37,6 +48,7 @@ def sign_up():
         return response.send200("You signed up successfully")
     except Exception, e:
         return response.send400("Error %s" %(e))
+
 
 @app.route("/load_links", methods=["GET", "POST"])
 @login_required
@@ -51,9 +63,7 @@ def load_links():
         return response.sendData([message] + results)
     except Exception, e:
         return response.send400("Error %s" %(e))
-
    
-
 
 @app.route("/link/add", methods=["PUT"])
 @login_required
@@ -63,8 +73,6 @@ def addLink():
         return response.send200("link added successfully")
     except Exception, e: 
         return response.send400("Error %s" %(e)) 
-    
-    
     
 
 @app.route("/links", methods=["GET", "POST"])
@@ -83,18 +91,17 @@ def login():
     try:
         name = request.form["username"]
         password = request.form["password"]
-        user = userQM.authenticate(name, password)
         remember_me = request.form["remember"]
+        
+        user = userQM.authenticate(name, password)
+        
+        session["remember_me"] = remember_me
         login_user(user, remember_me)
+        app.logger.info("user: %s logged in "%(user.nickname))
         return response.send200("Logged in successfully")
     except Exception, e:
         return response.send400("Error %s" %(e))
     
-
-@lm.unauthorized_handler
-def unauthorized():
-    return response.send401("login required")
-
 
 @app.route('/logout')
 def logout():
@@ -103,13 +110,8 @@ def logout():
         return response.send200("logout was successful")
     except Exception, e:
         return response.send400("Error %s" %(e))
+      
 
-    
-@lm.user_loader
-def load_user(_id):
-    return userQM.getUserById(_id)
-
-
-@app.before_request
-def before_request():
-    g.user = current_user
+@lm.unauthorized_handler
+def unauthorized():
+    return response.send401("login required")

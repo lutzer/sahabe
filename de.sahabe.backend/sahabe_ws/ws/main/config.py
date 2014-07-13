@@ -9,6 +9,10 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+tmp = "../../../tmp"
+log = tmp + "/sahabe.log"
+debug = True
+ 
 #activates the cross-site request forgery (make the more secure).
 #See: http://en.wikipedia.org/wiki/Cross-site_request_forgery
 CSRF_ENABLED = True
