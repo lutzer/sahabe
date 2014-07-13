@@ -6,6 +6,8 @@ Created on Jun 11, 2014
 import sys
 import MySQLdb
 
+CHARACTER_SET = "CHARACTER SET utf8 COLLATE utf8_unicode_ci"
+
 class DataTypes(object):
     UUID = "CHAR(36)"
     CHAR32 = "CHAR(32)"
@@ -22,7 +24,71 @@ class DataTypes(object):
     BOOL = "TINYINT(1)"
     TEXT = "TEXT"
     
-CHARACTER_SET = "CHARACTER SET utf8 COLLATE utf8_unicode_ci"
+class Where():
+    def __init__(self, column, value):
+        self.column = column
+        self.value = value
+        
+    def like(self):
+        clause = self.column + " LIKE "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'%" + self.value + "%'"
+        
+        return clause
+     
+    def equal(self):
+        clause = self.column + " = "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'" + self.value + "'"
+        
+        return clause
+        
+    def ORLike(self):
+        clause = "OR " + self.column + " LIKE "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'%" + self.value + "%'"
+        
+        return clause 
+
+    def ANDLike(self):
+        clause = "AND " + self.column + " LIKE "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'%" + self.value + "%'"
+        
+        return clause
+
+    def OREqual(self):
+        clause = "OR " + self.column + " = "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'" + self.value + "'"
+        
+        return clause 
+
+    def ANDEqual(self):
+        clause = "AND " + self.column + " = "
+        if "__IN__" in self.value: 
+            value = self.value.split("__IN__")
+            clause += value[1] + "." + value[0]
+        else:
+            clause += "'" + self.value + "'"
+        
+        return clause
+
 
 def connect(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     ''' 
@@ -109,6 +175,33 @@ def insertToTable(conn, table, commit=True, **kwargs):
     
     cursor.close()
     return cursor.rowcount
+
+
+def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
+    cursor = conn.cursor()
+    
+    query = "SELECT "
+    query += ", ".join(columns)
+    query += " FROM "
+    query += ", ".join(fromTables)
+    if where != [] and where is not None:
+        query += " WHERE " + " ".join(where) 
+    
+    query += " GROUP BY " + groupBy 
+    
+    cursor.execute(query)
+    
+    rows = []
+    while (1):
+        row = cursor.fetchone()
+        if row == None:
+            break
+        rows.append(row)
+    cursor.close()
+    return rows
+    
+    
+
 
 # TODO: implement select from for string search "like"
 def selectFrom(conn, selectedTables, *columns, **kwargs):
