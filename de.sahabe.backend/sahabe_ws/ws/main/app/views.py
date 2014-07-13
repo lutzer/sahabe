@@ -85,6 +85,15 @@ def getAllLinks():
     except Exception, e:
         return response.send400("Error %s" %(e))
     
+    
+@app.route("/search", methods=["POST"])
+@login_required
+def search():
+    searchValue = request.form["searchValue"]
+    linksSet = linkQM.searchLinkByUser(g.user.id, searchValue, "link.id")
+    links = linkConv.convertLinksSetToDicts(linksSet)
+    return response.sendData(links)
+    
 
 @app.route("/login", methods=["POST"])
 def login():
