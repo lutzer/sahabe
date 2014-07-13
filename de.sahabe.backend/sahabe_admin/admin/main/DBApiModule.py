@@ -86,11 +86,12 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     cursor.execute(query)
     cursor.close()
 
-def insertToTable(conn, table, **kwargs):
+def insertToTable(conn, table, commit=True, **kwargs):
     ''' 
     insert to table. 
     @param conn: connection object
     @param table: table name
+    @param commit: commit immediately after insertion   
     @param kwargs: <column>=<value>
     '''
     cursor = conn.cursor()
@@ -102,8 +103,10 @@ def insertToTable(conn, table, **kwargs):
         values += "'" + value + "' , "
     query = "INSERT INTO " + table + " (" + columns[:-2] + ") VALUES (" + values[:-2] + ")" 
     cursor.execute(query)
-    # TODO: should commit() be moved to a higher abstraction level?
-    conn.commit()
+    
+    if commit:
+        conn.commit()
+    
     cursor.close()
     return cursor.rowcount
 
@@ -111,7 +114,7 @@ def insertToTable(conn, table, **kwargs):
 def selectFrom(conn, selectedTables, *columns, **kwargs):
     '''
     select from user
-    @param conn: MySQLbd connection object
+    @param conn: MySQLdb connection object
     @param selectedTables: [String] - represents selected tables
     @param *columns: <column> ordered set of columns  
     @param **kwargs: <column>:<value> includes where statement
