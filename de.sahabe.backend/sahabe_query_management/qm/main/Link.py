@@ -107,6 +107,59 @@ def addLinksJSONFileByUser(data, userId):
             MetaData.addLogo(linkId, logo)
             count += 1
     return (count, links)
+
+
+def searchLinkByUser(userId, searchValue, groupBy):
+    conn = db.connect()
+    
+#     kwargs = {}
+#     kwargs["user_id__IN__link"] = userId 
+#     kwargs["link_id__IN__meta_data"] = "id__IN__link"
+#     kwargs["l_key__IN__meta_data"] = "logo"
+#     
+#     
+#     
+#     resultSet = db.selectFrom(conn, {"link", "meta_data"}, True,
+#                               "link.id",
+#                               "link.url",
+#                               "link.title",
+#                               "link.type_name",
+#                               "link.modified_at",
+#                               "meta_data.value",
+#                               **kwargs)
+
+    """ WHERE FOR search_table """
+
+#                             db.Where("search_table.groups", searchValue).ORLike(),
+#                             db.Where("search_table.tags", searchValue).ORLike(),
+#                             db.Where("search_table.text", searchValue).ORLike()
+#                             db.Where("search_table.link_id", "id__IN__link").OREqual(),
+    resultSet = db.selectFormWhereClause(conn, ["link","meta_data"],
+                            ["link.id",
+                             "link.url",
+                             "link.title",
+                             "link.type_name",
+                             "link.modified_at",
+                             "meta_data.value"],
+                            "link.id",
+                            db.Where("link.user_id", userId).equal(),
+                            db.Where("meta_data.link_id", "id__IN__link").ANDEqual(),
+                            db.Where("meta_data.l_key","logo").ANDEqual(),
+                            db.Where("link.url", searchValue).ANDLike(),
+                            db.Where("link.title", searchValue).ORLike(),
+                            db.Where("link.description", searchValue).ORLike(),
+                            db.Where("link.type_name", searchValue).ORLike())
+    return resultSet
+    
+
+
+
+
+
+
+
+
+
             
             
             
