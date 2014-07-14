@@ -76,64 +76,53 @@ def addLinksJSONFileByUser(data, userId):
     
     #FIXME: change insertion algorithm for sql queries that inserting data
     #as zip, json or ... 
-    
+    query = "INSERT INTO link (id, user_id, url, url_hash, title, type_name, modified_at) VALUES "
+    mdQuery = "INSERT INTO meta_data (link_id, l_key, value) VALUES "
     for i in range(4, len(linksData)):
         if linksData[i].has_key("title") and linksData[i].has_key("uri"): 
-            title =  linksData[i]["title"].replace("'", "")
+            linkId = str(uuid.uuid4())
             url = linksData[i]["uri"]
-            
+            urlHash = hashlib.md5(url).hexdigest()
+            title =  linksData[i]["title"].replace("'", "")
             lastModified = linksData[i]["lastModified"]/1000000
             dtLastModified = str(datetime.fromtimestamp(lastModified))
+            typeName= "uncategorized"
             
             logo = utils.extractHomeUrl(url)+"favicon.ico"
             
-            linkId = str(uuid.uuid4())
             links.append({"id":linkId,
-                          "title":title,
-                          "url":url,
-                          "typeName":"",
-                          "modifiedAt":dtLastModified,
-                          "logo":logo})
-
-            conn = db.connect()
-            db.insertToTable(conn, "link",
-                             id = linkId,
-                             user_id = userId,
-                             title = title,
-                             url = url,
-                             url_hash = hashlib.md5(url).hexdigest(),
-                             modified_at = dtLastModified)
+                        "title":title,
+                        "url":url,
+                        "typeName":typeName,
+                        "modifiedAt":dtLastModified,
+                        "logo":logo})
             
-            MetaData.addLogo(linkId, logo)
+            query += "('%s', '%s', '%s', '%s', '%s', '%s', '%s'), "%(linkId,
+                                                       userId,
+                                                       url,
+                                                       urlHash,
+                                                       title,
+                                                       typeName,
+                                                       dtLastModified)
+            
+            mdQuery += "('%s', '%s', '%s'), "%(linkId,
+                                         "logo",
+                                         logo)
+            
             count += 1
+            
+    conn = db.connect()
+    cursor = conn.cursor()
+    cursor.execute(query[:-2])
+    cursor.execute(mdQuery[:-2])
+    conn.commit()
+    cursor.close()
     return (count, links)
 
 
-def searchLinkByUser(userId, searchValue, groupBy):
+def searchLinkByUser(userId, searchValue):
     conn = db.connect()
-    
-#     kwargs = {}
-#     kwargs["user_id__IN__link"] = userId 
-#     kwargs["link_id__IN__meta_data"] = "id__IN__link"
-#     kwargs["l_key__IN__meta_data"] = "logo"
-#     
-#     
-#     
-#     resultSet = db.selectFrom(conn, {"link", "meta_data"}, True,
-#                               "link.id",
-#                               "link.url",
-#                               "link.title",
-#                               "link.type_name",
-#                               "link.modified_at",
-#                               "meta_data.value",
-#                               **kwargs)
 
-    """ WHERE FOR search_table """
-
-#                             db.Where("search_table.groups", searchValue).ORLike(),
-#                             db.Where("search_table.tags", searchValue).ORLike(),
-#                             db.Where("search_table.text", searchValue).ORLike()
-#                             db.Where("search_table.link_id", "id__IN__link").OREqual(),
     resultSet = db.selectFormWhereClause(conn, ["link","meta_data"],
                             ["link.id",
                              "link.url",
@@ -145,10 +134,10 @@ def searchLinkByUser(userId, searchValue, groupBy):
                             db.Where("link.user_id", userId).equal(),
                             db.Where("meta_data.link_id", "id__IN__link").ANDEqual(),
                             db.Where("meta_data.l_key","logo").ANDEqual(),
-                            db.Where("link.url", searchValue).ANDLike(),
-                            db.Where("link.title", searchValue).ORLike(),
-                            db.Where("link.description", searchValue).ORLike(),
-                            db.Where("link.type_name", searchValue).ORLike())
+                            db.Where("link.url", searchValue).ANDMatch(),
+                            db.Where("link.title", searchValue).ORMatch(),
+                            db.Where("link.description", searchValue).ORMatch(),
+                            db.Where("link.type_name", searchValue).ORMatch())
     return resultSet
     
 
