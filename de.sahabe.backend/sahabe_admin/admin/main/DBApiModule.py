@@ -88,7 +88,13 @@ class Where():
             clause += "'" + self.value + "'"
         
         return clause
-
+    
+    def ORMatch(self):
+        return "OR MATCH(%s) AGAINST('%s')"%(self.column, self.value) 
+        
+    def ANDMatch(self):
+        return "AND MATCH(%s) AGAINST('%s')"%(self.column, self.value)    
+        
 
 def connect(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     ''' 
@@ -111,7 +117,7 @@ def connect(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
         sys.exit(1)
     return conn
 
-def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *order, **kwargs):
+def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, searchFields, *order, **kwargs):
     '''
     create table.
     @param conn: connection object
@@ -120,7 +126,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     @param uniqueList: String list{} of unique columns,
         for combinations {"column1, column2"} for separated {"column1","column2"}
     @param notNulls: String list{} of not null columns
-    @param forgenKeys: map of <column>:<<foreignTable>.<column>>   
+    @param forgenKeys: map of <column>:<<foreignTable>.<column>>
+    @param searchFields: string array for full text searching   
     @param order: is a set of ordered keys 
     @param kwargs: <column>:<dataType>
     '''
@@ -130,8 +137,8 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
     query = "CREATE TABLE " + table + " ("
     for key in order:
         query += key + " " + kwargs[key] 
-        if(str(kwargs[key]).startswith("CHAR") or str(kwargs[key]).startswith("VARCHAR")):
-            query += " " + CHARACTER_SET
+#         if(str(kwargs[key]).startswith("CHAR") or str(kwargs[key]).startswith("VARCHAR")):
+#             query += " " + CHARACTER_SET
         if any(key == s for s in notNulls):
             query += " NOT NULL"
         query += ", "
@@ -147,7 +154,12 @@ def createTable(conn, table, primaryKey, uniqueList, notNulls, forgenKeys, *orde
         tColumn = value.split(".") 
         query += "FOREIGN KEY (" + key + ") REFERENCES " + tColumn[0] + " (" + tColumn[1] + ") ON DELETE CASCADE, "
     
+    if searchFields is not None and searchFields !=[]:
+        for searches in searchFields:
+            query += "FULLTEXT (%s), "%(searches)
+
     query = query[:-2] + ")"
+    
     print "db-api: ", query
     cursor.execute(query)
     cursor.close()
@@ -188,7 +200,7 @@ def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
         query += " WHERE " + " ".join(where) 
     
     query += " GROUP BY " + groupBy 
-    
+    print query
     cursor.execute(query)
     
     rows = []

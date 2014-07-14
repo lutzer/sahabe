@@ -26,6 +26,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"name", "email"},
                             {"id", "name", "email"},
                             {},
+                            [],
                             "id", "name", "email",
                             id=dt.UUID, name=dt.VCHAR64, email=dt.VCHAR64)
     
@@ -36,6 +37,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"user_id , url_hash"},
                             {"id", "user_id", "url", "url_hash","modified_at"},
                             {"user_id":"user.id"},
+                            ["url","title","description", "type_name"],
                             "id", "user_id", "url", "url_hash","title", "description", "type_name", "modified_at",
                             id=dt.UUID, user_id=dt.UUID, url=dt.TEXT, url_hash=dt.MD5 ,title=dt.VCHAR256,
                             description=dt.VCHAR256, type_name=dt.VCHAR64 ,modified_at=dt.DATETIME)
@@ -47,6 +49,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"user_id", "link_id"},
                             {"user_id":"user.id", "link_id":"link.id"},
+                            ["groups", "tags", "text"],
                             "user_id", "link_id", "groups", "tags", "text",
                             user_id=dt.UUID, link_id=dt.UUID,
                             groups=dt.VCHAR256, tags=dt.VCHAR256, text=dt.VCHAR256)
@@ -58,6 +61,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"id", "name"},
                             {},
+                            [],
                             "id", "name",
                             id=dt.UUID, name=dt.VCHAR64)
     
@@ -68,6 +72,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"tag_id", "link_id"},
                             {"tag_id":"tag.id", "link_id":"link.id"},
+                            [],
                             "tag_id", "link_id",
                             tag_id=dt.UUID, link_id=dt.UUID)
     
@@ -78,6 +83,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"id", "name", "public"},
                             {},
+                            [],
                             "id", "name", "public",
                             id=dt.UUID, name=dt.VCHAR64, public=dt.BOOL)
     
@@ -88,6 +94,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"group_id", "link_id"},
                             {"group_id":"link_group.id", "link_id":"link.id"},
+                            [],
                             "group_id", "link_id",
                             group_id=dt.UUID, link_id=dt.UUID)
     
@@ -98,6 +105,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {},
                             {"link_id", "l_key", "value"},
                             {"link_id":"link.id"},
+                            [],
                             "link_id", "l_key", "value",
                             link_id=dt.UUID, l_key=dt.VCHAR64, value=dt.VCHAR64)
     
@@ -108,6 +116,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"user_id", "value"},
                             {"user_id", "value", "salt"},
                             {"user_id":"user.id"},
+                            [],
                             "user_id", "value", "salt",
                             user_id=dt.UUID, value=dt.SHA_2, salt=dt.CHAR64)
     conn.close()
