@@ -200,7 +200,6 @@ def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
         query += " WHERE " + " ".join(where) 
     
     query += " GROUP BY " + groupBy 
-    print query
     cursor.execute(query)
     
     rows = []
@@ -211,8 +210,6 @@ def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
         rows.append(row)
     cursor.close()
     return rows
-    
-    
 
 
 # TODO: implement select from for string search "like"

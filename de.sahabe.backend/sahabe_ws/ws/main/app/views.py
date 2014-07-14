@@ -58,9 +58,8 @@ def load_links():
         user = g.user
         data = utils.extractData(upload)
         links = linkQM.addLinksJSONFileByUser(data, user.id)
-        results = links[1]
         message = {"message":"%s links were added"%(links[0])}
-        return response.sendData([message] + results)
+        return response.sendData([message] + links[1])
     except Exception, e:
         return response.send400("Error %s" %(e))
    
@@ -84,15 +83,21 @@ def getAllLinks():
         return response.sendData(links)
     except Exception, e:
         return response.send400("Error %s" %(e))
-    
+
+@app.route("/links/drop_all", methods=["GET"])
+def dropAllLinks():
+    count = linkQM.dropAllLinksByUser(g.user.id)
+    return response.send200("%s links dropped"%(count))
     
 @app.route("/search", methods=["POST"])
 @login_required
 def search():
     searchValue = request.form["searchValue"]
-    linksSet = linkQM.searchLinkByUser(g.user.id, searchValue, "link.id")
+    linksSet = linkQM.searchLinkByUser(g.user.id, searchValue)
+    count = len(linksSet)
+    message = {"message":"%s links found"%(count)}
     links = linkConv.convertLinksSetToDicts(linksSet)
-    return response.sendData(links)
+    return response.sendData([message]+links)
     
 
 @app.route("/login", methods=["POST"])

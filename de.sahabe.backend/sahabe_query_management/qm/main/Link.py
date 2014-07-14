@@ -71,7 +71,6 @@ def getLinksByUserId(userId):
 
 def addLinksJSONFileByUser(data, userId):
     linksData = data["children"][0]["children"]
-    count = 0
     links = []
     
     #FIXME: change insertion algorithm for sql queries that inserting data
@@ -109,7 +108,9 @@ def addLinksJSONFileByUser(data, userId):
                                          "logo",
                                          logo)
             
-            count += 1
+            print "url: " + url
+            print "logo: " + logo
+            print "-----------------"
             
     conn = db.connect()
     cursor = conn.cursor()
@@ -117,7 +118,7 @@ def addLinksJSONFileByUser(data, userId):
     cursor.execute(mdQuery[:-2])
     conn.commit()
     cursor.close()
-    return (count, links)
+    return (cursor.rowcount, links)
 
 
 def searchLinkByUser(userId, searchValue):
@@ -141,15 +142,8 @@ def searchLinkByUser(userId, searchValue):
     return resultSet
     
 
-
-
-
-
-
-
-
-
-            
-            
-            
+def dropAllLinksByUser(userId):
+    conn = db.connect()
+    count = db.deleteFromTable(conn, "link", user_id=userId)
+    return count
             
