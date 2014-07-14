@@ -24,13 +24,13 @@ def extractHomeUrl(url):
     if not url.endswith("/"):
         url += "/"
     
-    if not url.startswith("http://"):
+    if not url.startswith("http"):
         url = "http://"+url
     
-    if url.startswith("https://"):
-        url = url.replace("https://", "http://")
-        
-    m = re.search("(http(:|s:)//(.+?)/)", url)
+    if url.startswith("https:"):
+        url = url.replace("s", "")
+
+    m = re.search("(http://(.+?)/)", url)
     return m.group(1)
 
 def extractData(upload):
