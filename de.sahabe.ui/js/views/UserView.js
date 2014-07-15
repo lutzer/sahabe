@@ -17,6 +17,7 @@ define([
 			this.collection.fetch();
 
 			BaseView.prototype.initialize.call(this);
+
 		},
 
 		render: function(){

@@ -9,12 +9,18 @@ define([
 		urlRoot : constants.settings.webServiceUrlapi+"/userdata/",
 		
 		defaults: {
-			id: false
+			id: false,
+			loggedIn: false,
+			name: "-"
 		},
 		
 		// is the user logged in or not
 		isAnonymous: function() {
 			return (this.get('id') == false);
+		},
+		
+		isLoggedIn: function() {
+			return this.get(loggedIn);
 		}
 		
 	});

@@ -4,8 +4,9 @@ define([
 	'views/BaseView',
 	'values/constants',
 	'models/UserModel',
+	'singletons/TheUser',
 	'text!templates/loginTemplate.html'
-], function($, _, BaseView, constants, UserModel, loginTemplate){
+], function($, _, BaseView, constants, UserModel, TheUser, loginTemplate){
 	
 	var LoginView = BaseView.extend({
 		
@@ -43,7 +44,12 @@ define([
 	            success: function (data) {
 	                console.log("login succesfull:");
 	                console.log(data);
-	                window.location.hash = "#/user/"+userData.username;
+	                //TODO: initialize singleton properly
+	                /*var user = TheUser.getInstance.model;
+	                user.set({'id' : data.userId});
+	                user.fetch();
+	                window.location.hash = "#/user/"+user.get('name');*/
+	                window.location.hash = "#/user/blabla";
 	                
 	            },
 	            error: function(error) {

@@ -1,23 +1,13 @@
 define([
 	'jquery',
 	'underscore',
-	'views/BaseView',
+	'views/lists/BaseListView',
 	'models/LinkCollection',
 	'views/items/LinkListItemView',
 	'text!templates/lists/linkListTemplate.html'
-], function($, _, BaseView, LinkModel, LinkListItemView, linkListTemplate){
+], function($, _, BaseListView, LinkModel, LinkListItemView, linkListTemplate){
 	
-	var LinkListView = BaseView.extend({
-		
-		initialize: function() {
-			
-			//listen to the collections change events
-			this.listenTo(this.collection, 'add', this.addOne);
-			this.listenTo(this.collection, 'reset', this.addAll);
-			//this.listenTo(this.collection, 'all', this.render);
-			
-			BaseView.prototype.initialize.call(this);
-		},
+	var LinkListView = BaseListView.extend({
 
 		render: function(){
 			
@@ -26,15 +16,10 @@ define([
 			return this;
 		},
 		
-		// add all views for collection
-		addAll: function() {
-			this.collection.each(this.addOne);
-		},
-		
-		// add only one model to collection
 		addOne: function(model) {
 			this.append(new LinkListItemView({model: model}),".linklist");
-		}
+		},
+		
 	});
 	// Our module now returns our view
 	return LinkListView;

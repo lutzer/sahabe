@@ -2,7 +2,13 @@
 	<h1>Sahabe Home View</h1>
 </div>
 <div class="main">
+	<% if (user.isAnonymous()) { %>
+		<h2>Not logged in</h2>
+	<% } else { %>
+	 	<h2>Hello <%= user.get('name') %></h2>
+	<% } %> 
 	<a href="#/login">Login</a>
+	<a href="#/search">Search</a>
 	<a href="#/logout">Logout</a>
-	<a href="#/user/someuser">Links</a>
+	<a href="#/user/<%= user.get('name') %>">Links</a>
 </div>

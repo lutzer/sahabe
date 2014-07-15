@@ -5,14 +5,16 @@ define([
 	'views/HomeView',
 	'views/LoginView',
 	'views/UserView',
-	'views/LinkAddView'
-], function($, _, Backbone, HomeView, LoginView, UserView, LinkAddView){
+	'views/LinkAddView',
+	'views/SearchView'
+], function($, _, Backbone, HomeView, LoginView, UserView, LinkAddView, SearchView){
 
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			'login' : 'login',
+			'search' : 'search',
 			'user/:username' : 'user',
-			'link/add' : 'linkAdd',
+			'links/add' : 'linkAdd',
 			'*actions' : 'default'
 		},
 	});
@@ -39,6 +41,9 @@ define([
 		app_router.on('route:login', function(actions){
 			AppView.showView(new LoginView());
 		});
+		app_router.on('route:search', function(actions){
+			AppView.showView(new SearchView());
+		});
 		app_router.on('route:user', function(actions){
 			AppView.showView(new UserView({username: actions}));
 		});
@@ -57,18 +62,7 @@ define([
 	        withCredentials : true
 	    }
 	});
-	/*var proxiedSync = Backbone.sync;
-	Backbone.sync = function(method, model, options) {
-		options || (options = {});
-		
-		if (!options.crossDomain)
-		  options.crossDomain = true;
-		if (!options.xhrFields)
-		  options.xhrFields = {withCredentials:true};
-		
-		return proxiedSync(method, model, options);
-	};
-	$.support.cors=true;*/
+	$.support.cors=true;
 	
 	
 
