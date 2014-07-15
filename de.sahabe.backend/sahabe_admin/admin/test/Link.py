@@ -338,7 +338,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
 
     def testInsertInvalidUrl(self):
-        url = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        url = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
@@ -350,7 +350,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvalidTitle(self):
-        title = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        title = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,
@@ -362,7 +362,7 @@ class Link(Tables.Tables):
                          self.modifiedAt)
         
     def testInsertInvaliddescription(self):
-        desc = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        desc = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertLink,
                          self.id,
                          self.userId,

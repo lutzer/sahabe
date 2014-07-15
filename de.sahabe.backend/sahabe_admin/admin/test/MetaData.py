@@ -113,14 +113,14 @@ class MetaData(Tables.Tables):
                          self.value)
         
     def testInsertInvalidKey(self):
-        key = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        key = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertMetaData,
                          self.linkId,
                          key,
                          self.value)
         
     def testInsertInvalidValue(self):
-        value = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        value = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertMetaData,
                          self.linkId,
                          self.key,

@@ -8,10 +8,13 @@ import re
 import ast
 import string
 import random
+import time
 import datetime
 
 from flask import json
 
+def timeDifference(timeStamp):
+    return int(round((time.time() - timeStamp)* 1000)) 
 
 def timeStamp():
     timeStamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

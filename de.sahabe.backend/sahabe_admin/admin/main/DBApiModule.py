@@ -14,7 +14,7 @@ class DataTypes(object):
     CHAR64 = "CHAR(64)"
     VCHAR32 = "VARCHAR(32)"
     VCHAR64 = "VARCHAR(64)"
-    VCHAR256 = "VARCHAR(256)"
+    VCHAR255 = "VARCHAR(255)"
     VCHAR2048 = "VARCHAR(2048)"
     VCHAR512 = "VARCHAR(512)"
     SHA_2 = "CHAR(64)"
@@ -189,7 +189,7 @@ def insertToTable(conn, table, commit=True, **kwargs):
     return cursor.rowcount
 
 
-def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
+def selectFormWhereClause(conn, fromTables, columns, *where):
     cursor = conn.cursor()
     
     query = "SELECT "
@@ -199,7 +199,6 @@ def selectFormWhereClause(conn, fromTables, columns, groupBy,*where):
     if where != [] and where is not None:
         query += " WHERE " + " ".join(where) 
     
-    query += " GROUP BY " + groupBy 
     cursor.execute(query)
     
     rows = []

@@ -53,15 +53,15 @@ def sign_up():
 @app.route("/load_links", methods=["GET", "POST"])
 @login_required
 def load_links():
-    try:
-        upload = request.files["file"]
-        user = g.user
-        data = utils.extractData(upload)
-        links = linkQM.addLinksJSONFileByUser(data, user.id)
-        message = {"message":"%s links were added"%(links[0])}
-        return response.sendData([message] + links[1])
-    except Exception, e:
-        return response.send400("Error %s" %(e))
+#     try:
+    upload = request.files["file"]
+    user = g.user
+    data = utils.extractData(upload)
+    links = linkQM.addLinksJSONFileByUser(data, user.id)
+    message = {"message":"%s links were added"%(links[0])}
+    return response.sendData([message] + links[1])
+#     except Exception, e:
+#         return response.send400("Error %s" %(e))
    
 
 @app.route("/link/add", methods=["PUT"])

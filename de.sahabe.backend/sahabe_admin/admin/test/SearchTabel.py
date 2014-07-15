@@ -170,7 +170,7 @@ class SearchTable(Tables.Tables):
                          self.text)
         
     def testInsertInvalidGroups(self):
-        groups = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        groups = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,
@@ -179,7 +179,7 @@ class SearchTable(Tables.Tables):
                          self.text)
         
     def testInsertInvalidTags(self):
-        tags = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        tags = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,
@@ -188,7 +188,7 @@ class SearchTable(Tables.Tables):
                          self.text)
     
     def testInsertInvalidText(self):
-        text = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR256) + 2)
+        text = mock.randomFixedLengthText(self.extractNumber(db.DataTypes.VCHAR255) + 2)
         self.assertRaisesRegexp(DataError, "Data too long", self.insertSearchTable,
                          self.userId,
                          self.linkId,

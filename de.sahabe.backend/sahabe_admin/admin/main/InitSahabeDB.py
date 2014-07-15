@@ -39,8 +39,8 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"user_id":"user.id"},
                             ["url","title","description", "type_name"],
                             "id", "user_id", "url", "url_hash","title", "description", "type_name", "modified_at",
-                            id=dt.UUID, user_id=dt.UUID, url=dt.TEXT, url_hash=dt.MD5 ,title=dt.VCHAR256,
-                            description=dt.VCHAR256, type_name=dt.VCHAR64 ,modified_at=dt.DATETIME)
+                            id=dt.UUID, user_id=dt.UUID, url=dt.TEXT, url_hash=dt.MD5 ,title=dt.VCHAR255,
+                            description=dt.TEXT, type_name=dt.VCHAR64 ,modified_at=dt.DATETIME)
     
     """ search_table """ 
     DBApiModule.createTable(conn,
@@ -52,7 +52,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             ["groups", "tags", "text"],
                             "user_id", "link_id", "groups", "tags", "text",
                             user_id=dt.UUID, link_id=dt.UUID,
-                            groups=dt.VCHAR256, tags=dt.VCHAR256, text=dt.VCHAR256)
+                            groups=dt.VCHAR255, tags=dt.VCHAR255, text=dt.VCHAR255)
     
     """ tag """ 
     DBApiModule.createTable(conn,
@@ -107,7 +107,7 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
                             {"link_id":"link.id"},
                             [],
                             "link_id", "l_key", "value",
-                            link_id=dt.UUID, l_key=dt.VCHAR64, value=dt.VCHAR64)
+                            link_id=dt.UUID, l_key=dt.VCHAR64, value=dt.VCHAR255)
     
     """ pw_hash """
     DBApiModule.createTable(conn,
