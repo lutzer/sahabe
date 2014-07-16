@@ -13,7 +13,7 @@ define([
 			loggedIn: false,
 			name: "-"
 		},
-		
+
 		// is the user logged in or not
 		isAnonymous: function() {
 			return (this.get('id') == false);

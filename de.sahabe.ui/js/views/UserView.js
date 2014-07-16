@@ -10,6 +10,13 @@ define([
 	
 	var UserView = BaseView.extend({
 		
+		selectable : false,
+		
+		events: {
+			"click .selectLinks" : "_onSelectButtonClick",
+			"click .deleteLinks" : "_onDeleteButtonClick"
+		},
+		
 		initialize: function(options) {
 			this.username = options.username;
 			
@@ -28,6 +35,23 @@ define([
 			this.assign(new LinkListView({ collection: this.collection}), ".links");
 			
 			return this;
+		},
+		
+		_onSelectButtonClick: function() {
+			var self = this;
+			
+			this.selectable = !(this.selectable);
+			this.collection.each(function(model) {
+				model.setSelectable(self.selectable);
+			});
+			
+			return false;
+		},
+		
+		_onDeleteButtonClick: function() {
+			var selectedModels = this.collection.where({selected : true});
+			this.collection.deleteModels(selectedModels);
+			return false;
 		}
 	});
 	return UserView;

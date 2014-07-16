@@ -1,4 +1,9 @@
 <li>
+	<% if (selectable) { %>
+		<input type="checkbox" class="selectBox"/>
+	<% } %>
 	<!--  <img src="<%= link.iconUrl %>"/>--> 
-	<%= link.title %> - <a href="<%= link.url %>"><%= link.url %></a> - <a href="#/link/<%= link.id %>" class="linkDetails">More</a>
+	<%= link.title %> - <a href="<%= link.url %>"><%= link.url %></a> 
+	- <a href="#/link/<%= link.id %>" class="linkDelete">Delete</a>
+	- <a href="#/link/<%= link.id %>" class="linkDetails">More</a>
 </li>
