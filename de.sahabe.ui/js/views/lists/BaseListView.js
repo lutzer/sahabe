@@ -28,7 +28,8 @@ define([
 		},
 		
 		removeOne: function(model) {
-			model.destroy();
+			//only remove model from view, not from server
+			model.trigger('destroy', model);
 		}
 	});
 	// Our module now returns our view

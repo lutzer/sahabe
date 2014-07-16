@@ -20,7 +20,7 @@ define([
 		},
 
 		render: function() {
-			var compiledTemplate = _.template( linkListItemTemplate, { link : this.model.toJSON(), selectable: this.model.selectable} );
+			var compiledTemplate = _.template( linkListItemTemplate, { link : this.model.toJSON(), selectable: this.model.selectable } );
 			// Append our compiled template to this Views "el"
 			this.$el.html( compiledTemplate );
 			return this;
@@ -33,6 +33,7 @@ define([
 		},
 		
 		_onLinkDeleteClick: function() {
+			console.log("on delete clicked called");
 			this.model.destroy();
 			return false;
 		},

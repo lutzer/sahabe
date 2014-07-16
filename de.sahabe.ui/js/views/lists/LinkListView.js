@@ -18,7 +18,17 @@ define([
 		
 		addOne: function(model) {
 			this.append(new LinkListItemView({model: model}),".linklist");
+			this.updateLinkCount();
 		},
+		
+		removeOne: function(model) {
+			BaseListView.prototype.removeOne.call(this,model);
+			this.updateLinkCount();
+		},
+		
+		updateLinkCount: function() {
+			$(".linksFound").html(this.collection.length);
+		}
 		
 	});
 	// Our module now returns our view

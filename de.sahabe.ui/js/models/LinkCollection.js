@@ -23,13 +23,16 @@ define([
 	            url: self.url+"/delete",
 	            type: 'POST',
 	            dataType: "json",
-	            data: {linkIds : linkIds},
-	            success: function () {
+	            data: {linkIds: linkIds },
+	            success: function (data) {
+	            	console.log("successfully deleted");
+	            	console.log(data);
 	                _.forEach(models, function(model) {
 	                	self.remove(model);
 	                });
 	            },
 	            error: function(error) {
+	            	console.log("error");
 	            	console.log(error);
 	            }
 	        });
