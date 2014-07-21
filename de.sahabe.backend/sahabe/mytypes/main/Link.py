@@ -3,18 +3,41 @@ Created on Jul 12, 2014
 
 @author: Maan Al Balkhi
 '''
-import uuid as uid
+
+from common.main import utils
 
 class Link():
     
-    def __init__(self, resultSet):
-        self.id = resultSet[0][0]
-        self.userId = resultSet[0][1]
-        self.url = resultSet[0][2]
-        self.title = resultSet[0][3]
-        self.description = resultSet[0][4]
-        self.typeName = resultSet[0][5]
-        self.modifiedAt = resultSet[0][6]
+    def __init__(self, _id, userId, url, title, description, typeName, modifiedAt):
+        self.id = _id
+        self.userId = userId
+        self.url = url
+        self.title = title
+        self.description = description
+        self.typeName = typeName
+        self.modifiedAt = modifiedAt
         
+        
+    @staticmethod
+    def newLink(userId, url, title, description, typeName, modifiedAt):
+        return Link(utils.uuid(),
+                    userId,
+                    url,
+                    title,
+                    description,
+                    typeName,
+                    modifiedAt) 
+    
+    @staticmethod
+    def fromResultRecord(resultRecord): 
+        return Link(resultRecord[0],
+                    resultRecord[1],
+                    resultRecord[2],
+                    resultRecord[4],
+                    resultRecord[5],
+                    resultRecord[6],
+                    resultRecord[7])
+
+    
     def __repr__(self):
         return '<Link %r>' % (self.id)
