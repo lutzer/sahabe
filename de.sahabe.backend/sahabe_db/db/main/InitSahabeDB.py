@@ -58,12 +58,12 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     DBApiModule.createTable(conn,
                             "tag",
                             "id",
-                            {},
-                            {"id", "name"},
-                            {},
+                            {"user_id, name"},
+                            {"id", "user_id","name"},
+                            {"user_id":"user.id"},
                             [],
-                            "id", "name",
-                            id=dt.UUID, name=dt.VCHAR64)
+                            "id", "user_id", "name",
+                            id=dt.UUID, user_id=dt.UUID, name=dt.VCHAR64)
     
     """ link_tag_map """
     DBApiModule.createTable(conn,
@@ -80,12 +80,12 @@ def run(host="localhost", user="sahabe", pw="sahabe", db="sahabe"):
     DBApiModule.createTable(conn,
                             "link_group",
                             "id",
-                            {},
-                            {"id", "name", "public"},
-                            {},
+                            {"user_id, name"},
+                            {"id", "user_id","name", "public"},
+                            {"user_id":"user.id"},
                             [],
-                            "id", "name", "public",
-                            id=dt.UUID, name=dt.VCHAR64, public=dt.BOOL)
+                            "id", "user_id", "name", "public",
+                            id=dt.UUID, user_id=dt.UUID, name=dt.VCHAR64, public=dt.BOOL)
     
     """ link_group_map """
     DBApiModule.createTable(conn,

@@ -4,7 +4,7 @@ Created on Jul 12, 2014
 @author: Maan Al Balkhi
 '''
 
-from admin.main import DBApiModule as db
+from db.main import DBApiModule as db
 
 
 def addLogo(linkId, value, commit=True):

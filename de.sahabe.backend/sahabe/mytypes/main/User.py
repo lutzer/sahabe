@@ -4,7 +4,7 @@ Created on Jul 5, 2014
 @author: abo
 '''
 
-from admin.main import DBApiModule as db
+from db.main import DBApiModule as db
 
 
 class User():

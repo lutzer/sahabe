@@ -4,8 +4,8 @@ Created on Jun 13, 2014
 @author: Maan Al Balkhi
 '''
 import unittest
-import admin.main.DBApiModule as db
-import admin.main.InitSahabeDB as dbinit
+import db.main.DBApiModule as db
+import db.main.InitSahabeDB as dbinit
 from MockModule import DBMock as mock
 
 

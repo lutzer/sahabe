@@ -193,7 +193,7 @@
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="_6_GCIPvBEeONV6aU8dFjOA" name="name" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_6_GCIPvBEeONV6aU8dFjOA" name="name: {unique &amp; user_id}" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
       <ownedComment xmi:type="uml:Comment" xmi:id="_Ja0r4PvCEeONV6aU8dFjOA" annotatedElement="_6_GCIPvBEeONV6aU8dFjOA">
         <body>unique</body>
       </ownedComment>
@@ -209,6 +209,17 @@
       <defaultValue xmi:type="uml:LiteralString" xmi:id="_7c2VIPvBEeONV6aU8dFjOA">
         <value xsi:nil="true"/>
       </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_xxF6kAxhEeSLD4acFjqL2w" name="user_id: {unique &amp; name}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_yA3b8AxhEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yA4qEAxhEeSLD4acFjqL2w" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_yA54MAxhEeSLD4acFjqL2w">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="__23icAxhEeSLD4acFjqL2w" name="user" type="_Kga4cPu2EeONV6aU8dFjOA" association="__24JgAxhEeSLD4acFjqL2w">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__23icQxhEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__23icgxhEeSLD4acFjqL2w" value="1"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_aFcZoPvDEeONV6aU8dFjOA" name="meta_date">
@@ -282,12 +293,23 @@
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_3DgSIPvIEeONV6aU8dFjOA" name="tag">
     <ownedAttribute xmi:type="uml:Property" xmi:id="_4R70IPvIEeONV6aU8dFjOA" name="id: {PK}" type="_9zh5oPu2EeONV6aU8dFjOA" aggregation="composite" association="_NfWiMPvLEeONV6aU8dFjOA"/>
-    <ownedAttribute xmi:type="uml:Property" xmi:id="__iLuoPvIEeONV6aU8dFjOA" name="name" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
+    <ownedAttribute xmi:type="uml:Property" xmi:id="__iLuoPvIEeONV6aU8dFjOA" name="name: {unique &amp; user_id}" visibility="public" type="_BCyuIPu7EeONV6aU8dFjOA" isUnique="false">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__3dbEPvIEeONV6aU8dFjOA" value="1"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__3hsgPvIEeONV6aU8dFjOA" value="1"/>
       <defaultValue xmi:type="uml:LiteralString" xmi:id="__3kv0PvIEeONV6aU8dFjOA">
         <value xsi:nil="true"/>
       </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_KKJJEAxiEeSLD4acFjqL2w" name="user_id: {unique &amp; name}" visibility="public" type="_9zh5oPu2EeONV6aU8dFjOA" isUnique="false">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_KVhSoAxiEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_KVh5sAxiEeSLD4acFjqL2w" value="1"/>
+      <defaultValue xmi:type="uml:LiteralString" xmi:id="_KVigwAxiEeSLD4acFjqL2w">
+        <value xsi:nil="true"/>
+      </defaultValue>
+    </ownedAttribute>
+    <ownedAttribute xmi:type="uml:Property" xmi:id="_T3yTEAxiEeSLD4acFjqL2w" name="user" type="_Kga4cPu2EeONV6aU8dFjOA" association="_T3yTEwxiEeSLD4acFjqL2w">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_T3yTEQxiEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_T3yTEgxiEeSLD4acFjqL2w" value="1"/>
     </ownedAttribute>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_fpAhIPvJEeONV6aU8dFjOA" name="pw_hash">
@@ -426,5 +448,17 @@
         <value xsi:nil="true"/>
       </defaultValue>
     </ownedAttribute>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="__24JgAxhEeSLD4acFjqL2w" name="link_group_user_1" memberEnd="__24JgQxhEeSLD4acFjqL2w __23icAxhEeSLD4acFjqL2w">
+    <ownedEnd xmi:type="uml:Property" xmi:id="__24JgQxhEeSLD4acFjqL2w" name="link_group" type="_2wYmAPvBEeONV6aU8dFjOA" association="__24JgAxhEeSLD4acFjqL2w">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="__24JggxhEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="__24JgwxhEeSLD4acFjqL2w" value="1"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_T3yTEwxiEeSLD4acFjqL2w" name="tag_user_1" memberEnd="_T3yTFAxiEeSLD4acFjqL2w _T3yTEAxiEeSLD4acFjqL2w">
+    <ownedEnd xmi:type="uml:Property" xmi:id="_T3yTFAxiEeSLD4acFjqL2w" name="tag" type="_3DgSIPvIEeONV6aU8dFjOA" association="_T3yTEwxiEeSLD4acFjqL2w">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_T3yTFQxiEeSLD4acFjqL2w" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_T3yTFgxiEeSLD4acFjqL2w" value="1"/>
+    </ownedEnd>
   </packagedElement>
 </uml:Model>

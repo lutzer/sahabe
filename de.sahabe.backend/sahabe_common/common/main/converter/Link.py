@@ -15,8 +15,9 @@ def convertLinksSetToDicts(resultSet):
             dicts.append({"linkId":link[0],
                           "url":link[1],
                           "title":link[2],
-                          "typeName":link[3],
-                          "modifiedAt":link[4],
-                          "logo":link[5]})
+                          "description":link[3],
+                          "typeName":link[4],
+                          "modifiedAt":link[5],
+                          "logo":link[6]})
     return dicts
     

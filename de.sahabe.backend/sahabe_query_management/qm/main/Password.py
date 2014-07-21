@@ -5,7 +5,7 @@ Created on Jul 12, 2014
 '''
 
 import hashlib
-from admin.main import DBApiModule as db
+from db.main import DBApiModule as db
 
 
 def getPasswordByUserId(userId):

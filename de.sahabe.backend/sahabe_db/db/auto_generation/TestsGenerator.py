@@ -177,7 +177,7 @@ def generateTest(tables):
         imports = """
 import Tables as tables
 import MockModule as mock
-import admin.main.DBApiModule as db
+import db.main.DBApiModule as db
 from _mysql_exceptions import DataError, OperationalError, IntegrityError
         
 """

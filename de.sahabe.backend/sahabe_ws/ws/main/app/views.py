@@ -15,12 +15,17 @@ import common.main.utils as utils
 from flask import session, request, g
 from flask_login import login_user, logout_user, current_user, login_required
 from ws.main.app import app, lm
+import ast
 
 
 @lm.user_loader
 def load_user(_id):
-    return userQM.getUserById(_id)
-
+    try:
+        return userQM.getUserById(_id)
+    except Exception, e:
+        #FIXME: not every exception should remove the session
+        session.pop(_id, None)
+        return response.send400("Error %s" %(e))
 
 @app.before_request
 def before_request():
@@ -58,8 +63,9 @@ def load_links():
     user = g.user
     data = utils.extractData(upload)
     links = linkQM.addLinksJSONFileByUser(data, user.id)
-    message = {"message":"%s links were added"%(links[0])}
-    return response.sendData([message] + links[1])
+#     message = {"message":"%s links were added"%(links[0])}
+#     return response.sendData([message] + links[1])
+    return response.send200()
 #     except Exception, e:
 #         return response.send400("Error %s" %(e))
    
@@ -74,30 +80,84 @@ def addLink():
         return response.send400("Error %s" %(e)) 
     
 
-@app.route("/links", methods=["GET", "POST"])
+@app.route("/links", methods=["GET"])
 @login_required
-def getAllLinks():
+def links():
     try:
-        linksSet = linkQM.getLinksByUserId(g.user.id) 
+        linksSet = linkQM.getLinksByUserId(g.user.id)
         links = linkConv.convertLinksSetToDicts(linksSet)
         return response.sendData(links)
     except Exception, e:
         return response.send400("Error %s" %(e))
 
+
+@app.route("/links/<linkId>", methods=["PUT"])
+@login_required
+def updateLink(linkId):
+
+    data = ast.literal_eval(request.data)
+    try:
+        linkQM.update(data)
+    except (Exception, ), e:
+        return response.send400("Error %s" %(e))
+
+    return response.send200("update successful")
+
+
+@app.route("/links/<linkId>", methods=["DELETE"])
+@login_required   
+def deleteLink(linkId):
+    affected = 0
+    try:
+        affected = linkQM.dropLinksbyUser(g.user.id, [linkId])
+    except Exception, e:
+        return response.send400("Error %s" %(e))
+    
+    if affected == 1:
+        return response.send200("delete successful")
+    elif affected == 0 :
+        return response.send400("link not deleted")
+    
+    
+@app.route("/links/delete", methods=["POST"])
+@login_required   
+def deleteLinks():
+    
+    linkIds=request.form.getlist("linkIds[]")
+
+    if linkIds == []:
+        return response.send200("list is empty")
+
+    affected = 0
+    
+    try:
+        affected = linkQM.dropLinksbyUser(g.user.id, linkIds)
+    except Exception, e:
+        return response.send400("Error %s" %(e))
+
+    if affected == len(linkIds):
+        return response.send200("delete successful")
+    elif affected < len(linkIds) and affected > 0:  
+        return response.send400("not all links could be deleted")
+    elif affected == 0 :
+        return response.send400("no links could be deleted")
+    
+    
 @app.route("/links/drop_all", methods=["GET"])
 def dropAllLinks():
     count = linkQM.dropAllLinksByUser(g.user.id)
     return response.send200("%s links dropped"%(count))
+
     
 @app.route("/search", methods=["POST"])
 @login_required
 def search():
+    if request.form["searchValue"] == "":
+        return response.sendData([])
     searchValue = request.form["searchValue"]
     linksSet = linkQM.searchLinkByUser(g.user.id, searchValue)
-    count = len(linksSet)
-    message = {"message":"%s links found"%(count)}
     links = linkConv.convertLinksSetToDicts(linksSet)
-    return response.sendData([message]+links)
+    return response.sendData(links)
     
 
 @app.route("/login", methods=["POST"])

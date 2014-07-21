@@ -5,8 +5,8 @@ Created on Jun 27, 2014
 '''
 
 import Tables
-import admin.main.MockModule as mock
-import admin.main.DBApiModule as db
+import db.main.MockModule as mock
+import db.main.DBApiModule as db
 from _mysql_exceptions import DataError, OperationalError, IntegrityError
 
 

@@ -6,6 +6,7 @@ Created on Jul 13, 2014
 
 import re
 import ast
+import uuid as uid
 import string
 import random
 import time
@@ -14,11 +15,14 @@ import datetime
 from flask import json
 
 def timeDifference(timeStamp):
-    return int(round((time.time() - timeStamp)* 1000)) 
+    return int(round((time.time() - timeStamp)* 1000))
 
 def timeStamp():
     timeStamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return str(timeStamp)
+
+def uuid():
+    return str(uid.uuid4())
     
 def randomText(size=64, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -31,8 +35,8 @@ def extractHomeUrl(url):
         url = "http://"+url
     
     if url.startswith("https:"):
-        url = url.replace("s", "")
-
+        url = url.replace("https:", "http:")
+    
     m = re.search("(http://(.+?)/)", url)
     return m.group(1)
 

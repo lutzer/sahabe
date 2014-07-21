@@ -7,7 +7,7 @@ Created on Jul 12, 2014
 import uuid
 import hashlib
 
-from admin.main import DBApiModule as db
+from db.main import DBApiModule as db
 from qm.main import Password as passwordQM
 from mytypes.main.User import User
 
