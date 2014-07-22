@@ -8,6 +8,7 @@ import response
 import qm.main.User  as userQM 
 import qm.main.Password as passwordQM
 import qm.main.Link as linkQM
+import qm.main.LinkStorage as linkStoreQM
 
 import common.main.converter.Link as linkConv
 import common.main.utils as utils
@@ -62,7 +63,7 @@ def load_links():
     upload = request.files["file"]
     user = g.user
     data = utils.extractData(upload)
-    links = linkQM.addLinksJSONFileByUser(data, user.id)
+    linkStoreQM.addJSONLinksByUser(data, user.id)
 #     message = {"message":"%s links were added"%(links[0])}
 #     return response.sendData([message] + links[1])
     return response.send200()
@@ -74,7 +75,7 @@ def load_links():
 @login_required
 def addLink():
     try:
-        linkQM.addLink(request.form, g.user.id)
+        linkStoreQM.addLink(request.form, g.user.id)
         return response.send200("link added successfully")
     except Exception, e: 
         return response.send400("Error %s" %(e)) 
