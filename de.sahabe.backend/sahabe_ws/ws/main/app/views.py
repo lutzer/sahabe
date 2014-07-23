@@ -143,7 +143,7 @@ def deleteLinks():
         return response.send400("not all links could be deleted")
     elif affected == 0 :
         return response.send400("no links could be deleted")
-    
+
     
 @app.route("/links/drop_all", methods=["GET"])
 def dropAllLinks():

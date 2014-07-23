@@ -31,3 +31,4 @@ lm.init_app(app)
 
 #from ws.main.app import views
 import views
+import Tag
