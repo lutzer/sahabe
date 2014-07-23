@@ -29,64 +29,34 @@ def getLinksByUserId(userId):
     return resultSet
 
 def searchLinkByUser(userId, searchValue):
-#    searchString = searchValue.replace(" ", ".+")
     
-#     split = searchValue.split(" ")
-#     searchString = ""
-#     for word in split:
-#         searchString +="(?=.*\%s\b)"%(word) 
-#         
-#     searchString = "^%s.+"%(searchString)
-    
-#     regexSearch="""select link.id, link.url, link.title, link.type_name, link.modified_at, md.value from meta_data as md
-# join link on link.id = md.link_id  and link.id in 
-# (select l.id from link as l where
-# l.user_id='%s' and 
-# l.url REGEXP '%s' or
-# l.title REGEXP '%s' or
-# l.description REGEXP '%s' or
-# l.type_name REGEXP '%s')
-# """%(userId, searchString, searchString, searchString, searchString)
-#     
-#     conn = db.connect()
-#     cursor = conn.cursor()
-#     cursor.execute(regexSearch)
-# 
-#     rows = cursor.fetchall()
-#     conn.commit()
-#     cursor.close()
-#     print len(rows)
-#     return rows
-    
-    def buildRegexSearchClause(column, searchValue):
-        split = searchValue.split(" ")
-        searchString = ""
-        for word in split:
-            if word!= "":
-                searchString += "%s REGEXP '%s' and "%(column, word)
-        return searchString[:-4]
-    
-    regexSearch="""select link.id, link.url, link.title, link.description, link.type_name, link.modified_at, md.value from meta_data as md
-join link on link.id = md.link_id  and link.id in 
-(select l.id from link as l where
-l.user_id='%s' and 
- %s or
- %s or
- %s or
- %s)
+    searchLinks="""
+SELECT link.id, link.url, link.title, link.description, link.type_name, link.modified_at, md.value
+FROM meta_data AS md
+JOIN link ON link.id = md.link_id AND link.id IN 
+(SELECT l.id FROM link AS l WHERE
+l.user_id='%s' AND %s OR %s OR %s OR %s)
 """%(userId,
-     buildRegexSearchClause("l.url",searchValue),
-     buildRegexSearchClause("l.title",searchValue),
-     buildRegexSearchClause("l.description",searchValue),
-     buildRegexSearchClause("l.type_name",searchValue))
+     __buildRegexSearchClause("l.url",searchValue),
+     __buildRegexSearchClause("l.title",searchValue),
+     __buildRegexSearchClause("l.description",searchValue),
+     __buildRegexSearchClause("l.type_name",searchValue))
+    
+    searchTags="""SELECT id, name FROM tag WHERE %s """%(__buildRegexSearchClause("name", searchValue))
+    
+    
     conn = db.connect()
     cursor = conn.cursor()
-    cursor.execute(regexSearch)
-
-    rows = cursor.fetchall()
+    
+    cursor.execute(searchLinks)
+    links = cursor.fetchall()
+    
+    cursor.execute(searchTags)
+    tags = cursor.fetchall()
+    
     conn.commit()
     cursor.close()
-    return rows
+    return (tags, links)
 
 def update(link):
     conn = db.connect()
@@ -119,4 +89,13 @@ def dropAllLinksByUser(userId):
     conn = db.connect()
     count = db.deleteFromTable(conn, "link", user_id=userId)
     return count
+
+
+def __buildRegexSearchClause(column, searchValue):
+    split = searchValue.split(" ")
+    searchString = ""
+    for word in split:
+        if word!= "":
+            searchString += "%s REGEXP '%s' AND "%(column, word)
+    return searchString[:-4]
             

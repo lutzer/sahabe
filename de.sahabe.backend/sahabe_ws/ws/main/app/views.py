@@ -11,6 +11,7 @@ import qm.main.Link as linkQM
 import qm.main.LinkStorage as linkStoreQM
 
 import common.main.converter.Link as linkConv
+import common.main.converter.Tag as tagConv
 import common.main.utils as utils
 
 from flask import session, request, g
@@ -156,9 +157,16 @@ def search():
     if request.form["searchValue"] == "":
         return response.sendData([])
     searchValue = request.form["searchValue"]
-    linksSet = linkQM.searchLinkByUser(g.user.id, searchValue)
-    links = linkConv.convertLinksSetToDicts(linksSet)
-    return response.sendData(links)
+    
+    try:
+        searchResults = linkQM.searchLinkByUser(g.user.id, searchValue)
+    except Exception, e:
+        return response.send400("Error %s" %(e)) 
+    
+    tags = tagConv.converTagsSetToDict(searchResults[0])
+    links = linkConv.convertLinksSetToDicts(searchResults[1])
+    results = [{"tags":tags},{"links":links}]
+    return response.sendData(results)
     
 
 @app.route("/login", methods=["POST"])

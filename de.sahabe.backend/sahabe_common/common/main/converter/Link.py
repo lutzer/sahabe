@@ -18,6 +18,6 @@ def convertLinksSetToDicts(resultSet):
                           "description":link[3],
                           "typeName":link[4],
                           "modifiedAt":link[5],
-                          "logo":link[6]})
+                          "iconUrl":link[6]})
     return dicts
     
