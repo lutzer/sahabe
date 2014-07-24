@@ -2,10 +2,14 @@
 Created on Jul 23, 2014
 
 @author: Maan Al Balkhi
+
+get all:        /tags            - GET
+create:         /tags/create     - PUT
 '''
+
 import response
-import qm.main.Tag as tagQM 
-import common.main.converter.Tag as tagConv
+from qm.main import Tag as tagQM 
+from common.main.converter import Tag as tagConv 
 
 from flask import request, g 
 from flask_login import login_required
