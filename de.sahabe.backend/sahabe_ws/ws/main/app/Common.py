@@ -76,7 +76,9 @@ def search():
     
     tags = tagConv.converTagsSetToDict(searchResults[0])
     links = linkConv.convertLinksSetToDicts(searchResults[1])
-    results = [{"tags":tags},{"links":links}]
+    results = {}
+    results["tags"]=tags
+    results["links"]=links
     return response.sendData(results)
     
 

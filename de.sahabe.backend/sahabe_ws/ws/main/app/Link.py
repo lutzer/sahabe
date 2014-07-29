@@ -77,6 +77,7 @@ def updateLink(linkId):
 def deleteLink(linkId):
     affected = 0
     try:
+        #user id is required to verify that link belongs to a logged user.  
         affected = linkQM.dropLinksbyUser(g.user.id, [linkId])
     except Exception, e:
         return response.send400("Error %s" %(e))
