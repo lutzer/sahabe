@@ -17,10 +17,24 @@ define([
 		    view.setElement(this.$(selector)).render();
 		},
 		
-		//appends a subview
+		//appends one subview
 		append : function (view, selector) {
 			this.addChildView(view);
 			this.$(selector).append(view.render().el);
+		},
+		
+		//appends many subviews
+		appendMultiple : function(views, selector) {
+			var container = document.createDocumentFragment();
+			
+			// render each subview into the container
+			_.each(this._views, function(subview) {
+				this.addChildView(subview);
+				container.appendChild(subview.render().el)
+			});
+			
+			//append whole container
+			this.$(selector).append(container);
 		},
 		
 		close: function() {

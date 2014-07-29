@@ -31,3 +31,7 @@
 .linkLogo {
 	height:20px;
 }
+
+input[type='text'] {
+	width:100%;
+}

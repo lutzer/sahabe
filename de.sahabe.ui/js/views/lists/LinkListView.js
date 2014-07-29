@@ -16,6 +16,14 @@ define([
 			return this;
 		},
 		
+		addAll: function() {
+			var subviews = [];
+			this.collection.each( function(model) {
+				subviews.push(new LinkListItemView({model: model}));
+			});
+			this.appendMany(subviews,".linklist");
+		},
+		
 		addOne: function(model) {
 			this.append(new LinkListItemView({model: model}),".linklist");
 			this.updateLinkCount();

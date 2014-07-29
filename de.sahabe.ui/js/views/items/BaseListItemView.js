@@ -10,7 +10,6 @@ define([
 		
 		initialize: function() {
 			this.listenTo(this.model, 'destroy', this.close);
-			
 			BaseView.prototype.initialize.call(this);
 		}
 	

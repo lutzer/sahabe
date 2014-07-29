@@ -6,8 +6,6 @@ define([
 
 	var LinkModel = Backbone.Model.extend({
 		
-		selectable: false,
-		
 		urlRoot : constants.settings.webServiceUrl+"/links",
 		idAttribute: "linkId",
 		
@@ -16,7 +14,6 @@ define([
 		},
 		
 		setSelectable: function(selectable) {
-			this.selectable = selectable;
 			this.trigger("selectable");
 		},
 		
