@@ -15,17 +15,15 @@ define([
 		},
 		
 		initialize: function(options) {
-			
 			this.collection = new SearchCollection();
-			
-			this.searchString = "";
-
+			this.searchString = options.searchString;
+			if (this.searchString != "")
+				this.displaySearchResults(this.searchString);
 			BaseView.prototype.initialize.call(this);
-
 		},
 
 		render: function(){
-			var compiledTemplate = _.template( searchTemplate, {} );
+			var compiledTemplate = _.template( searchTemplate, {searchString : this.searchString} );
 			// Append our compiled template to this Views "el"
 			this.$el.html( compiledTemplate );
 			
@@ -34,14 +32,20 @@ define([
 			return this;
 		},
 		
+		displaySearchResults: function(searchString) {
+			//get data from server
+			this.collection.fetch({ data: { searchValue: searchString}, type: "POST" });
+			//update hash
+			history.pushState(null, null, '#/search/'+searchString);
+		},
+		
 		_onSearchFieldValueChange: function() {
 			var newSearchString = $("#searchField").val();
 			if (newSearchString != this.searchString) { 
 				// only fetch if the new search text is different from the previous
 				this.searchString = newSearchString;
-				this.collection.fetch({ data: { searchValue: this.searchString}, type: "POST" });
-			}
-				
+				this.displaySearchResults(this.searchString);
+			}	
 		}
 	});
 	return SearchView;

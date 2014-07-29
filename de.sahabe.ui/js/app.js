@@ -12,7 +12,7 @@ define([
 	var AppRouter = Backbone.Router.extend({
 		routes: {
 			'login' : 'login',
-			'search' : 'search',
+			'search/:searchString' : 'search',
 			'user/:username' : 'user',
 			'links/add' : 'linkAdd',
 			'*actions' : 'default'
@@ -41,11 +41,11 @@ define([
 		app_router.on('route:login', function(actions){
 			AppView.showView(new LoginView());
 		});
-		app_router.on('route:search', function(actions){
-			AppView.showView(new SearchView());
+		app_router.on('route:search', function(searchString){
+			AppView.showView(new SearchView({searchString : searchString}));
 		});
-		app_router.on('route:user', function(actions){
-			AppView.showView(new UserView({username: actions}));
+		app_router.on('route:user', function(username){
+			AppView.showView(new UserView({username: username}));
 		});
 		app_router.on('route:linkAdd', function(actions){
 			AppView.showView(new LinkAddView());
