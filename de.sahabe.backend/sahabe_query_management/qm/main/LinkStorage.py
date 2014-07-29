@@ -38,13 +38,13 @@ def addLink(form, userId):
     kwargs["modified_at"]=utils.timeStamp()
     
     #FIXME use other algorithms to get icon logo
-    logo = utils.extractHomeUrl(kwargs["url"])+"favicon.ico"
+    iconUrl = utils.extractHomeUrl(kwargs["url"])+"favicon.ico"
 
     conn = db.connect()
     db.insertToTable(conn,
                      "link",
                     **kwargs)
-    MetaData.addLogo(linkId, logo)
+    MetaData.addIconUrl(linkId, iconUrl)
     
     return linkId
 
