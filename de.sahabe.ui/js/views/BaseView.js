@@ -24,15 +24,15 @@ define([
 		},
 		
 		//appends many subviews
-		appendMultiple : function(views, selector) {
+		appendMany : function(views, selector) {
+			var self = this;
+			
 			var container = document.createDocumentFragment();
-			
 			// render each subview into the container
-			_.each(this._views, function(subview) {
-				this.addChildView(subview);
-				container.appendChild(subview.render().el)
+			_.each(views, function(subview) {
+				self.addChildView(subview);
+				container.appendChild(subview.render().el);
 			});
-			
 			//append whole container
 			this.$(selector).append(container);
 		},
@@ -45,6 +45,8 @@ define([
 			//close view
 			this.remove();
 			this.unbind();
+			
+			console.log("close view");
 		},
 		
 		//adds a childview, which will be deletet on close()

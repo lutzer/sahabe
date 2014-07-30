@@ -7,24 +7,32 @@ define([
 	var BaseListView = BaseView.extend({
 		
 		initialize: function() {
+			var self = this;
 			
 			//listen to the collections change events
+			this.listenTo(this.collection, 'reset', this.afterReset);
 			this.listenTo(this.collection, 'add', this.addOne);
-			this.listenTo(this.collection, 'reset', this.addAll);
 			this.listenTo(this.collection, 'remove', this.removeOne);
 			
 			BaseView.prototype.initialize.call(this);
 		},
 		
-		// add all views for collection
-		addAll: function() {
-			this.collection.each(this.addOne);
+		afterReset: function(attributes,options) {
+			var self = this;
+			
+			// remove previously shown models
+			_.each(options.previousModels, function(model) {
+				self.removeOne(model);
+			});
+			
+			// add new models
+			this.collection.each(function(model) {
+				self.addOne(model);
+			});
 		},
 		
-		// add only one model to collection
-		addOne: function(model) {
-			throw "Exception: ListView must implement addOne Method.";
-			//this.append(new LinkListItemView({model: model}),".linklist");
+		addOne: function() {
+			throw "BaseListView extended Class must implement addOne Method";
 		},
 		
 		removeOne: function(model) {

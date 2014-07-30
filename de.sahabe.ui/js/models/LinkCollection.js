@@ -40,7 +40,5 @@ define([
 		
 	});
 	
-	
-	
 	return LinkCollection;
 });

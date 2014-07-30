@@ -21,7 +21,7 @@ define([
 			this.username = options.username;
 			
 			this.collection = new LinkCollection();
-			this.collection.fetch();
+			this.collection.fetch({reset: true});
 
 			BaseView.prototype.initialize.call(this);
 

@@ -3,7 +3,7 @@ define([], function(){
 
 			settings: {
 				// server settings
-				webServiceUrl : "http://192.168.7.29:5000"
+				webServiceUrl : "http://0.0.0.0:5000"
 			}
 
 	};

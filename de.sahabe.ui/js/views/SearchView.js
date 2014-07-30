@@ -3,10 +3,11 @@ define([
 	'underscore',
 	'backbone',
 	'views/BaseView',
-	'models/SearchCollection',
+	'models/SearchModel',
+	'models/LinkCollection',
 	'views/lists/LinkListView',
 	'text!templates/searchTemplate.html'
-], function($, _, Backbone, BaseView, SearchCollection, LinkListView, searchTemplate){
+], function($, _, Backbone, BaseView, SearchModel, LinkCollection, LinkListView, searchTemplate){
 	
 	var SearchView = BaseView.extend({
 		
@@ -15,7 +16,8 @@ define([
 		},
 		
 		initialize: function(options) {
-			this.collection = new SearchCollection();
+			this.model = new SearchModel();
+			
 			this.searchString = options.searchString;
 			if (this.searchString != "")
 				this.displaySearchResults(this.searchString);
@@ -27,16 +29,19 @@ define([
 			// Append our compiled template to this Views "el"
 			this.$el.html( compiledTemplate );
 			
-			this.assign(new LinkListView({ collection: this.collection}), ".links");
+			this.assign(new LinkListView({ collection: this.model.get('links') }), ".links");
 			
 			return this;
 		},
 		
 		displaySearchResults: function(searchString) {
 			//get data from server
-			this.collection.fetch({ data: { searchValue: searchString}, type: "POST" });
+			this.model.fetch({ data: { searchValue: searchString}, type: "POST", reset : true });
 			//update hash
-			history.pushState(null, null, '#/search/'+searchString);
+			if (searchString != "")
+				history.pushState(null, null, '#/search/'+searchString);
+			else
+				history.pushState(null, null, '#/search');
 		},
 		
 		_onSearchFieldValueChange: function() {
