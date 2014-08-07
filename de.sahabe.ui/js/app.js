@@ -13,6 +13,7 @@ define([
 		routes: {
 			'login' : 'login',
 			'search/:searchString' : 'search',
+			'search' : 'search',
 			'user/:username' : 'user',
 			'links/add' : 'linkAdd',
 			'*actions' : 'default'
@@ -42,6 +43,8 @@ define([
 			AppView.showView(new LoginView());
 		});
 		app_router.on('route:search', function(searchString){
+			if (searchString == null)
+				searchString = "";
 			AppView.showView(new SearchView({searchString : searchString}));
 		});
 		app_router.on('route:user', function(username){

@@ -20,11 +20,12 @@ define([
 		},
 		
 		initialize: function() {
-			this.listenTo(this.model, 'selectable', this.render);
+			this.listenTo(this.model, 'selectableChanged', this.render);
 			BaseListItemView.prototype.initialize.call(this);
 		},
 
 		render: function() {
+			
 			var compiledTemplate;
 			if (this.editView)
 				compiledTemplate = _.template( linkListItemEditTemplate, { link : this.model.toJSON()} );

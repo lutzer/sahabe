@@ -11,7 +11,7 @@ define([
 		initialize: function() {
 			this.listenTo(this.model, 'destroy', this.close);
 			BaseView.prototype.initialize.call(this);
-		}
+		},
 	
 	});
 	// Our module now returns our view

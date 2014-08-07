@@ -9,12 +9,15 @@ define([
 		urlRoot : constants.settings.webServiceUrl+"/links",
 		idAttribute: "linkId",
 		
+		selectable : false,
+		
 		attributes: {
 			selected : false
 		},
 		
 		setSelectable: function(selectable) {
-			this.trigger("selectable");
+			this.selectable = selectable;
+			this.trigger("selectableChanged");
 		},
 		
 		setSelected: function(selected) {

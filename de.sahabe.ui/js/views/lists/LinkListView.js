@@ -8,7 +8,9 @@ define([
 ], function($, _, BaseListView, LinkModel, LinkListItemView, linkListTemplate){
 	
 	var LinkListView = BaseListView.extend({
-
+		
+		subviews : [],
+		
 		render: function(){
 			
 			var compiledTemplate = _.template( linkListTemplate, {} );
@@ -16,22 +18,30 @@ define([
 			return this;
 		},
 		
-		addAll: function() {
-			var subviews = [];
-			this.collection.each( function(model) {
-				subviews.push(new LinkListItemView({model: model}));
+		afterReset: function(attributes, options) {
+			var self = this;
+			
+			// remove previous model views
+			/*_.each(this.subviews, function(view) {
+				view.close();
+			});*/
+			_.each(options.previousModels, function(model) {
+				self.removeOne(model);
 			});
-			this.appendMany(subviews,".linklist");
+			
+			// add new model views
+			this.subviews = [];
+			this.collection.each( function(model) {
+				self.subviews.push(new LinkListItemView({model: model}));
+			});
+			this.appendMany(this.subviews,".linklist");
+			
+			//update result number
+			this.updateLinkCount();
 		},
 		
 		addOne: function(model) {
 			this.append(new LinkListItemView({model: model}),".linklist");
-			this.updateLinkCount();
-		},
-		
-		removeOne: function(model) {
-			BaseListView.prototype.removeOne.call(this,model);
-			this.updateLinkCount();
 		},
 		
 		updateLinkCount: function() {
