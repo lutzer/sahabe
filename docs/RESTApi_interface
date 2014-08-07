@@ -1,0 +1,24 @@
+Common:
+	index:		     /                - GET
+	              	     /index           - GET
+	sign up:       	     /sign_up         - GET, POST
+	search:        	     /search          - POST
+	login:               /login           - POST
+	logout:        	     /logout          - GET
+
+
+Link:
+	get all:             /links           - GET
+	load from a file:    /load_links      - GET, POST
+	add:                 /link/add        - PUT
+	update:              /links/<linkId>  - PUT
+	delete:              /links/<linkId>  - DELETE
+	multiple delete:     /links/delete    - POST
+	delete all           /links/drop_all  - GET
+
+
+Tag:
+	get all:             /tags            - GET
+	create:              /tags/create     - PUT
+	get links by tag     /tags/links      - POST
+	multiple delete      /tags/delete     - POST
