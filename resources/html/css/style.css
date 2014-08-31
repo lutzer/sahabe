@@ -1,0 +1,299 @@
+body {
+	margin: 0px;
+	background-color: #f2e9e1;
+	font-family: 'Open Sans', sans-serif;
+	color: #000;
+	font-size: 12pt;
+}
+
+h1 {
+	font-weight: normal;
+	font-size: 22pt;
+	border-bottom: 1px solid #9f5716;
+	margin:0px;
+	padding-bottom:5px;
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+}
+
+ul {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+li {
+	padding:1px;
+}
+
+input {
+	font-family: 'Sans Source Pro', sans-serif;
+	font-weight: 200;
+	border: 0px;
+	border-bottom: 1px solid #333;
+	background: transparent;
+	color:#fff;
+	font-size: 10pt;
+}
+
+input:focus {
+	border-bottom: 1px solid #555;
+    outline: none;
+}
+
+#container {
+	margin:0px;
+	height:100%;
+	width:100%;
+	min-height:500px;
+	min-width:500px;
+}
+
+/* HEADER STYLES */
+
+#header {
+	position:fixed;
+	top:0px;
+	right:0px;
+	left:0px;
+	height: 60px;
+	background-color: #1c140d;
+	padding: 0px 5px 0px 5px;
+	z-index: 2;
+	min-width:500px;
+}
+
+#header .logo {
+	padding-top: 10px;
+	float: left;
+	width:250px;
+}
+
+#headerRight {
+	float:right;
+}
+
+#searchbar {
+	padding-top:10px;
+	height:40px;
+	line-height: 40px;
+	margin: 0px 60px 0px 250px;
+}
+
+.addLinkButton .icon {
+	background-size: 32px 32px;
+	-webkit-transition: background-size 0.3s;
+    transition: background-size 0.3s;
+}
+
+.addLinkButton:hover .icon {
+	background-size: 40px 40px;
+}
+
+/* SEARCHBAR */
+
+#searchbar input {
+	padding:10px 0px 10px 0px;
+	width:100%;
+	padding-left:190px;
+}
+
+.searchfield {
+	margin-right: 50px;
+}
+
+.searchlogo {
+	float:right;
+	width:50px;
+}
+
+#searchoverlay {
+	position: absolute;
+}
+
+.searchword {
+	float:left;
+	color:#000;
+	background-color: #f2e9e1;
+	border-radius: 12px;
+	padding:0px 5px 0px 5px;
+	margin-top:10px;
+	margin-right:5px;
+	height:19px;
+	line-height: 20px;
+	vertical-align: middle;
+	font-size: 9pt;
+	font-weight:800;
+}
+
+/* SIDEBAR STYLES */
+
+.headlineButton {
+	float:right;
+	padding-top: 2px;
+}
+
+#sidebar {
+	position: relative;
+	top:60px;
+	bottom:0px;
+}
+
+#sidemenu {
+	float:left;
+	width:0px;
+	background-color: #c27835;
+	padding:20px 10px 10px 10px;;
+	border-right: 1px solid #5e3c1d;
+	z-index: 1;
+	overflow: scroll;
+	box-shadow: 1px -10px 20px #444;
+	height:100%;
+}
+
+#sidemenu.closed {
+	display: none;
+}
+
+#sidemenu-container {
+	width:230px;
+}
+
+#iconbar {
+	float:left;
+	width:80px;
+	padding-top:6px;
+	text-align: center
+}
+
+.iconbar-item {
+	padding:10px 20px 10px 20px;
+    -webkit-transition: background-color 0.5s;
+    transition: background-color 0.5s;
+}
+
+.iconbar-item .icon {
+    -webkit-transition: background-size 0.3s;
+    transition: background-size 0.3s;
+}
+
+.iconbar-item.open .icon {
+	background-size: 32px 32px;
+}
+
+.iconbar-item.close {
+	background-color: #c27835;
+}
+
+.iconbar-item.close.hover {
+	background-color: #000;
+}
+
+.iconbar-item.open.hover .icon {
+	/*margin-left: 6px;*/
+	background-size: 40px 40px;
+}
+
+.iconbar-label {
+	float:left;
+	font-weight: 400;
+	position: relative;
+	padding-left: 45px;
+	top: -30px;
+	font-size:10pt;
+	visibility: hidden;
+	color:#363330;
+}
+
+.iconbar-item.hover .iconbar-label {
+	visibility: visible;
+}
+
+.groupList li {
+	border: 1px solid transparent;
+}
+
+.groupList a {
+	display:inline-block;
+	padding-left: 30px;
+	background-image: url(../images/folder.png);
+	background-repeat: no-repeat;
+	background-position: 5px;
+	width:200px;
+}
+
+.groupList li:hover {
+	/*border: 1px solid #000;*/
+	background-color: #000;
+}
+
+.groupList li:hover a {
+	color: #c27835;
+	background-image: url(../images/folder_orange.png);
+}
+
+/* CONTENT STYLES */
+
+#content {
+	position:relative;
+	top:60px;
+	bottom:0px;
+	padding:5px;
+	overflow: scroll;
+}
+
+/* ICONS & BUTTONS */
+
+a.button {
+	display:inline-block;
+	height:40px;
+	padding:10px;
+}
+
+.icon {
+    display: inline-block;
+    width:40px;
+    height:40px;
+    background-repeat:no-repeat;
+    background-position:center;
+    white-space: nowrap;
+}
+
+.small {
+    background-size: 20px 20px;
+}
+
+.icon.addButton {
+	background-image: url("../images/add_button.png");
+}
+
+.icon.addButton-black {
+	background-image: url("../images/add_button_black.png");
+}
+
+.icon.search {
+	background-image: url("../images/looking_glass.png");
+}
+
+.icon.groups {
+	background-image: url("../images/groups_button.png");
+}
+
+.icon.close-black {
+	background-image: url("../images/close_black.png");
+}
+
+.icon.close-white {
+	background-image: url("../images/close_white.png");
+}
+
+.icon.wrench {
+	background-image: url("../images/wrench.png");
+}
+
+.icon.tag {
+	background-image: url("../images/tag.png");
+}

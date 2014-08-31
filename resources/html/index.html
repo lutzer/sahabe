@@ -1,0 +1,137 @@
+
+<html>
+	<head>
+		<title>Sahabe</title>
+		<link href="css/style.css" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600,400italic|Open+Sans:400,600' rel='stylesheet' type='text/css'>
+		<link rel="shortcut icon" href="images/favicon.ico">
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script>
+      $(document).ready(function(){
+        $('.iconbar-item').hover(
+          function(){ $(this).addClass('hover') },
+          function(){ $(this).removeClass('hover') }
+        )
+
+        //animate close
+        $('.closeSidebar').on('click', function() {
+          $('#sidemenu').animate({width: '0px'}, function() {
+            $('#sidemenu').hide();
+          } );
+        });
+
+        //animate open
+        $('.openGroups').on('click', function() {
+          $('#sidemenu').removeClass('closed');
+          $('#sidemenu').animate({width: '230px'});
+        });
+
+        //resizeSidebar();
+
+      });
+      /*$( window ).resize(function() {
+        resizeSidebar();
+      });
+
+      var resizeSidebar = function() {
+        console.log($('#container').height());
+        $('#sidemenu').height($('#container').height()-90);
+      };*/
+
+
+    </script>
+	</head>
+	<body>
+    <div id="container">
+      <div id="header">
+        <div class="logo">
+          <a href="#">
+            <img src="images/logo.png"/>
+          </a>
+        </div>
+        <div id="headerRight">
+          <a href="#add" class="button addLinkButton">
+            <span class="icon addButton"></span>
+          </a>
+        </div>
+        <div id="searchbar">
+          <div class="searchlogo">
+            <span class="icon search"></span>
+          </div>
+          <div class="searchfield">
+            <div id="searchoverlay">
+              <div class="searchword">Group: Projects</div>
+              <div class="searchword">Tag: music</div>
+            </div>
+            <input type="text" id="searchinput"/>
+          </div>
+          
+        </div>
+        
+      </div>
+      <div id="sidebar">
+        <div id="sidemenu" class="closed">
+          <div id="sidemenu-container">
+            <h1>Groups
+              <div class="headlineButton">
+                <a href="#">
+                  <span class="icon small addButton-black"></span>
+                </a>
+              </div>
+            </h1>
+            <ul class="fixed groupList">
+              <li><a href="#">Unsorted</a></li>
+              <li><a href="#">Inbox</a></li>
+              <li><a href="#">Recently Added</a></li>
+            </ul>
+            <ul class="user groupList">
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Uni</a></li>
+              <li><a href="#">Dubstep</a></li>
+              <li><a href="#">Music</a></li>
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Uni</a></li>
+              <li><a href="#">Dubstep</a></li>
+              <li><a href="#">Music</a></li>
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Uni</a></li>
+              <li><a href="#">Dubstep</a></li>
+              <li><a href="#">Music</a></li>
+              <li><a href="#">Projects</a></li>
+              <li><a href="#">Uni</a></li>
+              <li><a href="#">Dubstep</a></li>
+              <li><a href="#">Music</a></li>
+            </ul>
+          </div>
+        </div>
+        <div id="iconbar">
+          <!--<div class="iconbar-item close">
+            <a href="#groups" class="iconbar-link closeSidebar">
+              <span class="icon close-white"></span>
+            </a>
+          </div>-->
+          <div class="iconbar-item open">
+            <a href="#groups" class="iconbar-link openGroups">
+              <span class="icon groups iconbar-icon"></span>
+              <div class="iconbar-label">Groups</div>
+            </a>
+          </div>
+          <div class="iconbar-item open">
+            <a href="#groups" class="iconbar-link">
+              <span class="icon tag iconbar-icon"></span>
+              <div class="iconbar-label">Tags</div>
+            </a>
+          </div>
+          <div class="iconbar-item open">
+            <a href="#groups" class="iconbar-link">
+              <span class="icon wrench iconbar-icon"></span>
+              <div class="iconbar-label">Settings</div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="content">
+      </div>
+    </div>
+	</body>
+</html>
