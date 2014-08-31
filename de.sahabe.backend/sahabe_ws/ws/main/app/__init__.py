@@ -29,6 +29,6 @@ if not config.debug:
 lm = LoginManager()
 lm.init_app(app)
 
-from ws.main.app import Common
+import User
 import Link
 import Tag

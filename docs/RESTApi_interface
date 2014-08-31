@@ -6,7 +6,7 @@ User:
 
 Link:
 	get all:             	/links           		- GET
-	search:		     	/links/?searchvalue=		- GET	
+	search:		     	/links?searchvalue=		- GET	
 	add:                 	/links           	     	- PUT
 	update:              	/links/<linkId>         	- POST
 	delete:              	/links/<linkId>  	     	- DELETE
