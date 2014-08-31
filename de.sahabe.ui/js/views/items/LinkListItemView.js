@@ -59,7 +59,11 @@ define([
 			});
 			
 			// save model to database
-			this.model.save();
+			this.model.save(null, {
+				error: function(model, response) {
+					console.log(response);
+				}
+			});
 			
 			//re-render itemview
 			this.editView = false;

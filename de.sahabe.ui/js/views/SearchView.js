@@ -36,7 +36,7 @@ define([
 		
 		displaySearchResults: function(searchString) {
 			//get data from server
-			this.model.fetch({ data: { searchValue: searchString}, type: "POST", reset : true });
+			this.model.fetch({ data: { searchValue: searchString}, type: "GET", reset : true });
 			//update hash
 			if (searchString != "")
 				history.pushState(null, null, '#/search/'+searchString);

@@ -2,9 +2,10 @@ define([
 	'jquery',
 	'underscore',
 	'views/BaseView',
+	'models/LinkModel',
 	'values/constants',
 	'text!templates/linkAddTemplate.html'
-], function($, _, BaseView, constants,  linkAddTemplate){
+], function($, _, BaseView, LinkModel, constants,  linkAddTemplate){
 	
 	var LinkAddView = BaseView.extend({
 		
@@ -25,21 +26,15 @@ define([
 			var url = $('#url').val();
 			var description = $('#description').val();
 			
-			$.ajax({
-	            url: constants.settings.webServiceUrl+"/link/add",
-	            type: 'PUT',
-	            dataType: "json",
-	            data: { title: title, url : url, description : description},
-	            success: function (data) {
-	                console.log("link added");
-	                console.log(data);
-	                
-	            },
-	            error: function(error) {
-	            	console.log("failed to add link");
-	            	console.log(error);
-	            }
-	        });
+			var link = new LinkModel({title: title, url : url, description : description});
+			link.save(null,{
+				error: function(model, response) {
+					console.log(model);
+					console.log(response);
+				}
+			});
+			
+			
 		}
 	});
 	// Our module now returns our view

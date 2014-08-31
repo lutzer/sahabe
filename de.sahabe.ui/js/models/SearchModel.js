@@ -7,7 +7,7 @@ define([
 	
 	SearchModel = Backbone.Model.extend({
 		
-		urlRoot : constants.settings.webServiceUrl+"/search",
+		urlRoot : constants.settings.webServiceUrl+"/links",
 		
 		defaults: {
 			links : new LinkCollection(),

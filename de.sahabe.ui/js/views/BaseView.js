@@ -43,10 +43,9 @@ define([
 				this.childviews.pop().close();
 			}
 			//close view
+			this.stopListening();
 			this.remove();
 			this.unbind();
-			
-			console.log("close view");
 		},
 		
 		//adds a childview, which will be deletet on close()
