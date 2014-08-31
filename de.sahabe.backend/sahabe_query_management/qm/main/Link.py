@@ -25,7 +25,6 @@ def getLinksByUserId(userId):
                               user_id__IN__link=userId,
                               link_id__IN__meta_data="id__IN__link",
                               l_key__IN__meta_data="iconUrl")
-    
     return resultSet
 
 def searchLinkByUser(userId, searchValue):
@@ -44,7 +43,6 @@ l.user_id='%s' AND %s OR %s OR %s OR %s)
     
     searchTags="""SELECT id, name FROM tag WHERE %s """%(__buildRegexSearchClause("name", searchValue))
     
-    
     conn = db.connect()
     cursor = conn.cursor()
     
@@ -58,18 +56,23 @@ l.user_id='%s' AND %s OR %s OR %s OR %s)
     cursor.close()
     return (tags, links)
 
-def update(link):
+def update(link, linkId):
     conn = db.connect()
+    updateEntry = {}
+    if link.has_key("url") and link["url"] != None:
+        updateEntry["url"] = link["url"]
+    if link.has_key("title") and link["title"] != None:
+        updateEntry["title"] = link["title"]
+    if link.has_key("description") and link["description"] != None:
+        updateEntry["description"] = link["description"]
+    if link.has_key("typeName") and link["typeName"] != None:
+        updateEntry["type_name"] = link["typeName"]
+    updateEntry["modified_at"] = utils.timeStamp()
     count = db.updateInTable(conn,
-                     {"url":link["url"],
-                      "title":link["title"],
-                      "description":link["description"],
-                      "type_name":link["typeName"],
-                      "modified_at":utils.timeStamp()},
-                     "link",
-                     id=link["linkId"])
+                             updateEntry,       
+                             "link",
+                             id=linkId)
     return count
-    
 
 def dropLinksbyUser(userId, linkIds):
     
@@ -89,7 +92,6 @@ def dropAllLinksByUser(userId):
     conn = db.connect()
     count = db.deleteFromTable(conn, "link", user_id=userId)
     return count
-
 
 def __buildRegexSearchClause(column, searchValue):
     split = searchValue.split(" ")

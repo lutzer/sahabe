@@ -29,7 +29,6 @@ from ws.main.app import app
 @app.route("/links", methods=["GET"])
 @login_required
 def links():
-    
     ''' Get all links if there is no argument, else do a search '''
     if request.args.items() == [] :
         try:
@@ -55,27 +54,25 @@ def links():
         return response.sendData(results)
 
 
-@app.route("/links", methods=["PUT"])
+@app.route("/links", methods=["POST"])
 @login_required
 def addLink():
     try:
-        linkStoreQM.addLink(request.form, g.user.id)
+        linkStoreQM.addLink(request.get_json(), g.user.id)
     except Exception, e: 
         return response.send400("Error %s" %(e)) 
     return response.send200("link added successfully")
 
 
-@app.route("/links/<linkId>", methods=["POST"])
+@app.route("/links/<linkId>", methods=["PUT"])
 @login_required
 def updateLink(linkId):
-
-    data = ast.literal_eval(request.data)
     try:
-        linkQM.update(data)
+        linkQM.update(request.get_json(), linkId)
     except (Exception, ), e:
         return response.send400("Error %s" %(e))
 
-    return response.send200("update successful")
+    return response.response200()
 
 
 @app.route("/links/<linkId>", methods=["DELETE"])

@@ -7,8 +7,8 @@ User:
 Link:
 	get all:             	/links           		- GET
 	search:		     	/links?searchvalue=		- GET	
-	add:                 	/links           	     	- PUT
-	update:              	/links/<linkId>         	- POST
+	add:                 	/links           	     	- POST
+	update:              	/links/<linkId>         	- PUT
 	delete:              	/links/<linkId>  	     	- DELETE
 	multiple delete:     	/links/delete    		- POST
 	import from a file:  	/links/import    		- POST

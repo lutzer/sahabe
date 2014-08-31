@@ -30,6 +30,13 @@ def send401(message="unauthorized", mimetype='application/json'):
     
     return resp
 
+def response200():
+    resp = Response(status=200)
+    for key, value in headers.iteritems():
+        resp.headers.add(key, value)
+    return resp
+
+
 def send200(message="operation was successful", mimetype='application/json'):
     js = json.dumps({"message":message})
     resp = Response(js, status=200, mimetype=mimetype)
@@ -39,7 +46,6 @@ def send200(message="operation was successful", mimetype='application/json'):
 
     return resp
 
-
 def send204(message="operation was not successful", mimetype='application/json'):
     js = json.dumps({"message":message})
     resp = Response(js, status=204, mimetype=mimetype)
@@ -48,8 +54,6 @@ def send204(message="operation was not successful", mimetype='application/json')
         resp.headers.add(key, value)
 
     return resp
-    
-    
 
 def sendResponse(status=200, mimetype="text/html"):
     resp = Response(status=status, mimetype=mimetype)
@@ -58,7 +62,6 @@ def sendResponse(status=200, mimetype="text/html"):
         resp.headers.add(key, value)
 
     return resp
-
     
 def sendData(data, status=200,  mimetype='application/json'):
     js = json.dumps(data)
