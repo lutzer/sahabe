@@ -1,0 +1,163 @@
+--------------------------------
+SAHABE RASPBERRY PI INSTALLATION
+--------------------------------
+
+
+PASSWORDS
+---------
+
+username: root
+rootpw: tequila
+
+username: pi
+userpasswd: blanco
+(same for samba)
+
+mysqllogin: root
+mysqlpw: milbona
+
+
+SYSTEM INSTALLATION
+-------------------
+
+# Prepare SD Card
+1. Download Arch linux image and use apple pi-baker to transfer image to sd card
+2. Plug the raspberry pi ethernet cable into router or
+   Setup dhcp server on mac, plug it into the macs ethernet port
+   and use LanScan to detect its ip adress
+
+# Change keyboard and timezone Settings
+1. set german keyboard: localectl set-keymap --no-convert de 
+2. set berlin timezone: nano ~/.bashrc: TZ='Europe/Berlin'; export TZ 
+
+(# setup fixed ip address)
+1. edit /etc/netctlt/etho0
+2. comment ip=dhcp line
+3. add:
+	IP=static
+	Address='192.168.1.10/24'
+	Gateway='192.168.1.1'
+	DNS=('192.168.1.1')
+
+# resize partition
+1. http://gleenders.blogspot.de/2014/03/raspberry-pi-resizing-sd-card-root.html
+
+# setup hostname and timeserver
+1. change hostname: sudo nano /etc/hostname
+2. enable ntpd: systemctl enable ntpd
+
+# Login thorugh ssh and create user accounts
+1. type ssh root@ip password is root
+2. change root password (to <rootpw>): passwd
+3. create new user account: useradd -m pi -> passwd pi <userpasswd>
+
+# Install Sudo
+1. update pacman: pacman -Syy
+2. install sudo: pacman -S sudo
+   setup sudo for user: "EDITOR=nano visudo" -> add line "letterbox ALL=(ALL) ALL"
+
+# Install Samba
+1. pacman -S samba
+2. cp /etc/samba/smb.conf.default /etc/samba/smb.conf
+3. sudo smbpasswd -a pi (password: <userpasswd>
+4. start service: sudo systemctl start smbd.service
+5. sudo systemctl enable smbd.service
+6. connect through mac with address smb://rasp.pis.ip/homes
+
+# Install python
+1. sudo pacman -S python2
+2. sudo pacman -S python2-pip
+3. sudo pip2 install flask
+
+4. # install additional python packages
+1. sudo pip2 install flask-login
+
+# Setup NGINX webserver
+1. sudo pacman -S nginx
+2. enable automatic startup: systemctl enable nginx
+3. configure nano /etc/nginx/nginx.conf:
+	-add root parameter to server:
+		server {
+	        listen       80;
+	        server_name  localhost;
+	        root    /home/letterbox/http;
+	-remove all other root directives in locations
+4. chmod 755 home,pi and http directory
+
+# Install uwsgi server for python support (https://wiki.archlinux.org/index.php/Uwsgi)
+1. add to nginx conf:
+	http {
+
+	    sendfile on;
+
+	    gzip              on;
+	    gzip_http_version 1.0;
+	    gzip_proxied      any;
+	    gzip_min_length   500;
+	    gzip_disable      "MSIE [1-6]\.";
+	    gzip_types        text/plain text/xml text/css
+	                      text/comma-separated-values
+	                      text/javascript
+	                      application/x-javascript
+	                      application/atom+xml;
+
+	    # Configuration containing list of application servers
+	    upstream uwsgicluster {
+
+	        server 127.0.0.1:8080;
+	        # server 127.0.0.1:8081;
+	        # ..
+	        # ..
+	    }
+
+	    location / {
+
+            include            uwsgi_params;
+            uwsgi_pass         uwsgicluster;
+
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+
+        }
+
+         location ^~ /static/  {
+
+            root /home/pi/http/static;
+        }
+
+2. sudo pip2 install uwsgi
+3. to test: uwsgi --socket 127.0.0.1:8080 -w WSGI:app (WSGI.py is python script name to start app)
+	wsgi content:
+		from flask import Flask
+		app = Flask(__name__)
+
+		@app.route("/")
+		def hello():
+		    return "Hello!"
+
+		if __name__ == "__main__":
+		    app.run()
+4. create startup script: nano /etc/uswgi/sahabe.ini:
+	[uwsgi]
+	socket = 127.0.0.1:8080
+	chdir = /home/pi/http
+	module = WSGI:app
+5. enable startup sudo systemctl enable uwsgi@sahabe
+
+# install mysql
+1. sudo pacman -S mariadb
+2. sudo pacman -S mysql-python
+3. systemctl start mysqld
+   mysql_secure_installation -> mariadb root password: <mysqlpassword>
+   systemctl restart mysqld
+   systemctl enable mysqld
+4. login to mariadb: mysql -u root -p
+   -> GRANT ALL PRIVILEGES ON *.* TO 'root'@'192.168.72.%' IDENTIFIED BY '<mysqlpassword>' WITH GRANT OPTION;
+5. minimize memory usage: cp /usr/share/mysql/my-small.cnf /etc/mysql/my.cnf
+
+
+
+
