@@ -37,14 +37,28 @@ input {
 	font-family: 'Sans Source Pro', sans-serif;
 	font-weight: 200;
 	border: 0px;
-	border-bottom: 1px solid #788092;
+	border-left: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
 	background: transparent;
-	color:#fff;
-	font-size: 10pt;
+	color:#eee;
+	font-size: 11pt;
+	padding:5px;
 }
+
+/*input {
+	font-family: 'Sans Source Pro', sans-serif;
+	font-weight: 200;
+	color:#333;
+	font-size: 10pt;
+	padding:5px;
+	border-radius: 5px;
+	border:0px;
+	border:1px solid #000;
+}*/
 
 input:focus {
 	border-bottom: 1px solid #fff;
+	border-left: 1px solid #fff;
     outline: none;
 }
 
@@ -64,7 +78,7 @@ input:focus {
 	right:0px;
 	left:0px;
 	height: 60px;
-	background-color: #49505F;
+	background-color: rgba(63, 67, 83, 0.7);
 	padding: 0px 5px 0px 5px;
 	z-index: 2;
 	min-width:500px;
@@ -94,9 +108,8 @@ input:focus {
 /* SEARCHBAR */
 
 #searchbar input {
-	padding:10px 0px 10px 0px;
+	margin-top:6px;
 	width:100%;
-	padding-left:0px;
 }
 
 .searchfield {

@@ -9,7 +9,7 @@ define([
 		urlRoot : constants.settings.webServiceUrl+"/links",
 		idAttribute: "linkId",
 		
-		selectable : false,
+		/*selectable : false,
 		
 		attributes: {
 			selected : false
@@ -22,7 +22,7 @@ define([
 		
 		setSelected: function(selected) {
 			this.set({selected: selected});
-		}
+		}*/
 	});
 
 	// Return the model for the module

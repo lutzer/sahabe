@@ -1,16 +1,17 @@
 define([
+        'jquery',
         'underscore',
         'backbone',
         'models/LinkModel',
         'values/constants'
-], function(_, Backbone, LinkModel, constants){
+], function($,_, Backbone, LinkModel, constants){
 	
 	LinkCollection = Backbone.Collection.extend({
 		
 		model: LinkModel,
 		url : constants.settings.webServiceUrl+"/links",
 		
-		deleteModels: function(models) {
+		/*deleteModels: function(models) {
 			var self = this;
 			
 			// get the linkIds of all the models to delete
@@ -36,7 +37,7 @@ define([
 	            	console.log(error);
 	            }
 	        });
-		}
+		}*/
 		
 	});
 	

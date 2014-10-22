@@ -2,14 +2,14 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/BaseView',
+	'marionette',
 	'models/SearchModel',
 	'models/LinkCollection',
 	'views/lists/LinkListView',
 	'text!templates/searchTemplate.html'
-], function($, _, Backbone, BaseView, SearchModel, LinkCollection, LinkListView, searchTemplate){
+], function($, _, Backbone, Marionette, SearchModel, LinkCollection, LinkListView, searchTemplate){
 	
-	var SearchView = BaseView.extend({
+	var SearchView = Marionette.View.extend({
 		
 		events: {
 		    "keyup input#searchField": "_onSearchFieldValueChange"

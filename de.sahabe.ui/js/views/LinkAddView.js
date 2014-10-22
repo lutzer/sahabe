@@ -1,13 +1,13 @@
 define([
 	'jquery',
 	'underscore',
-	'views/BaseView',
+	'marionette',
 	'models/LinkModel',
 	'values/constants',
 	'text!templates/linkAddTemplate.html'
-], function($, _, BaseView, LinkModel, constants,  linkAddTemplate){
+], function($, _, Marionette, LinkModel, constants,  linkAddTemplate){
 	
-	var LinkAddView = BaseView.extend({
+	var LinkAddView = Marionette.View.extend({
 		
 		events : {
 			'click .addLinkButton' : '_onClickAddLinkButton'

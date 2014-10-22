@@ -13,4 +13,5 @@ require(['app',], function(App){
    
 	// start the app
 	App.initialize();
-});
+}
+);

@@ -2,40 +2,38 @@ define([
 	'jquery',
 	'underscore',
 	'backbone',
-	'views/HomeView',
-	'views/LoginView',
-	'views/UserView',
-	'views/LinkAddView',
-	'views/SearchView'
-], function($, _, Backbone, HomeView, LoginView, UserView, LinkAddView, SearchView){
-
-	var AppRouter = Backbone.Router.extend({
-		routes: {
-			'login' : 'login',
-			'search/:searchString' : 'search',
-			'search' : 'search',
-			'user/:username' : 'user',
-			'links/add' : 'linkAdd',
-			'*actions' : 'default'
-		},
-	});
+	'marionette',
+	'controller'
+], function($, _, Backbone, Marionette, Controller) {
 	
-	// adds all views to #container and removes unused views
-	var AppView = {
-			showView: function(view) {
-				if (this.currentView){
-					this.currentView.close();
-				}
-				this.currentView = view;
-				this.currentView.render();
-				$("#container").append(this.currentView.el);
-			}
-	};
+	var App = new Backbone.Marionette.Application();
 
 	var initialize = function(){
 		
+		App.addRegions({
+			headerRegion: "#header",
+			contentRegion: "#content",
+			sidebarRegion: "#sidebar"
+		});
+		
+		App.addInitializer(function(options){
+			  Backbone.history.start();
+		});
+		
+		App.Router = new Marionette.AppRouter({
+			controller: new Controller(App),
+			appRoutes: {
+				'login' : 'login',
+				'signup' : 'signup',
+				'home' : 'home',
+				'*actions' : 'defaultRoute'
+			}
+		});
+		
+		App.start();
+		
 		//setup routes
-		var app_router = new AppRouter;
+		/*var app_router = new AppRouter;
 		app_router.on('route:default', function(actions){
 			AppView.showView(new HomeView());
 		});
@@ -54,8 +52,9 @@ define([
 			AppView.showView(new LinkAddView());
 		});
 
-		Backbone.history.start();
+		Backbone.history.start();*/
 	};
+	
 	
 	//setup credentials to allow cross origin access
 	$.ajaxSetup({
@@ -64,9 +63,9 @@ define([
 		xhrFields: {
 	        withCredentials : true
 	    }
+	    //timeout: 2000
 	});
 	$.support.cors=true;
-	
 	
 
 	return {

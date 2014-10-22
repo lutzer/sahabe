@@ -4,24 +4,38 @@ define([
 	
 	var instance = null;
 	 
-    function TheUser(){
+    function User(){
         if(instance !== null){
-            throw new Error("Cannot instantiate more than one Singleton, use TheUser.getInstance()");
+            throw new Error("Cannot instantiate more than one Singleton, use User.getInstance()");
         } 
         
         this.initialize();
     }
-    TheUser.prototype = {
+    
+    User.prototype = {
         initialize: function(){
             this.model = new UserModel;
+        },
+        
+        checkLogin: function(options) {
+        	var self = this;
+        	//if model already fetched
+        	if (this.model.isFetched)
+        		options.success(self.model);
+        	else {
+        		// else fetch model
+        		this.model.fetch({ success: function() {
+        			options.success(self.model);
+        		}, error: options.error });	// display error on no connection
+        	}
         }
     };
-    TheUser.getInstance = function(){
+    User.getInstance = function(){
         if(instance === null){
-            instance = new TheUser();
+            instance = new User();
         }
         return instance;
     };
- 
-    return TheUser;
+    
+    return User;
 });

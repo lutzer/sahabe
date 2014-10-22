@@ -1,0 +1,48 @@
+input[type=text],
+input[type=url],
+input[type=tel],
+input[type=number],
+input[type=color],
+input[type=email],
+input[type=password] {
+	float:none;
+	width:100%
+}
+
+h1 {
+	border-bottom:1px solid #000;
+	margin:20px;
+}
+
+input {
+	margin: 10px
+}
+
+.errorpage {
+	margin:20px
+}
+
+#message {
+	width:100%;
+	text-align:center;
+}
+
+.login-form, .signup-form {
+	width:500px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+label {
+	padding:10px;
+}
+
+.invalid {
+	/*background: #fff url(images/invalid.png) no-repeat 98% center;*/
+    border-color: #f00;
+}
+
+
+ul {
+	list-style-type: none
+}

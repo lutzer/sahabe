@@ -1,12 +1,12 @@
 define([
 	'jquery',
 	'underscore',
-	'views/BaseView',
-	'singletons/TheUser',
+	'marionette',
+	'singletons/User',
 	'text!templates/homeTemplate.html'
-], function($, _, BaseView, TheUser, homeTemplate){
+], function($, _, Marionette, User, homeTemplate){
 	
-	var HomeView = BaseView.extend({
+	var HomeView = Marionette.View.extend({
 
 		render: function(){
 			
