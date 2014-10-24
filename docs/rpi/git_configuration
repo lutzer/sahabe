@@ -1,0 +1,11 @@
+Create working dir and init git.
+$ git init
+$ git remote add –f origin https://github.com/lutzer/sahabe.git
+$ git config core.sparsecheckout true
+$ echo de.sahabe.backend_alter/src >> .git/info/sparse-checkout
+$ echo de.sahabe.ui >> .git/info/sparse-checkout
+$ git pull origin master
+$ git push --set-upstream origin/master master
+$ git pull
+
+see also http://jasonkarns.com/blog/subdirectory-checkouts-with-git-sparse-checkout/
