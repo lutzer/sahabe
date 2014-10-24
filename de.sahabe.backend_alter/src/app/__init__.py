@@ -32,3 +32,4 @@ lm.init_app(app)
 import User
 import Link
 import Tag
+import Group

@@ -66,7 +66,7 @@ def deleteTags():
 
 @app.route("/tags/links", methods=["POST"])
 @login_required
-def getLinks():
+def getTagLinks():
     tagId = request.form["tagId"]
     try:
         linksSet = tagQM.getLinks(tagId)
