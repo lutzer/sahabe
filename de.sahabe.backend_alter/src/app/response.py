@@ -7,7 +7,7 @@ Created on Jul 13, 2014
 from flask import Response
 from flask import json
 
-headers = {"Access-Control-Allow-Origin":"http://0.0.0.0:8000",
+headers = {"Access-Control-Allow-Origin":"http://127.0.0.1:8000",
            "Access-Control-Allow-Methods":"*",
            "Access-Control-Allow-Credentials":"true",
            "Access-Control-Allow-Headers":"X-Requested-With"}
