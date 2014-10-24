@@ -1,8 +1,6 @@
-<li>
-	<% if (selectable) { %>
-		<input type="checkbox" class="selectBox"/>
-	<% } %>
-	<img src="<%= link.logo %>" class="linkLogo"/>
-	<%= link.title %> - <a href="<%= link.url %>"><%= link.url %></a>
-	- <a href="#/link/<%= link.id %>" class="linkEdit">Edit</a>
-</li>
+<!--  <img src="<%= iconUrl %>" class="linkLogo"/>-->
+<h1><%= title %></h1>
+<a href="<%= url %>"><%= trimString(url,50) %></a>
+<p class="description">
+	<%= description %>
+</p>

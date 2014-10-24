@@ -10,7 +10,7 @@ require.config({
 });
 // Load the app module
 require(['app',], function(App){
-   
+	
 	// start the app
 	App.initialize();
 }

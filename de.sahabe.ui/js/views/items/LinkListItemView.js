@@ -1,15 +1,27 @@
 define([
 	'jquery',
 	'underscore',
-	'views/items/BaseListItemView',
+	'backbone',
+	'marionette',
+	'utils',
 	'models/LinkModel',
 	'text!templates/items/linkListItemTemplate.html',
-	'text!templates/items/linkListItemEditTemplate.html'
-], function($, _, BaseListItemView, LinkModel, linkListItemTemplate, linkListItemEditTemplate){
+], function($, _, Backbone, Marionette, Utils, LinkModel, linkListItemTemplate){
 	
-	var LinkListItemView = BaseListItemView.extend({
+	var LinkListItemView = Backbone.Marionette.ItemView.extend({
 		
-		editView : false, //set to true when editing;
+		template: _.template(linkListItemTemplate),
+		
+		className: 'link-item',
+		
+		templateHelpers: function() {
+			return {
+				trimString : Utils.trimString
+			};
+
+		}
+		
+		/*editView : false, //set to true when editing;
 		
 		events: {
 			"click .linkEdit": "_onLinkEditClick",
@@ -79,7 +91,7 @@ define([
 		_onSelectCheckbox: function() {
 			this.model.set({selected : $(".selectBox").is(":checked")});
 			return false;
-		}
+		}*/
 	});
 	// Our module now returns our view
 	return LinkListItemView;

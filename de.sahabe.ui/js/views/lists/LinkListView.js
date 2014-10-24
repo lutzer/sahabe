@@ -1,52 +1,24 @@
 define([
 	'jquery',
 	'underscore',
-	'views/lists/BaseListView',
+	'backbone',
+	'marionette',
 	'models/LinkCollection',
 	'views/items/LinkListItemView',
-	'text!templates/lists/linkListTemplate.html'
-], function($, _, BaseListView, LinkModel, LinkListItemView, linkListTemplate){
+], function($, _, Backbone, Marionette, LinkCollection, LinkListItemView){
 	
-	var LinkListView = BaseListView.extend({
+	var LinkListView = Backbone.Marionette.CollectionView.extend({
 		
-		subviews : [],
+		childView: LinkListItemView,
 		
-		render: function(){
-			
-			var compiledTemplate = _.template( linkListTemplate, {} );
-			this.$el.html( compiledTemplate );
-			return this;
+		initialize : function(options) {
+			this.collection = new LinkCollection();
+			this.collection.fetch();
 		},
 		
-		afterReset: function(attributes, options) {
-			var self = this;
-			
-			// remove previous model views
-			/*_.each(this.subviews, function(view) {
-				view.close();
-			});*/
-			_.each(options.previousModels, function(model) {
-				self.removeOne(model);
-			});
-			
-			// add new model views
-			this.subviews = [];
-			this.collection.each( function(model) {
-				self.subviews.push(new LinkListItemView({model: model}));
-			});
-			this.appendMany(this.subviews,".linklist");
-			
-			//update result number
-			this.updateLinkCount();
-		},
+		className: "link-list"
 		
-		addOne: function(model) {
-			this.append(new LinkListItemView({model: model}),".linklist");
-		},
 		
-		updateLinkCount: function() {
-			$(".linksFound").html(this.collection.length);
-		}
 		
 	});
 	// Our module now returns our view

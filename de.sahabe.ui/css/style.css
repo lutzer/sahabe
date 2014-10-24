@@ -1,3 +1,81 @@
+body {
+	margin:0;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 10pt;
+}
+
+#container {
+	width:100%;
+	height:100%;
+}
+
+#message {
+	font-family: 'Courier', monospace ;
+	position:fixed;
+	bottom:0%;
+	right:0%;
+	left:0%;
+	margin:20px;
+	background-color:#cccccc;
+	text-align:center;
+	border-radius:5px;
+}
+
+.message-text {
+	padding:10px;
+}
+
+.single-page {
+	height:100%;
+}
+
+.single-page h1 {
+	/*margin:20px;*/
+	padding:10px 10px 10px 20px ;
+}
+
+#sidebar {
+	position:fixed;
+	width:230px;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	padding: 10px;
+	overflow:scroll;
+}
+
+#content {
+	position:fixed;
+	left:250px;
+	top:0px;
+	bottom:0px;
+	right:0px;
+	padding:10px;
+	overflow:scroll;
+}
+
+input {
+	font-family: 'Courier', monospace ;
+	margin-bottom: 15px;
+	margin-top: 5px;
+	padding:5px;
+	border-radius:3px;
+	border: 1px solid #ddd;
+	font-size: 10pt;
+}
+
+input[type=submit] {
+	font-size:10pt;
+	padding:8px;
+	margin-right:5px;
+	font-weight:600;
+	background-color: #ddd;
+}
+
+input:focus {
+	/*border: 1px solid #fff;*/
+}
+
 input[type=text],
 input[type=url],
 input[type=tel],
@@ -11,38 +89,45 @@ input[type=password] {
 
 h1 {
 	border-bottom:1px solid #000;
-	margin:20px;
-}
-
-input {
-	margin: 10px
+	margin-top:0px;
 }
 
 .errorpage {
 	margin:20px
 }
 
-#message {
-	width:100%;
-	text-align:center;
-}
-
 .login-form, .signup-form {
+	position: relative;
+  	top: 30%;
+  	transform: translateY(-30%);
 	width:500px;
 	margin-left:auto;
 	margin-right:auto;
 }
 
 label {
-	padding:10px;
 }
 
 .invalid {
 	/*background: #fff url(images/invalid.png) no-repeat 98% center;*/
-    border-color: #f00;
+    /*border-color: #f00;*/
+    background-color: #fee;
 }
 
 
 ul {
 	list-style-type: none
+}
+
+.link-list {
+	padding-top:60px;
+}
+
+.link-item {
+	border-bottom:1px dotted #ccc;
+}
+
+.link-item h1 {
+	border:none;
+	font-size:120%;
 }

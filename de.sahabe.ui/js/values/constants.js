@@ -3,13 +3,15 @@ define([], function(){
 
 			settings: {
 				// server settings
-				webServiceUrl : "http://192.168.7.29:5000",
-				loginTimeout : 2000
+				webServiceUrl : "http://192.168.7.36/api",
+				//webServiceUrl : "http://192.168.7.29:5000",
+				webServiceLoginTimeout : 2000,
+				messageDisplayTimeout : 3000
 			},
 	
 			errors: {
 				'0' : {
-					title : 'Unknown Error.',
+					title : 'Error.',
 					text : 'An Unknown Error occured.'
 				},
 				'1' : {
