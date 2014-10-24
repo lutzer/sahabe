@@ -37,7 +37,9 @@ def links():
             return response.send400("Error %s" %(e))
         
         links = linkConv.convertLinksSetToDicts(linksSet)
-        return response.sendData(links)
+        respData = {}
+        respData["links"]=links
+        return response.sendData(respData)
         
     else :
         searchValue = request.args["searchValue"]
@@ -48,10 +50,10 @@ def links():
     
         tags = tagConv.converTagsSetToDict(searchResults[0])
         links = linkConv.convertLinksSetToDicts(searchResults[1])
-        results = {}
-        results["tags"]=tags
-        results["links"]=links
-        return response.sendData(results)
+        respData = {}
+        respData["tags"]=tags
+        respData["links"]=links
+        return response.sendData(respData)
 
 
 @app.route("/links", methods=["POST"])
