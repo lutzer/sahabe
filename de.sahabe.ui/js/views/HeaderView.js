@@ -4,14 +4,10 @@ define([
 	'marionette',
 	'text!templates/headerTemplate.html'
 ], function(_, Backbone, Marionette, headerTemplate){
-	var HeaderView = Marionette.View.extend({
-		//template: _.template(headerTemplate, {}),
+	var HeaderView = Marionette.ItemView.extend({
 		
-		render: function() {
-			var compiledTemplate = _.template( headerTemplate, {});
-			this.$el.html( compiledTemplate );
-			return this;
-		}
+		template: _.template(headerTemplate),
+		
 	});
 	return HeaderView;
 });

@@ -7,17 +7,16 @@ define([
 	'text!templates/loginTemplate.html'
 ], function($, _, Marionette, constants, User, loginTemplate){
 	
-	var LoginView = Marionette.View.extend({
+	var LoginView = Marionette.ItemView.extend({
+		
+		template :  _.template( loginTemplate),
+		className: 'single-page',
 		
 		events : {
-			'click .loginButton' : '_onClickLoginButton'
+			'click .loginButton' : '_onClickLoginButton',
+			'click .signupButton' : '_onClickSignupButton'
 		},
 
-		render: function(){
-			var compiledTemplate = _.template( loginTemplate, {} );
-			this.$el.html( compiledTemplate );
-			return this;
-		},
 		
 		_onClickLoginButton: function() {
 			var self = this;
@@ -33,13 +32,22 @@ define([
 			self.trigger('display:message',"Logging in...");
 			
 			function onSuccess() {
-				self.trigger('display:message',"Logged in.");
+				self.trigger('display:message',"Login succesfull!");
+				window.location = "#";
 			};
 			
-			function onError() {
-				self.trigger('display:error',1);
+			function onError(error) {
+				
+				if (error.status == 401)
+					self.trigger('display:message',error.responseJSON.message);
+				else
+					self.trigger('display:error',1,error);
 				
 			}
+		},
+		
+		_onClickSignupButton: function () {
+			window.location = "#signup";
 		}
 		
 	});

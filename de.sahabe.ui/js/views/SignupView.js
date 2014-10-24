@@ -7,10 +7,14 @@ define([
 	'text!templates/signupTemplate.html'
 ], function($, _, Marionette, constants, UserModel, signupTemplate){
 	
-	var SignupView = Marionette.View.extend({
+	var SignupView = Marionette.ItemView.extend({
+		
+		template :  _.template( signupTemplate),
+		className: 'single-page',
 		
 		events : {
 			'click .signupButton' : '_onClickSignupButton',
+			'click .loginButton' : '_OnClickLoginButton',
 			'keyup .input-field' : '_validateForm',
 			'input .input-field' : '_validateForm'
 		},
@@ -19,11 +23,9 @@ define([
 			this.model = new UserModel();
 			this.model.on("invalid", this._handleInvalidError,this);
 		},
-
-		render: function(){
-			var compiledTemplate = _.template( signupTemplate, {} );
-			this.$el.html( compiledTemplate );
-			return this;
+		
+		_OnClickLoginButton: function() {
+			window.location = "#login"
 		},
 		
 		_onClickSignupButton: function() {
@@ -38,14 +40,13 @@ define([
 				
 				function onSuccess() {
 					self.trigger('display:message',"Account created");
-					self.$('#message').html("Account created.");
 				};
 				
-				function onError() {
-					self.trigger('display:error',1);
+				function onError(error) {
+					self.trigger('display:error',1,error);
 				};
 			} else {
-				self.trigger('display:message',"User data not valid.");
+				self.trigger('display:message',"Form data is not valid.");
 			}
 		},
 		
@@ -69,7 +70,6 @@ define([
 		
 		_handleInvalidError: function(model, errors) {
 			var self = this;
-			console.log(errors);
 			_.each(errors,function(error) {
 				self.$('#'+error.attr).addClass('invalid');
 			});

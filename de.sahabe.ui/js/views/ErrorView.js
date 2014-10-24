@@ -6,25 +6,31 @@ define([
 	'text!templates/errorTemplate.html'
 ], function($, _, Marionette, constants, errorTemplate){
 	
-	var ErrorView = Marionette.View.extend({
+	var ErrorView = Marionette.ItemView.extend({
 		
 		initialize: function(options) {
-			if (options.error !== 'undefined') {
+			if (options.hasOwnProperty('error')) {
 				this.error = constants.errors[options.error];
 				this.error.number = options.error;
 			} else {
 				this.error = constants.errors['0'];
 				this.error.number = 0;
 			}
-				
+			
+			
+			if (options.hasOwnProperty('message'))
+				this.error.text = options.message;
 		},
-
-		render: function(){
-			var compiledTemplate = _.template( errorTemplate, {error : this.error} );
-			// Append our compiled template to this Views "el"
-			this.$el.html( compiledTemplate );
-			return this;
+		
+		template : _.template(errorTemplate),
+		className: 'single-page',
+		
+		templateHelpers : function() {
+			return {
+				error : this.error
+			};
 		}
+		
 	});
 	// Our module now returns our view
 	return ErrorView;

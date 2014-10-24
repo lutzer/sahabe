@@ -11,9 +11,8 @@ define([
 	var initialize = function(){
 		
 		App.addRegions({
-			headerRegion: "#header",
-			contentRegion: "#content",
-			sidebarRegion: "#sidebar"
+			containerRegion: "#container",
+			messageRegion: "#message"
 		});
 		
 		App.addInitializer(function(options){
@@ -24,40 +23,21 @@ define([
 			controller: new Controller(App),
 			appRoutes: {
 				'login' : 'login',
+				'logout' : 'logout',
 				'signup' : 'signup',
 				'home' : 'home',
-				'*actions' : 'defaultRoute'
+				'error/:errorId' : 'error',
+				'*actions' : 'home'
 			}
 		});
 		
 		App.start();
 		
-		//setup routes
-		/*var app_router = new AppRouter;
-		app_router.on('route:default', function(actions){
-			AppView.showView(new HomeView());
-		});
-		app_router.on('route:login', function(actions){
-			AppView.showView(new LoginView());
-		});
-		app_router.on('route:search', function(searchString){
-			if (searchString == null)
-				searchString = "";
-			AppView.showView(new SearchView({searchString : searchString}));
-		});
-		app_router.on('route:user', function(username){
-			AppView.showView(new UserView({username: username}));
-		});
-		app_router.on('route:linkAdd', function(actions){
-			AppView.showView(new LinkAddView());
-		});
-
-		Backbone.history.start();*/
 	};
 	
 	
 	//setup credentials to allow cross origin access
-	$.ajaxSetup({
+	/*$.ajaxSetup({
 		cache: false,
 		crossDomain: true,
 		xhrFields: {
@@ -65,11 +45,11 @@ define([
 	    }
 	    //timeout: 2000
 	});
-	$.support.cors=true;
+	$.support.cors=true;*/
 	
 
 	return {
-		initialize: initialize
+		initialize: initialize,
 	};
 	
 });
