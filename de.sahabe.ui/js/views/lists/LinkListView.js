@@ -11,11 +11,6 @@ define([
 		
 		childView: LinkListItemView,
 		
-		initialize : function(options) {
-			this.collection = new LinkCollection();
-			this.collection.fetch();
-		},
-		
 		className: "link-list"
 		
 		

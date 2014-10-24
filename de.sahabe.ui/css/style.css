@@ -19,6 +19,7 @@ body {
 	background-color:#cccccc;
 	text-align:center;
 	border-radius:5px;
+	z-index:999;
 }
 
 .message-text {
@@ -30,8 +31,9 @@ body {
 }
 
 .single-page h1 {
-	/*margin:20px;*/
 	padding:10px 10px 10px 20px ;
+	background-color: #222222;
+	color:#ffffff;
 }
 
 #sidebar {
@@ -42,6 +44,16 @@ body {
 	left:0px;
 	padding: 10px;
 	overflow:scroll;
+	border-right:1px solid #000000;
+	/*background-color:#414147;*/
+	color:#ffffff;
+	background-color:#222222;
+	z-index:2;
+}
+
+#sidebar a {
+	color:#fff;
+	
 }
 
 #content {
@@ -50,8 +62,27 @@ body {
 	top:0px;
 	bottom:0px;
 	right:0px;
-	padding:10px;
+	padding:20px;
 	overflow:scroll;
+	z-index:1
+}
+
+#header {
+	position:fixed;
+	top:0px;
+	left:251px;
+	right:0px;
+	height:30px;
+	z-index:3;
+	padding:10px 20px 10px 10px;
+	text-align:right;
+	/*background-color: rgba(255,255,255,0.5);*/
+}
+
+#header input[type=text] {
+	width:50%;
+	padding:5px;
+	margin:5px;
 }
 
 input {
@@ -66,8 +97,8 @@ input {
 
 input[type=submit] {
 	font-size:10pt;
-	padding:8px;
-	margin-right:5px;
+	padding:5px;
+	margin:0px 5px 0px 5px;
 	font-weight:600;
 	background-color: #ddd;
 }
@@ -120,11 +151,20 @@ ul {
 }
 
 .link-list {
-	padding-top:60px;
+	padding-top:30px;
 }
 
 .link-item {
 	border-bottom:1px dotted #ccc;
+	margin:20px 0px 0px 0px;
+}
+
+.link-item h1 {
+	margin:0.5em;
+}
+
+.link-item .description,.url {
+	margin:0.5em;
 }
 
 .link-item h1 {

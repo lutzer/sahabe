@@ -11,6 +11,10 @@ define([
 		model: LinkModel,
 		url : constants.settings.webServiceUrl+"/links",
 		
+		parse : function(response) {
+			return response.links;
+		}
+		
 		/*deleteModels: function(models) {
 			var self = this;
 			

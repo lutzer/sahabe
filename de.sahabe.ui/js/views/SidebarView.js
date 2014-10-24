@@ -10,6 +10,14 @@ define([
 		
 		template : _.template(sidebarTemplate),
 		
+		events: {
+			'click #logoutButton' : '_onClickLogoutButton'
+		},
+	
+		_onClickLogoutButton : function() {
+			window.location = "#logout";
+		}
+		
 	});
 	// Our module now returns our view
 	return SidebarView;
