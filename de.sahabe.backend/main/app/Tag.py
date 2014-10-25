@@ -34,7 +34,7 @@ def tags():
     return response.sendData(respData)
 
 
-@app.route("/tags/create", methods=["POST"])
+@app.route("/tags", methods=["POST"])
 @login_required
 def createTag():
     name = request.form["name"]

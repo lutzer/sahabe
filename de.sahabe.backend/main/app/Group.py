@@ -34,7 +34,7 @@ def groups():
     return response.sendData(respData)
 
 
-@app.route("/groups/create", methods=["POST"])
+@app.route("/groups", methods=["POST"])
 @login_required
 def createGroup():
     name = request.form["name"]
