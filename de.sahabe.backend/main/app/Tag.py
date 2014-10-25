@@ -3,10 +3,12 @@ Created on Jul 23, 2014
 
 @author: Maan Al Balkhi
 
-get all:            /tags            - GET
-create:             /tags/create     - PUT
-get links by tag    /tags/links      - POST
-multiple delete     /tags/delete     - POST
+get all                 /tags                           - GET
+create                  /tags                           - POST
+update                  /tags/<tagId>                   - PUT
+get links by tag        /tags/<tagId>                   - GET
+multiple delete         /tags/delete                    - POST
+delete                  /tags/<tagId>                   - DELETE
 '''
 
 import response
@@ -32,7 +34,7 @@ def tags():
     return response.sendData(respData)
 
 
-@app.route("/tags/create", methods=["PUT"])
+@app.route("/tags/create", methods=["POST"])
 @login_required
 def createTag():
     name = request.form["name"]
@@ -66,7 +68,7 @@ def deleteTags():
         return response.send400("no links could be deleted")
     
 
-@app.route("/tags/links", methods=["POST"])
+@app.route("/tags/<tagId>", methods=["DELETE"])
 @login_required
 def getTagLinks():
     tagId = request.form["tagId"]

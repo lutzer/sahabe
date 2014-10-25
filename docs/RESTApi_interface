@@ -15,7 +15,18 @@ Link:
 
 
 Tag:
-	get all:             	/tags            		- GET
-	create:              	/tags/create     		- PUT
-	get links by tag     	/tags/links      		- POST
+	get all             	/tags            		- GET
+	create              	/tags		     		- POST
+	update			/tags/<tagId>			- PUT
+	get links by tag     	/tags/<tagId>      		- GET
 	multiple delete      	/tags/delete     		- POST
+	delete 			/tags/<tagId>			- DELETE
+
+
+Groups:
+        get all                 /groups                         - GET
+        create                  /groups                         - POST
+        update                  /groups/<tagId>                 - PUT
+        get links by tag        /groups/<tagId>                 - GET
+        multiple delete         /groups/delete                  - POST
+	delete 			/groups/<groupId>		- DELETE

@@ -3,10 +3,12 @@ Created on Oct 24, 2014
 
 @author: Maan Al Balkhi
 
-get all:                /groups            - GET
-create:                 /groups/create     - PUT
-get links by group      /groups/links      - POST
-multiple delete         /groups/delete     - POST
+get all                 /groups                         - GET
+create                  /groups                         - POST
+update                  /groups/<tagId>                 - PUT
+get links by tag        /groups/<tagId>                 - GET
+multiple delete         /groups/delete                  - POST
+delete                  /groups/<groupId>               - DELETE
 '''
 
 import response
@@ -32,7 +34,7 @@ def groups():
     return response.sendData(respData)
 
 
-@app.route("/groups/create", methods=["PUT"])
+@app.route("/groups/create", methods=["POST"])
 @login_required
 def createGroup():
     name = request.form["name"]
@@ -67,7 +69,7 @@ def deleteGroups():
         return response.send400("no links could be deleted")
     
 
-@app.route("/groups/links", methods=["POST"])
+@app.route("/groups/<groupId>", methods=["GET"])
 @login_required
 def getGroupLinks():
     groupId = request.form["groupId"]
