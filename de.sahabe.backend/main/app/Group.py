@@ -37,8 +37,9 @@ def groups():
 @app.route("/groups", methods=["POST"])
 @login_required
 def createGroup():
-    name = request.form["name"]
-    public = request.form["public"]
+    requestData = request.get_json()
+    name = requestData["name"]
+    public = requestData["public"]
     try:
         groupQM.create(g.user.id, name, public)
     except Exception, e: 

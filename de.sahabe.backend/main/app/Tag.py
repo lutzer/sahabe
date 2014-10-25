@@ -37,7 +37,7 @@ def tags():
 @app.route("/tags", methods=["POST"])
 @login_required
 def createTag():
-    name = request.form["name"]
+    name = request.get_json()["name"]
     try:
         tagQM.create(g.user.id, name)
     except Exception, e: 
