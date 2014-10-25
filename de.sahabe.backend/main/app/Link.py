@@ -12,7 +12,7 @@ multiple delete:        /links/delete                   - POST
 import from a file:     /links/import                   - POST
 '''
 
-import ast
+# import ast
 import response
 from app.qm import Link as linkQM 
 from app.qm import LinkStorage as linkStoreQM 

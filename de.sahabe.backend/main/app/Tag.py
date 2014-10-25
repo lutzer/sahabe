@@ -27,7 +27,9 @@ def tags():
     except Exception, e:
         return response.send400("Error %s" %(e))
     tags = tagConv.converTagsSetToDict(tagsSet)
-    return response.sendData(tags)
+    respData = {}
+    respData["tags"] = tags
+    return response.sendData(respData)
 
 
 @app.route("/tags/create", methods=["PUT"])
@@ -73,4 +75,6 @@ def getTagLinks():
     except Exception, e:
         return response.send400("Error %s" %(e))
     links = linkConv.convertLinksSetToDicts(linksSet)
-    return response.sendData(links)
+    respData = {}
+    respData["links"] = links
+    return response.sendData(respData)

@@ -26,9 +26,11 @@ from app import app, lm
 @login_required
 def getUser():
     try:
-        user = userQM.getUserById(g.user.id)
-        userDict = userConv.converUserToDict(user)
-        return response.sendData(userDict)
+        resultSet = userQM.getUserById(g.user.id)
+        user = userConv.converUserToDict(resultSet)
+        respData = {}
+        respData["user"] = user
+        return response.sendData(respData)
     except Exception, e:
         return response.send400("Error %s" %(e))
     

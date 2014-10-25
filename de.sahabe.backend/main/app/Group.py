@@ -27,7 +27,9 @@ def groups():
     except Exception, e:
         return response.send400("Error %s" %(e))
     groups = groupConv.converGroupsSetToDict(groupsSet)
-    return response.sendData(groups)
+    respData = {}
+    respData["groups"] = groups 
+    return response.sendData(respData)
 
 
 @app.route("/groups/create", methods=["PUT"])
@@ -74,4 +76,6 @@ def getGroupLinks():
     except Exception, e:
         return response.send400("Error %s" %(e))
     links = linkConv.convertLinksSetToDicts(linksSet)
-    return response.sendData(links)
+    respData = {}
+    respData["links"] = links
+    return response.sendData(respData)
