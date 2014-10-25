@@ -22,6 +22,11 @@ def getTagsByUser(userId):
     resultSet = db.selectFrom(conn, {"tag"}, "id", "name", user_id=userId)
     return resultSet
 
+def getTagNames(userId):
+    conn = db.connect()
+    resultSet = db.selectFrom(conn, {"tag"}, "name", user_id=userId)
+    return resultSet 
+
 def deleteTags(tagIds):
     query = "delete from tag where "
     for _id in tagIds:

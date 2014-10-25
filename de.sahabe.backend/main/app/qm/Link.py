@@ -8,6 +8,11 @@ from app.db import DBApiModule as db
 from app.common import utils
 
 
+def getLinkUrlsAndIds(userId):
+    conn = db.connect()
+    resultSet = db.selectFrom(conn, {"link"}, "id", "url", user_id=userId)
+    return resultSet
+
 def getLinksByUserId(userId):
     '''
     @param userId: user uuid 
