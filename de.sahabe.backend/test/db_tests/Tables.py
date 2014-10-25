@@ -4,9 +4,9 @@ Created on Jun 13, 2014
 @author: Maan Al Balkhi
 '''
 import unittest
-import db.main.DBApiModule as db
-import db.main.InitSahabeDB as dbinit
-from MockModule import DBMock as mock
+import app.db.DBApiModule as db
+import app.db.InitSahabeDB as dbinit
+from app.db.MockModule import DBMock as mock
 
 
 host = "localhost"
