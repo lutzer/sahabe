@@ -9,6 +9,26 @@ define([
 		urlRoot : constants.settings.webServiceUrl+"/links",
 		idAttribute: "linkId",
 		
+		defaults: {
+			title: '',
+			url : '',
+			description: '',
+			modifiedAt: 0,
+		},
+		
+		validate : function(attrs, options) {
+			
+			errors = [];
+			
+			if (!(attrs.url).match("^https?:\\/\\/.*$"))
+				errors.push({attr: 'url', msg: "url is not valid"});
+			if (!(attrs.title).length > 0)
+				errors.push({attr: 'title', msg: "title is empty"});
+			
+			if (errors.length > 0)
+				return errors;
+		}
+		
 		/*selectable : false,
 		
 		attributes: {

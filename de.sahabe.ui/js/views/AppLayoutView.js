@@ -9,8 +9,10 @@ define([
 	'views/subviews/HeaderView',
 	'views/lists/LinkListView',
 	'views/overlays/ImportView',
+	'views/overlays/LinkEditView',
+	'views/overlays/LinkAddView',
 	'text!templates/appLayoutTemplate.html'
-], function($, _, Marionette, vent, LinkCollection, GroupCollection, SidebarView, HeaderView, LinkListView, ImportView, appLayoutTemplate){
+], function($, _, Marionette, vent, LinkCollection, GroupCollection, SidebarView, HeaderView, LinkListView, ImportView, LinkEditView, LinkAddView, appLayoutTemplate){
 	
 	var AppLayoutView = Marionette.LayoutView.extend({
 		
@@ -37,6 +39,8 @@ define([
 			//register events
 			linkListView.listenTo(headerView,'search:changed',linkListView._onSearchValueChanged);
 			this.listenTo(sidebarView,'open:importFile',this.showImportOverlay);
+			this.listenTo(linkListView,'open:editLink', this.showLinkEditOverlay);
+			this.listenTo(headerView,'open:addLink', this.showLinkAddOverlay);
 			
 			//render views
 			this.sidebarRegion.show(sidebarView);
@@ -46,6 +50,14 @@ define([
 		
 		showImportOverlay: function() {
 			this.overlayRegion.show(new ImportView({collection : this.linkCollection}));
+		},
+		
+		showLinkEditOverlay: function(model) {
+			this.overlayRegion.show(new LinkEditView({model : model}));
+		},
+		
+		showLinkAddOverlay: function() {
+			this.overlayRegion.show(new LinkAddView({collection : this.linkCollection}));
 		}
 		
 	});

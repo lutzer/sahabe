@@ -74,7 +74,6 @@ define([
 		},
 		
 		logout: function() {
-			var self = this;
 			
 			var user = User.getInstance();
 			user.model.logout(onSuccess,onError);

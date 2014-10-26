@@ -1,5 +1,11 @@
 <h1><%= title %></h1>
-<input type="button" value="Edit" class="editButton">
+<div class="link-menu">
+	<input type="button" value="Edit" class="editButton button">
+	<input type="button" value="Share" class="shareButton button">
+</div>
+<div class="date">
+	<%= timeSince(modifiedAt) %> ago
+</div>
 <div class="url">
 	<a href="<%= url %>" target="_blank"><%= trimString(url,50) %></a>
 </div>

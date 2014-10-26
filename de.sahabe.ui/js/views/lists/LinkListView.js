@@ -14,6 +14,13 @@ define([
 		
 		initialize: function(options) {
 			options.collection.fetch();
+			
+		},
+		
+		childEvents: {
+		    'edit': function(view,model) {
+		    	this.trigger('open:editLink',model);
+		    }
 		},
 		
 		_onSearchValueChanged: function(searchString) {

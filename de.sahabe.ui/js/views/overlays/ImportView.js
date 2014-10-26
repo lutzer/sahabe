@@ -29,9 +29,14 @@ define([
 			
 			this.collection.importFromFile(file,onSuccess,onError);
 			
+			vent.trigger("display:message","Importing links... (May take some time)");
+			self.destroy();
+			
+			//TODO: return how many links got imported
 			function onSuccess() {
-				vent.trigger("display:message","Importing bookmarks from file...");
-				self.destroy();
+				vent.trigger("display:message","Links succesfully imported.");
+				//TODO: use current search string to fetch collection again
+				self.collection.fetch();
 			};
 			
 			function onError(error) {

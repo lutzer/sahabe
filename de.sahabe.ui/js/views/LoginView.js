@@ -15,7 +15,14 @@ define([
 		
 		events : {
 			'click .loginButton' : '_onClickLoginButton',
-			'click .signupButton' : '_onClickSignupButton'
+			'click .signupButton' : '_onClickSignupButton',
+			'keyup input' : '_onInputEnterPress'
+		},
+		
+		onRender : function() {
+			var self = this;
+			_.defer(function(){ self.$('#username').focus(); });
+			
 		},
 
 		
@@ -45,6 +52,17 @@ define([
 					vent.trigger('display:error',1,error);
 				
 			}
+		},
+		
+		_onInputEnterPress: function(e) {
+			if (!e) e = window.event;
+		    var keyCode = e.keyCode || e.which;
+		    if (keyCode == '13'){ //enter press
+		    	
+		    	this._onClickLoginButton();
+				
+			    return false;
+		    }
 		},
 		
 		_onClickSignupButton: function () {
