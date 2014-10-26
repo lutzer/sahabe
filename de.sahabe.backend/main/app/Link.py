@@ -5,8 +5,8 @@ Created on Jul 24, 2014
 
 get all:                /links                          - GET
 search:                 /links?searchvalue=             - GET
-add:                    /links                          - PUT
-update:                 /links/<linkId>                 - POST
+add:                    /links                          - POST
+update:                 /links/<linkId>                 - PUT
 delete:                 /links/<linkId>                 - DELETE
 multiple delete:        /links/delete                   - POST
 import from a file:     /links/import                   - POST
@@ -60,21 +60,22 @@ def links():
 @login_required
 def addLink():
     try:
-        linkStoreQM.addLink(request.get_json(), g.user.id)
+        link = linkStoreQM.addLink(request.get_json(), g.user.id)
     except Exception, e: 
         return response.send400("Error %s" %(e)) 
-    return response.send200("link added successfully")
+    return response.sendData(link)
 
 
 @app.route("/links/<linkId>", methods=["PUT"])
 @login_required
 def updateLink(linkId):
     try:
-        linkQM.update(request.get_json(), linkId)
+        newlink = request.get_json()
+        linkQM.update(newlink, linkId)
     except (Exception, ), e:
         return response.send400("Error %s" %(e))
 
-    return response.response200()
+    return response.sendData(newlink)
 
 
 @app.route("/links/<linkId>", methods=["DELETE"])

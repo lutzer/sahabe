@@ -77,7 +77,7 @@ def update(link, linkId):
                              updateEntry,       
                              "link",
                              id=linkId)
-    return count
+    return link
 
 def dropLinksbyUser(userId, linkIds):
     

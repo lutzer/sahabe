@@ -48,7 +48,7 @@ def addLink(form, userId):
                     **kwargs)
     MetaData.addIconUrl(linkId, iconUrl)
     
-    return linkId
+    return kwargs
 
 def addJSONLinksByUser(data, userId):
     #FIXME: change insertion algorithm for sql queries that inserting data
