@@ -1,5 +1,6 @@
 define([
         'marionette',
+        'vent',
         'utils',
         'singletons/User',
         'views/AppLayoutView',
@@ -7,14 +8,19 @@ define([
         'views/SignupView',
         'views/ErrorView',
         'views/MessageView'
-], function(Marionette, Utils, User, AppLayoutView, LoginView, SignupView, ErrorView, MessageView){
+], function(Marionette, Vent, Utils, User, AppLayoutView, LoginView, SignupView, ErrorView, MessageView){
 	
 	var Controller = Marionette.Controller.extend({
 		
 		initialize: function(app) {
 			this.app = app;
+			
+			// register events
+			Vent.on('display:message', this.showMessage,this);
+			Vent.on("display:error", this.showErrorPage,this);
 		},
 		
+		// checks if user is logged in, callback returns true if logged in, false otherwise
 		checkLogin: function(callback) {
 			var self = this;
 			
@@ -29,18 +35,20 @@ define([
 				if (error.status == 401)
 					callback(false);
 				else
-					self.showError(1,error);
+					Vent.trigger("display:error",1,error)
 			};
 		},
 		
-		showError: function(errorId,error) {
-			if (error !== 'undefined' && Utils.propertyExists(error,"responseJSON.message"))
+		// displays an errorPage
+		showErrorPage: function(errorId,error) {
+			if (Utils.propertyExists(error,"responseJSON.message"))
 				this.app.containerRegion.show(new ErrorView({error : errorId, message : error.responseJSON.message}));
 			else
 				this.app.containerRegion.show(new ErrorView({error : errorId}));
 			//window.location = "#error/"+errorId;
 		},
 		
+		// displays a message to the user
 		showMessage: function(message) {
 			this.app.messageRegion.show(new MessageView({message : message}));
 		},
@@ -54,10 +62,7 @@ define([
 			this.checkLogin(
 				function(loggedIn) {
 					if (loggedIn) {
-						var layout = new AppLayoutView();
-						self.listenTo(layout, "display:error", self.showError);
-						self.listenTo(layout, "display:message", self.showMessage);
-						self.app.containerRegion.show(layout);
+						self.app.containerRegion.show(new AppLayoutView());
 					} else
 						window.location = "#login";
 				}
@@ -65,10 +70,7 @@ define([
 		},
 		
 		login: function() {
-			var view = new LoginView();
-			this.listenTo(view, "display:error", this.showError);
-			this.listenTo(view, "display:message", this.showMessage);
-			this.app.containerRegion.show(view);
+			this.app.containerRegion.show(new LoginView());
 		},
 		
 		logout: function() {
@@ -78,23 +80,24 @@ define([
 			user.model.logout(onSuccess,onError);
 			
 			function onSuccess(response) {
-				self.showMessage(response.message);
+				Vent.trigger("display:message",response.message);
+				
+				var user = User.getInstance();
+				user.reset();
+				
 				window.location="#";
 			};
 			
 			function onError(error) {
 				if (error.status != 401)
-					self.showError(0,error);
+					Vent.trigger("display:error",1,error)
 				else
 					window.location="#";
 			};
 		},
 		
 		signup: function() {
-			var view = new SignupView();
-			this.listenTo(view, "display:error", this.showError);
-			this.listenTo(view, "display:message", this.showMessage);
-			this.app.containerRegion.show(view);
+			this.app.containerRegion.show(new SignupView());
 		},
 		
 		user: function(name) {
@@ -106,7 +109,7 @@ define([
 		},
 		
 		defaultRoute: function() {
-			//window.location = "#home";
+			this.home();
 		},
 		
 		

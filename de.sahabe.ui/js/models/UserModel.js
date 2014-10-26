@@ -9,11 +9,12 @@ define([
 		
 		urlRoot : constants.settings.webServiceUrl+"/user/data",
 		
-		defaults: {
-			loggedIn: false
-		},
+		loggedIn : false,
 		
-		isFetched : false,
+		// override parse
+		parse : function(response) {
+			return response.user;
+		},
 		
 		// override fetch
 		fetch : function(options) {
@@ -43,25 +44,20 @@ define([
 		// checks if user is logged in
 		checkLogin: function(successCallback,errorCallback) {
         	var self = this;
-        	//if model already fetched
-        	if (this.isFetched)
-        		if (this.loggedIn)
-        			successCallback();
-        		else 
-        			errorCallback({status : 401});
-        	else {
-        		// else fetch model
-        		$.ajax({
-        			url: constants.settings.webServiceUrl+"/user/data",
-        	        type: 'GET',
-        	        timeout: constants.settings.webServiceLoginTimeout,
-        	        success: function() {
-        				successCallback();
-        			}, 
-        			error: function(error) {
-        				errorCallback(error);
-        			} 
-        		});
+
+        	if (this.has('id')) { //if model already fetched
+        		successCallback();
+        	} else { // else fetch model
+        		self.fetch({success : onSuccess, error: onError});
+        		
+        		function onSuccess(data) {
+        			this.loggedIn = true;
+            		successCallback();
+            	};
+            	
+            	function onError(model,error) {
+            		errorCallback(error);
+            	};
         	}
         },
 		
@@ -76,12 +72,7 @@ define([
 	            dataType: "json",
 	            data: data,
 	            timeout: constants.settings.webServiceLoginTimeout,
-	            success: function (data) {
-	            	self.set(data);
-	            	self.set({loggedIn : true});
-	            	this.isFetched = true;
-	            	successCallback();
-	            },
+	            success: successCallback,
 	            error: errorCallback
 	        });
 		},
@@ -100,24 +91,15 @@ define([
 			
 			var self = this;
 			
-			console.log(this.attributes);
-			
 			$.ajax({
 	            url: constants.settings.webServiceUrl+"/sign_up",
 	            type: 'POST',
 	            dataType: "json",
 	            data: self.attributes,
 	            timeout: constants.settings.webServiceLoginTimeout,
-	            success: function (data) {
-	            	self.set(data);
-	            	self.set({loggedIn : true});
-	            	this.isFetched = true;
-	            	successCallback();
-	            },
+	            success: successCallback,
 	            error: errorCallback
 	        });
-			
-			errorCallback();
 		},
 
 		// is the user logged in or not

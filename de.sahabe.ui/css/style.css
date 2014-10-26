@@ -15,7 +15,7 @@ body {
 	bottom:0%;
 	right:0%;
 	left:0%;
-	margin:20px;
+	margin:2em;
 	background-color:#cccccc;
 	text-align:center;
 	border-radius:5px;
@@ -23,7 +23,7 @@ body {
 }
 
 .message-text {
-	padding:10px;
+	padding:1em;
 }
 
 .single-page {
@@ -31,10 +31,94 @@ body {
 }
 
 .single-page h1 {
-	padding:10px 10px 10px 20px ;
+	padding:0.5em 0.5em 0.5em 1em ;
 	background-color: #222222;
 	color:#ffffff;
 }
+
+.errorpage {
+	margin:2em
+}
+
+/* INPUT ELEMENTS */
+
+input {
+	font-family: 'Courier', monospace ;
+	margin-bottom: 1em;
+	margin-top: 0.3em;
+	padding: 0.5em;
+	border-radius:3px;
+	border: 1px solid #ddd;
+	font-size: 10pt;
+}
+
+input[type=button] {
+	font-size:10pt;
+	padding:0.5em;
+	margin:0px 0.5em 0px 0em;
+	font-weight:600;
+	background-color: #FFA319;
+	color:#000000;
+	border: 1px solid #FFCC80;
+}
+
+input[type=file] {
+	height: 0;
+  	width: 0;
+  	display:none;
+}
+
+.file-upload {
+	border:1px solid #dddddd;
+	border-radius:3px;
+	margin: 0.5em 0 1em 0;
+	padding:0.3em;
+}
+
+.input-file-label {
+	display:block
+}
+
+.input-file-name {
+	margin-left:1em;
+	font-family: 'Courier', monospace;
+}
+
+.button {
+	font-family: 'Courier', monospace;
+	font-weight: 600;
+	display:inline-block;
+	background-color: #FFA319;
+	color:#000000;
+	border: 1px solid #FFCC80;
+	border-radius:3px;
+	padding: 0.5em;
+}
+
+input:focus {
+	/*border: 1px solid #fff;*/
+}
+
+input[type=text],
+input[type=url],
+input[type=tel],
+input[type=number],
+input[type=color],
+input[type=email],
+input[type=password] {
+	float:none;
+	width:100%
+}
+
+.button.small {
+	background: none;
+	border: none;
+	color: #FFA319;
+	float:none;
+	clear:both;
+}
+
+/* SIDEBAR STYLES */
 
 #sidebar {
 	position:fixed;
@@ -56,6 +140,22 @@ body {
 	
 }
 
+#sidebar h2 {
+	margin:1em 0em 0.5em 0em;
+}
+
+.sidebar-menu {
+	padding:1em;
+	border-radius:5px;
+}
+
+.sidebar-menu input {
+	width:100%;
+	margin-bottom:1em;
+}
+
+/* CONTENT STYLES */
+
 #content {
 	position:fixed;
 	left:250px;
@@ -66,6 +166,8 @@ body {
 	overflow:scroll;
 	z-index:1
 }
+
+/* HEADER STYLES */
 
 #header {
 	position:fixed;
@@ -85,46 +187,45 @@ body {
 	margin:5px;
 }
 
-input {
-	font-family: 'Courier', monospace ;
-	margin-bottom: 15px;
-	margin-top: 5px;
-	padding:5px;
-	border-radius:3px;
-	border: 1px solid #ddd;
-	font-size: 10pt;
+/* OVERLAY ELEMENTS */
+
+.overlay-background {
+	position:absolute;
+	background-color: rgba(0,0,0,0.5);
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index:50;
 }
 
-input[type=submit] {
-	font-size:10pt;
-	padding:5px;
-	margin:0px 5px 0px 5px;
-	font-weight:600;
-	background-color: #ddd;
+.overlay-dialog {
+	position: absolute;
+  	top: 40%;
+  	transform: translateY(-40%);
+	left:20%;
+	right:20%;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#ffffff;
+	border-radius:5px;
+	z-index:51;
+	padding:1em;
 }
 
-input:focus {
-	/*border: 1px solid #fff;*/
+.overlay-dialog h1 {
+	border:none;
 }
 
-input[type=text],
-input[type=url],
-input[type=tel],
-input[type=number],
-input[type=color],
-input[type=email],
-input[type=password] {
-	float:none;
-	width:100%
+.overlay-dialog .closeButton {
+	float:right;
 }
+
+
 
 h1 {
 	border-bottom:1px solid #000;
 	margin-top:0px;
-}
-
-.errorpage {
-	margin:20px
 }
 
 .login-form, .signup-form {
@@ -136,9 +237,6 @@ h1 {
 	margin-right:auto;
 }
 
-label {
-}
-
 .invalid {
 	/*background: #fff url(images/invalid.png) no-repeat 98% center;*/
     /*border-color: #f00;*/
@@ -147,7 +245,8 @@ label {
 
 
 ul {
-	list-style-type: none
+	list-style-type: none;
+	padding:0px;
 }
 
 .link-list {
@@ -160,14 +259,56 @@ ul {
 }
 
 .link-item h1 {
-	margin:0.5em;
+	
 }
 
 .link-item .description,.url {
 	margin:0.5em;
+	clear:both;
 }
 
 .link-item h1 {
 	border:none;
 	font-size:120%;
+	float:left;
+	margin:0.5em;
+}
+
+.link-item .editButton {
+	float:right;
+	background:none;
+}
+
+#group-container {
+	margin: 1em 0em 1em 0em;
+}
+
+.group-list {
+	border-bottom:1px dotted #333333;
+	overflow:hidden;
+	padding-bottom:0.5em;
+}
+
+.group-item {
+	float:left;
+	width:48%;
+	text-align:center;
+	background-color: #000;
+	border-radius:3px;
+	margin:1%
+}
+
+.group-item .name {
+	padding:5px;
+}
+
+.group-item .group-icon {
+	display:block;
+	width:10px;
+	height:10px;
+	background-color:#ffffff;
+	/*border:1px solid #ffffff;*/
+	border-radius:5px;
+	/*margin: 0.5em auto 0.5em auto;*/
+	float:left;
 }

@@ -1,17 +1,49 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone',
 	'marionette',
-	'models/LinkCollection',
+	'vent',
 	'views/items/LinkListItemView',
-], function($, _, Backbone, Marionette, LinkCollection, LinkListItemView){
+], function($, _, Marionette, vent, LinkListItemView){
 	
-	var LinkListView = Backbone.Marionette.CollectionView.extend({
+	var LinkListView = Marionette.CollectionView.extend({
 		
 		childView: LinkListItemView,
 		
-		className: "link-list"
+		className: "link-list",
+		
+		initialize: function(options) {
+			options.collection.fetch();
+		},
+		
+		_onSearchValueChanged: function(searchString) {
+			var self = this;
+			
+			//remove whitespaces at front and back
+			searchString = $.trim(searchString);
+			
+			if (searchString.length > 0) {
+				this.collection.fetch({ 
+					data: $.param({searchValue : searchString}),
+					success: onSuccess,
+					error: onError
+				});
+			} else {
+				this.collection.fetch({
+					success: onSuccess,
+					error: onError
+				});
+			}
+			
+			function onSuccess() {
+				vent.trigger("display:message","Displaying "+ self.collection.length+" search results.");
+			};
+			
+			function onError(error) {
+				vent.trigger("display:error",error);
+			};
+			
+		}
 		
 		
 		

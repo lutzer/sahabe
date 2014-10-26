@@ -13,9 +13,9 @@ define([
 		
 		parse : function(response) {
 			return response.links;
-		}
+		},
 		
-		/*deleteModels: function(models) {
+		deleteModels: function(models,successCallback,errorCallback) {
 			var self = this;
 			
 			// get the linkIds of all the models to delete
@@ -29,19 +29,33 @@ define([
 	            type: 'POST',
 	            dataType: "json",
 	            data: {linkIds: linkIds },
-	            success: function (data) {
-	            	console.log("successfully deleted");
-	            	console.log(data);
+	            success: function () {
 	                _.forEach(models, function(model) {
 	                	self.remove(model);
 	                });
+	                successCallback();
 	            },
-	            error: function(error) {
-	            	console.log("error");
-	            	console.log(error);
-	            }
+	            error: errorCallback
 	        });
-		}*/
+		},
+		
+		importFromFile: function(file,successCallback,errorCallback) {
+			var self = this;
+			
+			var formData = new FormData();
+			formData.append('file',file);
+			
+			$.ajax({
+		        url: self.url+'/import',  //Server script to process data
+		        type: 'POST',
+		        data: formData,
+		        cache: false,
+		        contentType: false,
+		        processData: false,
+		        success: successCallback,
+		        error: errorCallback
+		    });
+		}
 		
 	});
 	
