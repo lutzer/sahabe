@@ -46,7 +46,7 @@ define([
 			formData.append('file',file);
 			
 			$.ajax({
-		        url: 'http://192.168.7.29:5000/links/import',  //Server script to process data
+		        url: self.url+'/import',  //Server script to process data
 		        type: 'POST',
 		        data: formData,
 		        cache: false,
