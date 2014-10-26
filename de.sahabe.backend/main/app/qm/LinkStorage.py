@@ -197,11 +197,9 @@ def extractLink(userId, data):
     url = data["uri"]
     title = data["title"].replace("'", "")
 
-    description = "no_description"
+    description = ""
     if data.has_key("annos"):    
         description = data["annos"][0]["value"].replace("'", "")
-        if description == "":
-            description = "no_description"
 
     typeName= "uncategorized"
 
