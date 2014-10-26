@@ -2,10 +2,11 @@ define([
 	'jquery',
 	'underscore',
 	'marionette',
+	'vent',
 	'values/constants',
 	'models/UserModel',
 	'text!templates/signupTemplate.html'
-], function($, _, Marionette, constants, UserModel, signupTemplate){
+], function($, _, Marionette, vent, Constants, UserModel, signupTemplate){
 	
 	var SignupView = Marionette.ItemView.extend({
 		
@@ -34,19 +35,19 @@ define([
 			this._setValues();
 			
 			if (this.model.isValid()) {
-				self.trigger('display:message',"Creating User Account...");
+				vent.trigger('display:message',"Creating User Account...");
 				
 				this.model.signup(onSuccess,onError);
 				
 				function onSuccess() {
-					self.trigger('display:message',"Account created");
+					vent.trigger('display:message',"Account created");
 				};
 				
 				function onError(error) {
-					self.trigger('display:error',1,error);
+					vent.trigger('display:error',1,error);
 				};
 			} else {
-				self.trigger('display:message',"Form data is not valid.");
+				vent.trigger('display:message',"Form data is not valid.");
 			}
 		},
 		
@@ -66,7 +67,7 @@ define([
 			$('#'+event.target.id).removeClass('invalid');
 			this._setValues();
 			this.model.isValid();
-		},200),
+		},Constants.settings.inputDebounceTime),
 		
 		_handleInvalidError: function(model, errors) {
 			var self = this;

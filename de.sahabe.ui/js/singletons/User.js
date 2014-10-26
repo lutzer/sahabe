@@ -16,7 +16,11 @@ define([
         initialize: function(){
             this.model = new UserModel;
         },
+        reset: function() {
+        	instance = null;
+        }
     };
+    
     User.getInstance = function(){
         if(instance === null){
             instance = new User();

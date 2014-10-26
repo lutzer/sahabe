@@ -1,14 +1,13 @@
 define([
 	'jquery',
 	'underscore',
-	'backbone',
 	'marionette',
 	'utils',
 	'models/LinkModel',
 	'text!templates/items/linkListItemTemplate.html',
-], function($, _, Backbone, Marionette, Utils, LinkModel, linkListItemTemplate){
+], function($, _, Marionette, Utils, LinkModel, linkListItemTemplate){
 	
-	var LinkListItemView = Backbone.Marionette.ItemView.extend({
+	var LinkListItemView = Marionette.ItemView.extend({
 		
 		template: _.template(linkListItemTemplate),
 		

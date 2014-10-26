@@ -27,7 +27,7 @@ define([
 				'signup' : 'signup',
 				'home' : 'home',
 				'error/:errorId' : 'error',
-				'*actions' : 'home'
+				'*actions' : 'defaultRoute'
 			}
 		});
 		

@@ -3,10 +3,11 @@ define([], function(){
 
 			settings: {
 				// server settings
-				webServiceUrl : "http://192.168.7.36/api",
-				//webServiceUrl : "http://192.168.7.29:5000",
+				//webServiceUrl : "http://192.168.7.36/api",
+				webServiceUrl : "http://192.168.7.29:5000",
 				webServiceLoginTimeout : 2000,
-				messageDisplayTimeout : 3000
+				messageDisplayTimeout : 3000,
+				inputDebounceTime : 300
 			},
 	
 			errors: {

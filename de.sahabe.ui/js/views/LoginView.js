@@ -2,10 +2,11 @@ define([
 	'jquery',
 	'underscore',
 	'marionette',
+	'vent',
 	'values/constants',
 	'singletons/User',
 	'text!templates/loginTemplate.html'
-], function($, _, Marionette, constants, User, loginTemplate){
+], function($, _, Marionette, vent, constants, User, loginTemplate){
 	
 	var LoginView = Marionette.ItemView.extend({
 		
@@ -29,19 +30,19 @@ define([
 			
 			user.model.login(username,password,remember,onSuccess,onError);
 			
-			self.trigger('display:message',"Logging in...");
+			vent.trigger('display:message',"Logging in...");
 			
 			function onSuccess() {
-				self.trigger('display:message',"Login succesfull!");
+				vent.trigger('display:message',"Login succesfull!");
 				window.location = "#";
 			};
 			
 			function onError(error) {
 				
 				if (error.status == 401)
-					self.trigger('display:message',error.responseJSON.message);
+					vent.trigger('display:message',error.responseJSON.message);
 				else
-					self.trigger('display:error',1,error);
+					vent.trigger('display:error',1,error);
 				
 			}
 		},

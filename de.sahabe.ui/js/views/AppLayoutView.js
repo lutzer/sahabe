@@ -2,67 +2,52 @@ define([
 	'jquery',
 	'underscore',
 	'marionette',
-	'views/SidebarView',
-	'views/HeaderView',
+	'vent',
+	'models/LinkCollection',
+	'models/GroupCollection',
+	'views/subviews/SidebarView',
+	'views/subviews/HeaderView',
 	'views/lists/LinkListView',
+	'views/overlays/ImportView',
 	'text!templates/appLayoutTemplate.html'
-], function($, _, Marionette, SidebarView, HeaderView, LinkListView, appLayoutTemplate){
+], function($, _, Marionette, vent, LinkCollection, GroupCollection, SidebarView, HeaderView, LinkListView, ImportView, appLayoutTemplate){
 	
 	var AppLayoutView = Marionette.LayoutView.extend({
 		
 		template: _.template(appLayoutTemplate),
 		
 		initialize: function(options) {
-			
 			this.linkCollection = new LinkCollection();
-			this.linkCollection.fetch();
-			
+			this.groupCollection = new GroupCollection();
 		},
-		
+
 		regions: {
-			   'sidebarRegion': '#sidebar',
-			   'contentRegion': '#content',
-			   'headerRegion' : '#header'
+			'sidebarRegion': '#sidebar',
+			'contentRegion': '#content',
+			'headerRegion' : '#header',
+			'overlayRegion': '#overlay'
 		},
-		
+
 		onRender : function() {
 			// init views
-			var sidebarView = new SidebarView();
 			var headerView = new HeaderView();
+			var sidebarView = new SidebarView({ groupCollection : this.groupCollection});
+			var linkListView = new LinkListView({ collection : this.linkCollection});
 			
 			//register events
-			this.listenTo(headerView,'search:changed',this._onSearchValueChanged);
+			linkListView.listenTo(headerView,'search:changed',linkListView._onSearchValueChanged);
+			this.listenTo(sidebarView,'open:importFile',this.showImportOverlay);
 			
 			//render views
 			this.sidebarRegion.show(sidebarView);
 			this.headerRegion.show(headerView);
-			this.contentRegion.show(new LinkListView({collection : this.linkCollection}));
+			this.contentRegion.show(linkListView);
 		},
 		
-		_onSearchValueChanged: function(searchString) {
-			var self = this;
-			
-			//remove whitespaces at front and back
-			searchString = $.trim(searchString);
-			
-			console.log("search");
-			
-			if (searchString.length > 0) {
-				this.linkCollection.fetch({ 
-					data: $.param({searchValue : searchString}),
-					success: function() {
-						self.trigger("display:message","Found "+ self.linkCollection.length+" search results.");
-					} });
-			} else {
-				this.linkCollection.fetch({
-					success: function() {
-						self.trigger("display:message","Found "+ self.linkCollection.length+" search results.");
-					}
-				});
-			}
-			
+		showImportOverlay: function() {
+			this.overlayRegion.show(new ImportView({collection : this.linkCollection}));
 		}
-
+		
 	});
 	return AppLayoutView;
 	
