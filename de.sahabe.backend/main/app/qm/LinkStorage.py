@@ -3,7 +3,7 @@ Created on Jul 22, 2014
 
 @author: Maan Al Balkhi
 '''
-
+import time
 import copy
 import hashlib
 import MetaData
@@ -53,7 +53,7 @@ def addLink(form, userId):
 def addJSONLinksByUser(data, userId):
     #FIXME: change insertion algorithm for sql queries that inserting data
     #as zip, json or ...
-    
+    #curTime = time.time()
     query = {"linksQuery":StringHolder("INSERT INTO link (id, user_id, url, url_hash, title, description, type_name, modified_at) VALUES\n"),
              "updateLinkSubQuery":{"id":StringHolder(""),
                                    "title":StringHolder(""),
@@ -68,6 +68,9 @@ def addJSONLinksByUser(data, userId):
     savedTags = tagQM.getTagNames(userId)
     savedLinks = linkQM.getLinkUrlsAndIds(userId)
     parseData(userId, data, tags, query, savedLinks, savedTags)
+    
+    #print "calculating time: " + str(utils.timeDifference(curTime)) + " ms"
+    #curTime = time.time()
     
     conn = db.connect()
     cursor = conn.cursor()
@@ -85,7 +88,7 @@ def addJSONLinksByUser(data, userId):
     
     conn.commit()
     cursor.close()
-       
+    #print "database request time: " + str(utils.timeDifference(curTime)) + " ms"   
     return
 
 
@@ -131,6 +134,8 @@ def linkEntriesQuery(userId, newLink, json_data, tags, query):
 
 def isTagInList(tag, savedTags):
     for savedTag in savedTags:
+        if type(tag) is unicode:
+            tag = tag.encode("utf8") 
         if savedTag[0] == tag:
             return True
         

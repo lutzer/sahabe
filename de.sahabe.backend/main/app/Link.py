@@ -117,14 +117,14 @@ def deleteLinks():
         return response.send400("no links could be deleted")
 
 
-@app.route("/links/import", methods=["GET", "POST"])
+@app.route("/links/import", methods=["POST"])
 @login_required
-def load_links():
+def importLinks():
     upload = request.files["file"]
     user = g.user
     data = utils.extractData(upload)
-    #try:
-    linkStoreQM.addJSONLinksByUser(data, user.id)
-    #except Exception, e:
-        #return response.send400("Error %s" %(e))
-    return response.send200()
+    try:
+        linkStoreQM.addJSONLinksByUser(data, user.id)
+        return response.send200()
+    except Exception, e:
+        return response.send400("Error %s" %(e))
