@@ -1,0 +1,7 @@
+get coockies by request.cookies
+get headers by request.headers
+get form by request.form
+get args by request.args
+get data by request.data
+get json by request.get_json()
+get files by equest.files
