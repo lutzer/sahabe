@@ -5,8 +5,9 @@ define([
 	'vent',
 	'values/constants',
 	'singletons/User',
+	'behaviors/KeypressBehavior',
 	'text!templates/loginTemplate.html'
-], function($, _, Marionette, vent, constants, User, loginTemplate){
+], function($, _, Marionette, vent, constants, User, KeypressBehavior, loginTemplate){
 	
 	var LoginView = Marionette.ItemView.extend({
 		
@@ -14,9 +15,14 @@ define([
 		className: 'single-page',
 		
 		events : {
-			'click .loginButton' : '_onClickLoginButton',
-			'click .signupButton' : '_onClickSignupButton',
-			'keyup input' : '_onInputEnterPress'
+			'click .loginButton' : 'onClickLoginButton',
+			'click .signupButton' : 'onClickSignupButton'
+		},
+		
+		behaviors: {
+		    keypressBehavior: {
+		        behaviorClass: KeypressBehavior
+		    }
 		},
 		
 		onRender : function() {
@@ -26,7 +32,7 @@ define([
 		},
 
 		
-		_onClickLoginButton: function() {
+		onClickLoginButton: function() {
 			var self = this;
 		
 			var username = $('#username').val();
@@ -54,18 +60,11 @@ define([
 			}
 		},
 		
-		_onInputEnterPress: function(e) {
-			if (!e) e = window.event;
-		    var keyCode = e.keyCode || e.which;
-		    if (keyCode == '13'){ //enter press
-		    	
-		    	this._onClickLoginButton();
-				
-			    return false;
-		    }
+		onEnterKeyPress: function(e) {
+		    this.onClickLoginButton();
 		},
 		
-		_onClickSignupButton: function () {
+		onClickSignupButton: function () {
 			window.location = "#signup";
 		}
 		

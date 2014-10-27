@@ -47,7 +47,7 @@ input {
 	margin-bottom: 1em;
 	margin-top: 0.3em;
 	padding: 0.5em;
-	border-radius:3px;
+	border-radius:0px;
 	border: 1px solid #ddd;
 	font-size: 10pt;
 }
@@ -93,6 +93,8 @@ input[type=file] {
 	border-radius:3px;
 	padding: 0.5em;
 }
+
+
 
 input:focus {
 	/*border: 1px solid #fff;*/
@@ -260,12 +262,13 @@ ul {
 
 .link-item {
 	border-bottom:1px dotted #ccc;
-	margin:20px 0px 0px 0px;
-	padding:0.5em
+	margin-top:1em;
+	padding:0.5em;
 }
 
 .link-item.hover {
 	background-color: #eee;
+	transition: background-color 500ms;
 }
 
 .link-item .date {
@@ -276,7 +279,6 @@ ul {
 }
 
 .link-item .description,.url {
-	margin:0.5em;
 	clear:both;
 }
 
@@ -284,12 +286,15 @@ ul {
 	border:none;
 	font-size:120%;
 	float:left;
-	margin-left:0.5em;
 }
 
 .link-item .button {
-	background:#fff;
+	background-color:#fff;
 	border:none;
+}
+
+.link-item .button.ask-permission {
+	background-color: #ff0000;
 }
 
 .link-item .link-menu {
@@ -317,7 +322,6 @@ ul {
 	/*background-color: #111;*/
 	/*height:2em;*/
 	padding: 0.3em 0.3em;
-	font-size:90%;
 	width:100%;
 }
 
@@ -326,7 +330,7 @@ ul {
 }
 
 .group-item .name {
-	padding:5px;
+	margin:0.3em;
 }
 
 .group-item .group-icon {
@@ -338,4 +342,20 @@ ul {
 	border-radius:5px;
 	/*margin: 0.5em auto 0.5em auto;*/
 	float:left;
+}
+
+/* ICONS */
+
+.icon {
+    display: inline-block;
+    width:40px;
+    height:40px;
+    background-repeat:no-repeat;
+    background-position:center;
+    white-space: nowrap;
+}
+
+.icon.folder {
+	background-image: url("../images/folder.png");
+	background-size: 36px 36px;
 }

@@ -12,7 +12,7 @@ define([
 		},
 		
 		modelEvents: {
-		      "invalid": "_handleInvalidError"
+		      "invalid": "handleInvalidModelError"
 		},
 		
 		
@@ -23,7 +23,7 @@ define([
 			this.view.model.isValid();
 		},constants.settings.inputDebounceTime),
 		
-		_handleInvalidError: function(model, errors) {
+		handleInvalidModelError: function(model, errors) {
 			var self = this;
 			
 			_.each(errors,function(error) {

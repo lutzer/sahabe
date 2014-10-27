@@ -7,8 +7,9 @@ define([
 	'values/constants',
 	'models/LinkModel',
 	'behaviors/ValidationBehavior',
+	'behaviors/KeypressBehavior',
 	'text!templates/overlays/linkAddTemplate.html'
-], function($, _, Backbone, Marionette, vent, constants, LinkModel, ValidationBehavior, linkAddTemplate ){
+], function($, _, Backbone, Marionette, vent, constants, LinkModel, ValidationBehavior, KeypressBehavior, linkAddTemplate ){
 	var LinkAddView = Marionette.ItemView.extend({
 		
 		template: _.template(linkAddTemplate),
@@ -31,6 +32,13 @@ define([
 		    validationBehaviour: {
 		        behaviorClass: ValidationBehavior,
 		        idPrefix: "link_"
+		    },
+		    keypressBehavior: {
+		        behaviorClass: KeypressBehavior,
+		        listenToKeys : {
+		        	'13' : 'saveButtonPress',
+		        	'27' : 'closeButtonPress'
+		        }
 		    }
 		},
 		
@@ -81,19 +89,6 @@ define([
 				vent.trigger('display:message','Link data is invalid');
 			}
 			
-		},
-		
-		onInputEnterPress: function(e) {
-			if (!e) e = window.event;
-		    var keyCode = e.keyCode || e.which;
-		    if (keyCode == '13'){ //enter press
-		    	this.onSaveButtonPress();
-		    	return false;
-		    }
-		    if (e.keyCode == 27) { //esc press
-				this.onCloseButtonPress();
-				return false;
-			}
 		}
 		
 	});

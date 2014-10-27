@@ -15,9 +15,10 @@ define([
 		className: 'link-item',
 		
 		events: {
-			'click .editButton' : '_onEditButtonClick',
-			'mouseenter'  : '_onHoverLink',
-			'mouseleave'  : '_onHoverLink'
+			'click #editButton' : 'onEditButtonClick',
+			'click #deleteButton' : 'onDeleteButtonClick',
+			'mouseenter'  : 'onHoverLink',
+			'mouseleave'  : 'onHoverLink'
 		},
 		
 		modelEvents: {
@@ -36,11 +37,25 @@ define([
 
 		},
 	
-		_onEditButtonClick: function() {
+		onEditButtonClick: function() {
 			this.trigger('edit',this.model);
 		},
 		
-		_onHoverLink: function(event) {
+		onDeleteButtonClick: function() {
+			console.log('click');
+			//this.$('#deleteButton').addClass('ask-permission');
+			//this.$('#deleteButton').attr('value','Yes');
+			this.model.destroy({
+				success: function() {
+					vent.trigger('display:message',"Link deleted.");
+				}, 
+				error: function() {
+					vent.trigger('display:message',"Cloud not delete link");
+				}
+			});
+		},
+		
+		onHoverLink: function(event) {
 			if (event.type == 'mouseenter')
 				this.$el.addClass('hover');
 			else 

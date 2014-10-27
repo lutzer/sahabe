@@ -4,8 +4,9 @@ define([
 	'backbone',
 	'marionette',
 	'vent',
+	'behaviors/KeypressBehavior',
 	'text!templates/overlays/importTemplate.html'
-], function($, _, Backbone, Marionette, vent, importTemplate){
+], function($, _, Backbone, Marionette, vent, KeypressBehavior, importTemplate){
 	var ImportView = Marionette.ItemView.extend({
 		
 		template: _.template(importTemplate),
@@ -13,15 +14,21 @@ define([
 		className: 'overlay-background',
 		
 		events : {
-			'click .closeButton' : '_onCloseButtonPress',
-			'change input:file' : '_onImportFileChange'
+			'click .closeButton' : 'onCloseButtonPress',
+			'change input:file' : 'onImportFileChange'
+		},
+		
+		behaviors: {
+		    keypressBehavior: {
+		        behaviorClass: KeypressBehavior
+		    }
 		},
 			
-		_onCloseButtonPress: function() {
+		onCloseButtonPress: function() {
 			this.destroy();
 		},
 		
-		_onImportFileChange: function() {
+		onImportFileChange: function() {
 			var self = this;
 			
 			var files = this.$('#importFileField')[0].files;
@@ -29,7 +36,7 @@ define([
 			
 			this.collection.importFromFile(file,onSuccess,onError);
 			
-			vent.trigger("display:message","Importing links... (May take some time)");
+			vent.trigger("display:message","Importing links... May take a few minutes.");
 			self.destroy();
 			
 			//TODO: return how many links got imported
@@ -43,6 +50,10 @@ define([
 				vent.trigger("display:message","Failed importing bookmarks from file.");
 			};
 			
+		},
+		
+		onEscKeyPress: function() {
+			this.onCloseButtonPress();
 		}
 		
 	});

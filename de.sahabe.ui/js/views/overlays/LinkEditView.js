@@ -5,8 +5,9 @@ define([
 	'marionette',
 	'vent',
 	'behaviors/ValidationBehavior',
+	'behaviors/KeypressBehavior',
 	'text!templates/overlays/linkEditTemplate.html'
-], function($, _, Backbone, Marionette, vent, ValidationBehavior, linkEditTemplate ){
+], function($, _, Backbone, Marionette, vent, ValidationBehavior, KeypressBehavior, linkEditTemplate ){
 	var LinkEditView = Marionette.ItemView.extend({
 		
 		template: _.template(linkEditTemplate),
@@ -38,6 +39,13 @@ define([
 		    validationBehaviour: {
 		        behaviorClass: ValidationBehavior,
 		        idPrefix: "link_"
+		    },
+		    keypressBehavior: {
+		        behaviorClass: KeypressBehavior,
+		        listenToKeys : {
+		        	'13' : 'saveButtonPress',
+		        	'27' : 'closeButtonPress'
+		        }
 		    }
 		},
 		
@@ -85,19 +93,6 @@ define([
 			
 			
 		},
-		
-		onInputEnterPress: function(e) {
-			if (!e) e = window.event;
-			
-		    if (e.keyCode == 13){ //enter press
-		    	this.triggerMethod('saveButtonPress');
-		    	return true;
-		    }
-		    if (e.keyCode == 27) { //esc press
-		    	this.triggerMethod('closeButtonPress');
-				return true;
-			}
-		}
 		
 	});
 	return LinkEditView;

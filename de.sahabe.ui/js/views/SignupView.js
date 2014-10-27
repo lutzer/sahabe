@@ -6,8 +6,9 @@ define([
 	'values/constants',
 	'models/UserModel',
 	'behaviors/ValidationBehavior',
+	'behaviors/KeypressBehavior',
 	'text!templates/signupTemplate.html'
-], function($, _, Marionette, vent, constants, UserModel, ValidationBehavior, signupTemplate){
+], function($, _, Marionette, vent, constants, UserModel, ValidationBehavior, KeypressBehavior, signupTemplate){
 	
 	var SignupView = Marionette.ItemView.extend({
 		
@@ -31,7 +32,18 @@ define([
 		behaviors: {
 		    validationBehaviour: {
 		        behaviorClass: ValidationBehavior
+		    },
+		    keypressBehavior: {
+		        behaviorClass: KeypressBehavior,
+		        listenToKeys : {
+		        	'13' : 'clickSignupButton',
+		        }
 		    }
+		},
+		
+		onRender : function() {
+			var self = this;
+			_.defer(function(){ self.$('#username').focus(); });
 		},
 		
 		onClickLoginButton: function() {
@@ -72,7 +84,7 @@ define([
 			this.model.set(userdata);
 			this.triggerMethod('validateForm',event);
 
-		}
+		},
 		
 	});
 	// Our module now returns our view
