@@ -17,7 +17,7 @@ define([
 			
 		},
 		
-		_onSearchValueChanged: function(searchString) {
+		onSearchValueChanged: function(searchString) {
 			var self = this;
 			
 			//remove whitespaces at front and back

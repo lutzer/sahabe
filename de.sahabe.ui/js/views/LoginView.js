@@ -28,7 +28,6 @@ define([
 		onRender : function() {
 			var self = this;
 			_.defer(function(){ self.$('#username').focus(); });
-			
 		},
 
 		

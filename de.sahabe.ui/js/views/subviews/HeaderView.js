@@ -16,8 +16,14 @@ define([
 		},
 		
 		_onSearchBarInput:  _.debounce(function() {
-			var searchText = $('#searchField').val();
+			var searchText = $('#searchField').val().trim();
 			this.trigger("search:changed",searchText);
+			
+			/*if (searchText != "")
+				history.pushState(null, null, '#/search/'+searchText);
+			else
+				history.pushState(null, null, '#/search');*/
+			
 		},300),
 		
 		onRender : function() {

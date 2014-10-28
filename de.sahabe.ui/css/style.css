@@ -300,6 +300,7 @@ ul {
 	border:none;
 	font-size:120%;
 	float:left;
+	margin:0;
 }
 
 .link-item .button {

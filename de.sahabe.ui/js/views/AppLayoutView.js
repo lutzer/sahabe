@@ -22,6 +22,7 @@ define([
 		initialize: function(options) {
 			this.linkCollection = new LinkCollection();
 			this.groupCollection = new GroupCollection();
+			
 		},
 
 		regions: {
@@ -32,13 +33,14 @@ define([
 		},
 
 		onRender : function() {
+			
 			// init views
 			var headerView = new HeaderView();
 			var sidebarView = new SidebarView({ groupCollection : this.groupCollection});
 			var linkListView = new LinkListView({ collection : this.linkCollection});
 			
 			//register direct view events
-			linkListView.listenTo(headerView,'search:changed',linkListView._onSearchValueChanged);
+			linkListView.listenTo(headerView,'search:changed',linkListView.onSearchValueChanged);
 			this.listenTo(sidebarView,'open:importFile',this.showImportOverlay);
 			this.listenTo(headerView,'open:addLink', this.showLinkAddOverlay);
 			
@@ -50,6 +52,10 @@ define([
 			this.sidebarRegion.show(sidebarView);
 			this.headerRegion.show(headerView);
 			this.contentRegion.show(linkListView);
+			
+			/*if (this.options.hasOwnProperty('searchText')) {
+				linkListView.onSearchValueChanged(this.options.searchText);
+			}*/
 		},
 		
 		showImportOverlay: function() {

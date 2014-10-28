@@ -12,6 +12,7 @@ define([
 		defaults: {
 			title: '',
 			url : '',
+			shortUrl : '',
 			description: '',
 			modifiedAt: 0,
 		},
@@ -27,7 +28,7 @@ define([
 			
 			if (errors.length > 0)
 				return errors;
-		}
+		},
 		
 		/*selectable : false,
 		

@@ -22,7 +22,8 @@ define([
 		
 		triggers : {
 			'click .closeButton' : 'closeButtonPress',
-			'click .saveButton' : 'saveButtonPress'
+			'click .saveButton' : 'saveButtonPress',
+			'click .deleteButton' : 'deleteButtonPress'
 		},
 		
 		onRender : function() {
@@ -58,11 +59,8 @@ define([
 				name : this.$('#group_name').val(),
 				public : this.$('#group_public').is(":checked")
 			};
-			
-			console.log(data);
 			this.model.set(data);
 			this.triggerMethod('validateForm',event);
-
 		},
 			
 		onCloseButtonPress: function() {
@@ -94,6 +92,11 @@ define([
 			
 			
 		},
+		
+		onDeleteButtonPress: function() {
+			this.model.destroy();
+			this.destroy();
+		}
 		
 	});
 	return GroupEditView;

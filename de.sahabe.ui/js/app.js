@@ -26,6 +26,7 @@ define([
 				'logout' : 'logout',
 				'signup' : 'signup',
 				'home' : 'home',
+				'search/:searchText' : 'home',
 				'error/:errorId' : 'error',
 				'*actions' : 'defaultRoute'
 			}

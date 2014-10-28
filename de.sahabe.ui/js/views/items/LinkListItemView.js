@@ -32,7 +32,8 @@ define([
 		templateHelpers: function() {
 			return {
 				trimString : Utils.trimString,
-				timeSince : Utils.timeSince
+				timeSince : Utils.timeSince,
+				removeSchemeFromUrl : Utils.removeSchemeFromUrl
 			};
 
 		},

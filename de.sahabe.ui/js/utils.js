@@ -53,6 +53,12 @@ define([
 			        return interval + " minutes";
 			    }
 			    return Math.floor(seconds) + " seconds";
+			},
+			
+			// removes http
+			removeSchemeFromUrl: function(url) {
+				var remove = url.match("^(https?|ftp):\\/\\/");
+				return url.substr(remove[0].length,url.length);
 			}
 	
 	};
