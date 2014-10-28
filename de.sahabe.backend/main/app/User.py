@@ -70,7 +70,6 @@ def login():
 def logout():
     try:
         logout_user()
-        print "logged out"
         return response.send200("logout was successful")
     except Exception, e:
         return response.send400("Error %s" %(e))
