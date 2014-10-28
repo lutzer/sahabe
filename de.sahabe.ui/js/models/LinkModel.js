@@ -20,7 +20,7 @@ define([
 			
 			errors = [];
 			
-			if (!(attrs.url).match("^https?:\\/\\/.*$"))
+			if (!(attrs.url).match("^(http|ftp)s?:\\/\\/.+$"))
 				errors.push({attr: 'url', msg: "url is not valid"});
 			if (!(attrs.title).length > 0)
 				errors.push({attr: 'title', msg: "title is empty"});

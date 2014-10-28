@@ -11,8 +11,9 @@ define([
 	'views/overlays/ImportView',
 	'views/overlays/LinkEditView',
 	'views/overlays/LinkAddView',
+	'views/overlays/GroupEditView',
 	'text!templates/appLayoutTemplate.html'
-], function($, _, Marionette, vent, LinkCollection, GroupCollection, SidebarView, HeaderView, LinkListView, ImportView, LinkEditView, LinkAddView, appLayoutTemplate){
+], function($, _, Marionette, vent, LinkCollection, GroupCollection, SidebarView, HeaderView, LinkListView, ImportView, LinkEditView, LinkAddView, GroupEditView, appLayoutTemplate){
 	
 	var AppLayoutView = Marionette.LayoutView.extend({
 		
@@ -36,11 +37,14 @@ define([
 			var sidebarView = new SidebarView({ groupCollection : this.groupCollection});
 			var linkListView = new LinkListView({ collection : this.linkCollection});
 			
-			//register events
+			//register direct view events
 			linkListView.listenTo(headerView,'search:changed',linkListView._onSearchValueChanged);
 			this.listenTo(sidebarView,'open:importFile',this.showImportOverlay);
-			this.listenTo(linkListView,'open:editLink', this.showLinkEditOverlay);
 			this.listenTo(headerView,'open:addLink', this.showLinkAddOverlay);
+			
+			//register indirect view events
+			vent.on("open:editGroup",this.showGroupEditOverlay,this);
+			vent.on("open:editLink",this.showLinkEditOverlay,this);
 			
 			//render views
 			this.sidebarRegion.show(sidebarView);
@@ -58,6 +62,10 @@ define([
 		
 		showLinkAddOverlay: function() {
 			this.overlayRegion.show(new LinkAddView({collection : this.linkCollection}));
+		},
+		
+		showGroupEditOverlay: function(model) {
+			this.overlayRegion.show(new GroupEditView({model : model}));
 		}
 		
 	});

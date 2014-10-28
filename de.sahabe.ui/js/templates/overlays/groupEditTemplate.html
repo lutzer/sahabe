@@ -1,0 +1,15 @@
+<div class="overlay-dialog form">
+	<h1>Edit Group</h1>
+	
+	<label>Name</label>
+	<input type="text" id="group_name" class="input-field" value="<%= name %>"/>
+	<input type="checkbox" id="group_public" <% if (public) print('checked') %>/><label>Public (visible to anyone)</label>
+	
+	<br/>
+	<button class="deleteGroup form-left">Delete</button>
+	
+	<button class="saveButton form-right">Save</button>
+	<button class="closeButton form-right">Cancel</button>
+</div>
+
+

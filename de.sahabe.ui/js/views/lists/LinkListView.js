@@ -17,12 +17,6 @@ define([
 			
 		},
 		
-		childEvents: {
-		    'edit': function(view,model) {
-		    	this.trigger('open:editLink',model);
-		    }
-		},
-		
 		_onSearchValueChanged: function(searchString) {
 			var self = this;
 			

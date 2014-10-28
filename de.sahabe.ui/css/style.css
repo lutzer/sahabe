@@ -42,29 +42,41 @@ body {
 
 /* INPUT ELEMENTS */
 
-input {
+input,button {
 	font-family: 'Courier', monospace ;
-	margin-bottom: 1em;
-	margin-top: 0.3em;
 	padding: 0.5em;
 	border-radius:0px;
 	border: 1px solid #ddd;
-	font-size: 10pt;
+	font-size:100%;
 }
 
-input[type=button] {
+input[type=button],button {
 	padding:0.5em;
-	margin:0px 0.5em 0px 0em;
-	font-weight:600;
+	/*font-weight:600;*/
 	background-color: #FFA319;
 	color:#000000;
-	border: 1px solid #FFCC80;
+	border: 1px solid #FFA319;
+}
+
+button.form-right {
+	margin:1em 0 0 0.5em;
+	float:right;
+}
+
+button.form-left {
+	margin:1em 0.5em 0 0;
 }
 
 input[type=file] {
 	height: 0;
   	width: 0;
   	display:none;
+}
+
+label {
+	display:inline-block;
+	margin-top:1em;
+	margin-bottom:0.5em;
 }
 
 .file-upload {
@@ -85,19 +97,32 @@ input[type=file] {
 
 .button {
 	font-family: 'Courier', monospace;
-	font-weight: 600;
 	display:inline-block;
 	background-color: #FFA319;
 	color:#000000;
 	border: 1px solid #FFCC80;
-	border-radius:3px;
 	padding: 0.5em;
 }
 
+/* field with button within */
+.button-field input[type=text] {
+    padding:0.5em;
+    width:100%;
+}
 
+.button-field span {
+    display: block;
+    overflow: hidden;
+}
+
+.button-field button {
+    padding:0.5em;
+    float:right;
+}
 
 input:focus {
-	/*border: 1px solid #fff;*/
+	border: 1px solid #FFCC80;
+	outline:none;
 }
 
 input[type=text],
@@ -112,11 +137,12 @@ input[type=password] {
 }
 
 .button.small {
-	background: none;
-	border: none;
+	font-size:80%;
+	/*background-color: #333;
+	border:1px solid #444;*/
 	color: #FFA319;
-	float:none;
-	clear:both;
+	background:none;
+	border:none;
 }
 
 /* SIDEBAR STYLES */
@@ -184,10 +210,8 @@ input[type=password] {
 	/*background-color: rgba(255,255,255,0.5);*/
 }
 
-#header input[type=text] {
-	width:50%;
-	padding:5px;
-	margin:5px;
+#header #addLinkButton {
+	margin-left:0.5em;
 }
 
 /* OVERLAY ELEMENTS */
@@ -219,16 +243,6 @@ input[type=password] {
 .overlay-dialog h1 {
 	border:none;
 }
-
-.overlay-dialog .closeButton {
-	float:right;
-}
-
-.overlay-dialog .saveButton {
-	float:right;
-}
-
-
 
 h1 {
 	border-bottom:1px solid #000;
@@ -314,14 +328,17 @@ ul {
 	border-bottom:1px dotted #333333;
 	overflow:hidden;
 	padding-bottom:0.5em;
-	margin:0px;
+	margin-bottom:1em;
+}
+
+.createGroupForm {
+	font-size:90%;
 }
 
 .group-item {
 	float:left;
 	/*background-color: #111;*/
 	/*height:2em;*/
-	padding: 0.3em 0.3em;
 	width:100%;
 }
 
@@ -330,7 +347,18 @@ ul {
 }
 
 .group-item .name {
-	margin:0.3em;
+	margin:0.5em;
+	float:left;
+}
+
+.group-item .button {
+	float:right;
+	margin:0.5em;
+	visibility:hidden;
+}
+
+.group-item.hover .button {
+	visibility:visible;
 }
 
 .group-item .group-icon {

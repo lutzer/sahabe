@@ -38,7 +38,8 @@ define([
 		},
 	
 		onEditButtonClick: function() {
-			this.trigger('edit',this.model);
+			vent.trigger('open:editLink',this.model);
+			//this.trigger('edit',this.model);
 		},
 		
 		onDeleteButtonClick: function() {
