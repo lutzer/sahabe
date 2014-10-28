@@ -1,13 +1,15 @@
-<div class="overlay-dialog">
+<div class="overlay-dialog form">
 	<h1>Import Bookmarks</h1>
+	
 	<form method="post" enctype="multipart/form-data">
 			<span class="input-file-label">Choose a file for import</span>
 			<div class="file-upload">
-				<label for="importFileField"><span class="button">Browse Files</span></label><span class="input-file-name">Choose a file containing exported bookmarks from your browser.</span>
+				<label for="importFileField"><span class="button">Browse Files</span></label><span class="input-file-name">Choose a bookmarks file. (.html / .json)</span>
 				<input type="file" name="file" id="importFileField" />
 			</div>
 	</form>
-	<input type="button" value="Close" class="closeButton"/>
+	
+	<button class="closeButton form-right">Cancel</button>
 </div>
 
 

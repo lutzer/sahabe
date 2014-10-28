@@ -17,8 +17,9 @@ define([
 		childViewContainer: '.group-list',
 		
 		events : {
-			'click #addGroupButton': '_onAddGroupButtonClick',
-			'keypress #newGroupField': '_onNewGroupFieldEnterKeyPress'
+			'click #addGroupButton': 'onAddGroupButtonClick',
+			'click #cancelNewGroupButton': 'onCancelNewGroupButtonClick',
+			'keydown #newGroupField': 'onNewGroupFieldKeyPress'
 		},
 		
 		initialize: function(options) {
@@ -31,31 +32,36 @@ define([
 		
 		/* Add Group Functions */
 		
-		_onAddGroupButtonClick: function() {
+		onAddGroupButtonClick: function() {
 			this.showCreateGroupForm(true);
 		},
 		
-		_onNewGroupFieldEnterKeyPress: function(e) {
+		onCancelNewGroupButtonClick: function() {
+			this.showCreateGroupForm(false);
+		},
+		
+		onNewGroupFieldKeyPress: function(e) {
 			if (!e) e = window.event;
 		    var keyCode = e.keyCode || e.which;
-		    if (keyCode == '13'){
-		    	
-		    	// Enter pressed
+		    if (keyCode == '13'){ // enter
 				this.showCreateGroupForm(false);
-				
 				var name = this.$('#newGroupField').val().trim();
 				this.createGroup(name,false);
-				
-			    return false;
+				return false;
 		    }
+		    if (keyCode == '27') { //esc 
+		    	this.showCreateGroupForm(false);
+		    	return false;
+		    }
+		    return true;
 		},
 		
 		showCreateGroupForm : function(show) {
 			if (show) {
 				this.$('#newGroupField').val("");
-				
 				this.$('.createGroupForm').show();
 				this.$('#addGroupButton').hide();
+				this.$('#newGroupField').focus();
 			} else {
 				this.$('.createGroupForm').hide();
 				this.$('#addGroupButton').show();

@@ -17,7 +17,7 @@ define([
 			
 			errors = [];
 			
-			if (!(attrs.name).match("^[a-zA-Z0-9_-\\s]+$"))
+			if (!(attrs.name).match("^[ -~]+$"))
 				errors.push({attr: 'name', msg: "Groupname not valid"});
 		
 			if (errors.length > 0)

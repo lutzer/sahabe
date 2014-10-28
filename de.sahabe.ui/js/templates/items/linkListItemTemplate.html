@@ -1,7 +1,14 @@
+<div class="link-menu">
+	<input type="button" value="Edit" id="editButton" class="button">
+	<input type="button" value="Delete" id="deleteButton" class="button">
+	<input type="button" value="Share" id="shareButton" class="button">
+</div>
+<div class="date">
+	<%= timeSince(modifiedAt) %> ago
+</div>
 <h1><%= title %></h1>
-<input type="button" value="Edit" class="editButton">
 <div class="url">
-	<a href="<%= url %>" target="_blank"><%= trimString(url,50) %></a>
+	<a href="<%= url %>" target="_blank"><%= trimString(removeSchemeFromUrl(url),70) %></a>
 </div>
 <div class="description">
 	<%= description %>

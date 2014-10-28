@@ -42,30 +42,41 @@ body {
 
 /* INPUT ELEMENTS */
 
-input {
+input,button {
 	font-family: 'Courier', monospace ;
-	margin-bottom: 1em;
-	margin-top: 0.3em;
 	padding: 0.5em;
-	border-radius:3px;
+	border-radius:0px;
 	border: 1px solid #ddd;
-	font-size: 10pt;
+	font-size:100%;
 }
 
-input[type=button] {
-	font-size:10pt;
+input[type=button],button {
 	padding:0.5em;
-	margin:0px 0.5em 0px 0em;
-	font-weight:600;
+	/*font-weight:600;*/
 	background-color: #FFA319;
 	color:#000000;
-	border: 1px solid #FFCC80;
+	border: 1px solid #FFA319;
+}
+
+button.form-right {
+	margin:1em 0 0 0.5em;
+	float:right;
+}
+
+button.form-left {
+	margin:1em 0.5em 0 0;
 }
 
 input[type=file] {
 	height: 0;
   	width: 0;
   	display:none;
+}
+
+label {
+	display:inline-block;
+	margin-top:1em;
+	margin-bottom:0.5em;
 }
 
 .file-upload {
@@ -86,17 +97,32 @@ input[type=file] {
 
 .button {
 	font-family: 'Courier', monospace;
-	font-weight: 600;
 	display:inline-block;
 	background-color: #FFA319;
 	color:#000000;
 	border: 1px solid #FFCC80;
-	border-radius:3px;
 	padding: 0.5em;
 }
 
+/* field with button within */
+.button-field input[type=text] {
+    padding:0.5em;
+    width:100%;
+}
+
+.button-field span {
+    display: block;
+    overflow: hidden;
+}
+
+.button-field button {
+    padding:0.5em;
+    float:right;
+}
+
 input:focus {
-	/*border: 1px solid #fff;*/
+	border: 1px solid #FFCC80;
+	outline:none;
 }
 
 input[type=text],
@@ -111,11 +137,12 @@ input[type=password] {
 }
 
 .button.small {
-	background: none;
-	border: none;
+	font-size:80%;
+	/*background-color: #333;
+	border:1px solid #444;*/
 	color: #FFA319;
-	float:none;
-	clear:both;
+	background:none;
+	border:none;
 }
 
 /* SIDEBAR STYLES */
@@ -142,6 +169,8 @@ input[type=password] {
 
 #sidebar h2 {
 	margin:1em 0em 0.5em 0em;
+	font-size:100%;
+	color: #555555;
 }
 
 .sidebar-menu {
@@ -181,10 +210,8 @@ input[type=password] {
 	/*background-color: rgba(255,255,255,0.5);*/
 }
 
-#header input[type=text] {
-	width:50%;
-	padding:5px;
-	margin:5px;
+#header #addLinkButton {
+	margin-left:0.5em;
 }
 
 /* OVERLAY ELEMENTS */
@@ -216,12 +243,6 @@ input[type=password] {
 .overlay-dialog h1 {
 	border:none;
 }
-
-.overlay-dialog .closeButton {
-	float:right;
-}
-
-
 
 h1 {
 	border-bottom:1px solid #000;
@@ -255,15 +276,23 @@ ul {
 
 .link-item {
 	border-bottom:1px dotted #ccc;
-	margin:20px 0px 0px 0px;
+	margin-top:1em;
+	padding:0.5em;
 }
 
-.link-item h1 {
-	
+.link-item.hover {
+	background-color: #eee;
+	transition: background-color 500ms;
+}
+
+.link-item .date {
+	float:right;
+	font-size:80%;
+	margin: 0.5em;
+	color: #aaa;
 }
 
 .link-item .description,.url {
-	margin:0.5em;
 	clear:both;
 }
 
@@ -271,12 +300,25 @@ ul {
 	border:none;
 	font-size:120%;
 	float:left;
-	margin:0.5em;
+	margin:0;
 }
 
-.link-item .editButton {
+.link-item .button {
+	background-color:#fff;
+	border:none;
+}
+
+.link-item .button.ask-permission {
+	background-color: #ff0000;
+}
+
+.link-item .link-menu {
 	float:right;
-	background:none;
+	display: none;
+}
+
+.link-item.hover .link-menu {
+	display:inline;
 }
 
 #group-container {
@@ -287,19 +329,37 @@ ul {
 	border-bottom:1px dotted #333333;
 	overflow:hidden;
 	padding-bottom:0.5em;
+	margin-bottom:1em;
+}
+
+.createGroupForm {
+	font-size:90%;
 }
 
 .group-item {
 	float:left;
-	width:48%;
-	text-align:center;
-	background-color: #000;
-	border-radius:3px;
-	margin:1%
+	/*background-color: #111;*/
+	/*height:2em;*/
+	width:100%;
+}
+
+.group-item:hover {
+	background-color: #111;
 }
 
 .group-item .name {
-	padding:5px;
+	margin:0.5em;
+	float:left;
+}
+
+.group-item .button {
+	float:right;
+	margin:0.5em;
+	visibility:hidden;
+}
+
+.group-item.hover .button {
+	visibility:visible;
 }
 
 .group-item .group-icon {
@@ -311,4 +371,20 @@ ul {
 	border-radius:5px;
 	/*margin: 0.5em auto 0.5em auto;*/
 	float:left;
+}
+
+/* ICONS */
+
+.icon {
+    display: inline-block;
+    width:40px;
+    height:40px;
+    background-repeat:no-repeat;
+    background-position:center;
+    white-space: nowrap;
+}
+
+.icon.folder {
+	background-image: url("../images/folder.png");
+	background-size: 36px 36px;
 }

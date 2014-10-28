@@ -55,14 +55,17 @@ define([
 			
 		/* ROUTES */
 		
-		home: function() {
+		home: function(searchText) {
+			
+			if (typeof searchText == 'undefined')
+				searchText = false;
 			
 			var self = this;
 			
 			this.checkLogin(
 				function(loggedIn) {
 					if (loggedIn) {
-						self.app.containerRegion.show(new AppLayoutView());
+						self.app.containerRegion.show(new AppLayoutView({searchText : searchText}));
 					} else
 						window.location = "#login";
 				}
@@ -74,7 +77,6 @@ define([
 		},
 		
 		logout: function() {
-			var self = this;
 			
 			var user = User.getInstance();
 			user.model.logout(onSuccess,onError);

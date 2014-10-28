@@ -3,9 +3,10 @@ define([
 	'underscore',
 	'marionette',
 	'utils',
+	'vent',
 	'models/LinkModel',
 	'text!templates/items/linkListItemTemplate.html',
-], function($, _, Marionette, Utils, LinkModel, linkListItemTemplate){
+], function($, _, Marionette, Utils, vent, LinkModel, linkListItemTemplate){
 	
 	var LinkListItemView = Marionette.ItemView.extend({
 		
@@ -13,84 +14,57 @@ define([
 		
 		className: 'link-item',
 		
+		events: {
+			'click #editButton' : 'onEditButtonClick',
+			'click #deleteButton' : 'onDeleteButtonClick',
+			'mouseenter'  : 'onHoverLink',
+			'mouseleave'  : 'onHoverLink'
+		},
+		
+		modelEvents: {
+			"change": "render"
+		},
+		
+		initialize: function(options) {
+			this.$el.attr("draggable", "true");
+		},
+		
 		templateHelpers: function() {
 			return {
-				trimString : Utils.trimString
+				trimString : Utils.trimString,
+				timeSince : Utils.timeSince,
+				removeSchemeFromUrl : Utils.removeSchemeFromUrl
 			};
 
-		}
-		
-		/*editView : false, //set to true when editing;
-		
-		events: {
-			"click .linkEdit": "_onLinkEditClick",
-			"click .linkDelete": "_onLinkDeleteClick",
-			"click .linkCancelEdit": "_onLinkCancelEditClick",
-			"click .linkSave": "_onLinkSaveClick",
-			"change .selectBox": "_onSelectCheckbox"	
+		},
+	
+		onEditButtonClick: function() {
+			vent.trigger('open:editLink',this.model);
+			//this.trigger('edit',this.model);
 		},
 		
-		initialize: function() {
-			this.listenTo(this.model, 'selectableChanged', this.render);
-			BaseListItemView.prototype.initialize.call(this);
-		},
-
-		render: function() {
-			
-			var compiledTemplate;
-			if (this.editView)
-				compiledTemplate = _.template( linkListItemEditTemplate, { link : this.model.toJSON()} );
-			else
-				compiledTemplate = _.template( linkListItemTemplate, { link : this.model.toJSON(), selectable: this.model.selectable } );
-			// Append our compiled template to this Views "el"
-			this.$el.html( compiledTemplate );
-			return this;
-		},
-		
-		_onLinkEditClick: function() {
-			//TODO: implement link details method
-			this.editView = true;
-			this.render();
-			return false;
-		},
-		
-		_onLinkCancelEditClick: function() {
-			this.editView = false;
-			this.render();
-			return false;
-		},
-		
-		_onLinkSaveClick: function() {
-			
-			//update values
-			this.model.set({
-				title: $(".linkTitle").val(),
-				url: $(".linkUrl").val(),
-				description: $(".linkDescription").val()
-			});
-			
-			// save model to database
-			this.model.save(null, {
-				error: function(model, response) {
-					console.log(response);
+		onDeleteButtonClick: function() {
+			console.log('click');
+			//this.$('#deleteButton').addClass('ask-permission');
+			//this.$('#deleteButton').attr('value','Yes');
+			this.model.destroy({
+				success: function() {
+					vent.trigger('display:message',"Link deleted.");
+				}, 
+				error: function() {
+					vent.trigger('display:message',"Cloud not delete link");
 				}
 			});
-			
-			//re-render itemview
-			this.editView = false;
-			this.render();
-			return false;
 		},
 		
-		_onLinkDeleteClick: function() {
-			this.model.destroy();
-			return false;
-		},
+		onHoverLink: function(event) {
+			if (event.type == 'mouseenter')
+				this.$el.addClass('hover');
+			else 
+				this.$el.removeClass('hover');
+		}
 		
-		_onSelectCheckbox: function() {
-			this.model.set({selected : $(".selectBox").is(":checked")});
-			return false;
-		}*/
+		
 	});
 	// Our module now returns our view
 	return LinkListItemView;
