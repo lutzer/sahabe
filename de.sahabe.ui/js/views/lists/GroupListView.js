@@ -59,11 +59,11 @@ define([
 		showCreateGroupForm : function(show) {
 			if (show) {
 				this.$('#newGroupField').val("");
-				this.$('.createGroupForm').show();
+				this.$('.create-group-form').show();
 				this.$('#addGroupButton').hide();
 				this.$('#newGroupField').focus();
 			} else {
-				this.$('.createGroupForm').hide();
+				this.$('.create-group-form').hide();
 				this.$('#addGroupButton').show();
 			}
 		},

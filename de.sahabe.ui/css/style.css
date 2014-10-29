@@ -149,11 +149,10 @@ input[type=password] {
 
 #sidebar {
 	position:fixed;
-	width:230px;
+	width:250px;
 	top:0px;
 	bottom:0px;
 	left:0px;
-	padding: 10px;
 	overflow:scroll;
 	border-right:1px solid #000000;
 	/*background-color:#414147;*/
@@ -168,7 +167,7 @@ input[type=password] {
 }
 
 #sidebar h2 {
-	margin:1em 0em 0.5em 0em;
+	margin:1em 1em 0.5em 1em;
 	font-size:100%;
 	color: #555555;
 }
@@ -191,7 +190,7 @@ input[type=password] {
 	top:0px;
 	bottom:0px;
 	right:0px;
-	padding:20px;
+	padding:0px;
 	overflow:scroll;
 	z-index:1
 }
@@ -203,11 +202,15 @@ input[type=password] {
 	top:0px;
 	left:251px;
 	right:0px;
-	height:30px;
 	z-index:3;
-	padding:10px 20px 10px 10px;
+	padding: 10px 1em 1em 1em;
 	text-align:right;
 	/*background-color: rgba(255,255,255,0.5);*/
+}
+
+#header #batchEditButton {
+	float:left;
+	margin-right:0.5em;
 }
 
 #header #addLinkButton {
@@ -271,13 +274,12 @@ ul {
 }
 
 .link-list {
-	padding-top:30px;
+	padding-top:4em;
 }
 
 .link-item {
 	border-bottom:1px dotted #ccc;
-	margin-top:1em;
-	padding:0.5em;
+	padding:1em 1em 0.5em 1em;
 }
 
 .link-item.hover {
@@ -303,9 +305,17 @@ ul {
 	margin:0;
 }
 
-.link-item .button {
-	background-color:#fff;
-	border:none;
+.link-item ul {
+	float:none;
+	clear:both;
+}
+
+.link-item li {
+	margin-bottom:0.5em;
+}
+
+.link-item li.bottom {
+	height:1em;
 }
 
 .link-item .button.ask-permission {
@@ -315,6 +325,15 @@ ul {
 .link-item .link-menu {
 	float:right;
 	display: none;
+}
+
+
+.link-item .tags {
+	float:left;
+} 
+
+.link-menu button {
+	font-size:90%;
 }
 
 .link-item.hover .link-menu {
@@ -329,17 +348,11 @@ ul {
 	border-bottom:1px dotted #333333;
 	overflow:hidden;
 	padding-bottom:0.5em;
-	margin-bottom:1em;
-}
-
-.createGroupForm {
-	font-size:90%;
+	margin:0 0 1em 0;
 }
 
 .group-item {
 	float:left;
-	/*background-color: #111;*/
-	/*height:2em;*/
 	width:100%;
 }
 
@@ -348,13 +361,13 @@ ul {
 }
 
 .group-item .name {
-	margin:0.5em;
+	margin:0.5em 0.5em 0.5em 1em;
 	float:left;
 }
 
 .group-item .button {
 	float:right;
-	margin:0.5em;
+	margin:0.5em 1em 0.5em 0.5em;
 	visibility:hidden;
 }
 
@@ -371,6 +384,14 @@ ul {
 	border-radius:5px;
 	/*margin: 0.5em auto 0.5em auto;*/
 	float:left;
+}
+
+.group-menu {
+	padding:0 1em 0 1em;
+}
+
+.create-group-form {
+	font-size:90%;
 }
 
 /* ICONS */

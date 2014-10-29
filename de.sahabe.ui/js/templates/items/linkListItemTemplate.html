@@ -1,15 +1,39 @@
-<div class="link-menu">
-	<input type="button" value="Edit" id="editButton" class="button">
-	<input type="button" value="Delete" id="deleteButton" class="button">
-	<input type="button" value="Share" id="shareButton" class="button">
-</div>
 <div class="date">
 	<%= timeSince(modifiedAt) %> ago
 </div>
 <h1><%= title %></h1>
+<ul>
+	<li>
+		<a href="<%= url %>" target="_blank"><%= trimString(removeSchemeFromUrl(url),70) %></a>
+	</li>
+	<li>
+		<%= description %>
+	</li>
+	<li class="bottom">
+		<div class ="tags">
+			Tags
+		</div>
+		<div class="link-menu">
+			<button id="editButton">Edit</button>
+			<button id="deleteButton">Delete</button>
+			<button id="shareButton">Share</button>
+		</div>
+	</li>
+</ul>
+
+<!--  
 <div class="url">
 	<a href="<%= url %>" target="_blank"><%= trimString(removeSchemeFromUrl(url),70) %></a>
 </div>
 <div class="description">
 	<%= description %>
 </div>
+<div class="link-menu">
+	<button id="editButton">Edit</button>
+	<button id="deleteButton">Delete</button>
+	<button id="shareButton">Share</button>
+</div>
+<div class="tags">
+	Tags:
+</div>-->
+
