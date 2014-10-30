@@ -59,8 +59,7 @@ define([
 			removeSchemeFromUrl: function(url) {
 				var remove = url.match("^(https?|ftp):\\/\\/");
 				return url.substr(remove[0].length,url.length);
-			}
-	
+			},
 	};
 	
 	return Utils;

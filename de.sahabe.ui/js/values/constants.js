@@ -3,8 +3,8 @@ define([], function(){
 
 			settings: {
 				// server settings
-				//webServiceUrl : 'http://0.0.0.0:5000',
-				webServiceUrl : "http://generalmanstein.selfhost.bz:5080/api",
+				webServiceUrl : 'http://0.0.0.0:5000',
+				//webServiceUrl : "http://generalmanstein.selfhost.bz:5080/api",
 				//webServiceUrl : "http://192.168.7.29:5000",
 				webServiceLoginTimeout : 2000,
 				messageDisplayTimeout : 3000,

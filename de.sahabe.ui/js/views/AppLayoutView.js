@@ -44,6 +44,10 @@ define([
 			this.listenTo(sidebarView,'open:importFile',this.showImportOverlay);
 			this.listenTo(headerView,'open:addLink', this.showLinkAddOverlay);
 			
+			// expanding/collapsing sidebar events
+			this.listenTo(sidebarView,'expand',this.onExpandSidebar);
+			this.listenTo(sidebarView,'collapse',this.onCollapseSidebar);
+			
 			//register indirect view events
 			vent.on("open:editGroup",this.showGroupEditOverlay,this);
 			vent.on("open:editLink",this.showLinkEditOverlay,this);
@@ -72,6 +76,19 @@ define([
 		
 		showGroupEditOverlay: function(model) {
 			this.overlayRegion.show(new GroupEditView({model : model}));
+		},
+		
+		/* Triggered when the sidebar view changes its with */
+		onExpandSidebar: function() {
+			this.$('#content').addClass('collapsed');
+			this.$('#header').addClass('collapsed');
+			this.$('#sidebar').removeClass('collapsed');
+		},
+		
+		onCollapseSidebar: function() {
+			this.$('#content').removeClass('collapsed');
+			this.$('#header').removeClass('collapsed');
+			this.$('#sidebar').addClass('collapsed');
 		}
 		
 	});

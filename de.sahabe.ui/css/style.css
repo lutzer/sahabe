@@ -48,6 +48,9 @@ input,button {
 	border-radius:0px;
 	border: 1px solid #ddd;
 	font-size:100%;
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
 input[type=button],button {
@@ -161,6 +164,7 @@ input[type=password] {
 	z-index:2;
 	overflow-x:hidden;
 	overflow-y:auto;
+	transition: left 250ms;
 }
 
 #sidebar a {
@@ -174,6 +178,22 @@ input[type=password] {
 	color: #555555;
 }
 
+#sidebar #collapseViewButton {
+	position:absolute;
+	top:0;
+	right:0;
+	background:none;
+	color:#fff;
+	border:none;
+	font-weight:600;
+	font-size:120%;
+}
+
+#sidebar.collapsed {
+	left: -220px;
+	transition: left 250ms;
+}
+
 .sidebar-menu {
 	padding:1em;
 	border-radius:5px;
@@ -184,11 +204,25 @@ input[type=password] {
 	margin-bottom:1em;
 }
 
+.sidebar-menu-collapsed {
+	float:right;
+	width:30px;
+}
+
+.sidebar-menu-collapsed button {
+	width:30px;
+	background:none;
+	color:#fff;
+	border:none;
+	font-weight:600;
+	font-size:120%;
+}
+
 /* CONTENT STYLES */
 
 #content {
 	position:fixed;
-	left:250px;
+	left:30px;
 	top:0px;
 	bottom:0px;
 	right:0px;
@@ -196,6 +230,12 @@ input[type=password] {
 	overflow-x:hidden;
 	overflow-y:auto;
 	z-index:1
+	transition: left 250ms;
+}
+
+#content.collapsed {
+	left: 250px;
+	transition: left 250ms;
 }
 
 /* HEADER STYLES */
@@ -203,15 +243,20 @@ input[type=password] {
 #header {
 	position:fixed;
 	top:0px;
-	left:251px;
+	left:30px;
 	right:0px;
 	z-index:3;
 	padding: 10px 1em 1em 1em;
 	text-align:right;
-	/*background-color: rgba(255,255,255,0.5);*/
+	transition: left 250ms;
 }
 
-#header #batchEditButton {
+#header.collapsed {
+	left:250px;
+	transition: left 250ms;
+}
+
+#header .left-button {
 	float:left;
 	margin-right:0.5em;
 }
@@ -287,7 +332,7 @@ ul {
 
 .link-item.hover {
 	background-color: #eee;
-	transition: background-color 500ms;
+	transition: background-color 500ms ease-out;
 }
 
 .link-item .date {
@@ -336,7 +381,6 @@ ul {
 } 
 
 .link-menu button {
-	font-size:90%;
 }
 
 .link-item.hover .link-menu {
@@ -348,9 +392,8 @@ ul {
 }
 
 .group-list {
-	border-bottom:1px dotted #333333;
+	/*border-bottom:1px dotted #333333;*/
 	overflow:hidden;
-	padding-bottom:0.5em;
 	margin:0 0 1em 0;
 }
 

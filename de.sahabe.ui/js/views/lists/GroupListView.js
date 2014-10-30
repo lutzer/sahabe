@@ -23,7 +23,10 @@ define([
 		},
 		
 		initialize: function(options) {
-			options.collection.fetch();
+			if (!options.collection.fetched) {
+				options.collection.fetch();
+			}
+				
 		},
 		
 		onRender : function() {
