@@ -1,7 +1,9 @@
 User:
-	sign up:       	     	/sign_up         		- POST
-	login:               	/login           		- POST
-	logout:        	     	/logout          		- GET
+	sign up:       	     	/user/sign_up         		- POST
+	login:               	/user/login           		- POST
+	logout:        	     	/user/logout          		- GET
+	userdata(loggedin):	/user				- GET (not implemented)
+	userdata:		/user/<userId>			- GET (not implemented)
 
 
 Link:
