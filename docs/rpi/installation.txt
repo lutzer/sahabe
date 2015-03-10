@@ -56,14 +56,6 @@ SYSTEM INSTALLATION
 2. install sudo: pacman -S sudo
    setup sudo for user: "EDITOR=nano visudo" -> add line "letterbox ALL=(ALL) ALL"
 
-# Install Samba
-1. pacman -S samba
-2. cp /etc/samba/smb.conf.default /etc/samba/smb.conf
-3. sudo smbpasswd -a pi (password: <userpasswd>
-4. start service: sudo systemctl start smbd.service
-5. sudo systemctl enable smbd.service
-6. connect through mac with address smb://rasp.pis.ip/homes
-
 # Install python
 1. sudo pacman -S python2
 2. sudo pacman -S python2-pip
@@ -80,57 +72,22 @@ SYSTEM INSTALLATION
 		server {
 	        listen       80;
 	        server_name  localhost;
-	        root    /home/letterbox/http;
+	        root    /home/pi/http;
 	-remove all other root directives in locations
 4. chmod 755 home,pi and http directory
 
 # Install uwsgi server for python support (https://wiki.archlinux.org/index.php/Uwsgi)
 1. add to nginx conf:
 	http {
-
-	    sendfile on;
-
-	    gzip              on;
-	    gzip_http_version 1.0;
-	    gzip_proxied      any;
-	    gzip_min_length   500;
-	    gzip_disable      "MSIE [1-6]\.";
-	    gzip_types        text/plain text/xml text/css
-	                      text/comma-separated-values
-	                      text/javascript
-	                      application/x-javascript
-	                      application/atom+xml;
-
-	    # Configuration containing list of application servers
-	    upstream uwsgicluster {
-
-	        server 127.0.0.1:8080;
-	        # server 127.0.0.1:8081;
-	        # ..
-	        # ..
-	    }
-
-	    location / {
-
-            include            uwsgi_params;
-            uwsgi_pass         uwsgicluster;
-
-            proxy_redirect     off;
-            proxy_set_header   Host $host;
-            proxy_set_header   X-Real-IP $remote_addr;
-            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header   X-Forwarded-Host $server_name;
-
-        }
-
-         location ^~ /static/  {
-
-            root /home/pi/http/static;
-        }
+		location /api/ {
+    			include uwsgi_params;
+    			uwsgi_pass 127.0.0.1:8080;
+		}
+	}
 
 2. sudo pip2 install uwsgi
-3. to test: uwsgi --socket 127.0.0.1:8080 -w WSGI:app (WSGI.py is python script name to start app)
-	wsgi content:
+3. to test: uwsgi --socket 127.0.0.1:8080 -w wsgi:app (WSGI.py is python script name to start app)
+	wsgi.py content:
 		from flask import Flask
 		app = Flask(__name__)
 
