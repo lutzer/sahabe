@@ -80,8 +80,13 @@ SYSTEM INSTALLATION
 1. add to nginx conf:
 	http {
 		location /api/ {
+			# forward location to uwsgi python server
     			include uwsgi_params;
     			uwsgi_pass 127.0.0.1:8080;
+    			
+    			# uwsgi_modifier1 removes SCRIPT_NAME from PATH_INFO
+			uwsgi_modifier1 30;
+    			uwsgi_param SCRIPT_NAME /api;
 		}
 	}
 
