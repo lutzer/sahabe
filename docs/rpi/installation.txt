@@ -7,14 +7,13 @@ PASSWORDS
 ---------
 
 username: root
-rootpw: tequila
+rootpw: xxxx
 
 username: pi
-userpasswd: blanco
-(same for samba)
+userpasswd: xxxx
 
 mysqllogin: root
-mysqlpw: milbona
+mysqlpw: xxxx
 
 
 SYSTEM INSTALLATION
