@@ -90,7 +90,11 @@ SYSTEM INSTALLATION
 	}
 
 2. sudo pip2 install uwsgi
-3. to test: uwsgi --socket 127.0.0.1:8080 -w wsgi:app (WSGI.py is python script name to start app)
+3. to test: 
+	uwsgi --socket 127.0.0.1:8080 -w wsgi:app or
+	uwsgi --socket 127.0.0.1:8080 --wsgi-file wsgi.py --callable app
+	(wsgi.py is python script name to start app)
+	
 	wsgi.py content:
 		from flask import Flask
 		app = Flask(__name__)
@@ -101,12 +105,30 @@ SYSTEM INSTALLATION
 
 		if __name__ == "__main__":
 		    app.run()
-4. create startup script: nano /etc/uswgi/sahabe.ini:
+		    
+4. create uwsgi ini script: nano /etc/uswgi/sahabe.ini:
 	[uwsgi]
 	socket = 127.0.0.1:8080
-	chdir = /home/pi/http
-	module = WSGI:app
-5. enable startup sudo systemctl enable uwsgi@sahabe
+	chdir = /home/httpd/sahabe
+	module = wsgi:app
+5. write systemctl unit in /etc/systemd/system/sahabe.uwsgi.service:
+
+	[Unit]
+	Description=uWSGI Emperor
+	After=syslog.target
+	
+	[Service]
+	ExecStart=/bin/uwsgi --ini /etc/uwsgi/sahabe.ini
+	Restart=always
+	KillSignal=SIGQUIT
+	Type=notify
+	StandardError=syslog
+	NotifyAccess=all
+	
+	[Install]
+	WantedBy=multi-user.target
+	
+6. enable startup: sudo systemctl enable sahabe.uwsgi.service
 
 # install mysql
 1. sudo pacman -S mariadb
