@@ -3,19 +3,6 @@ SAHABE RASPBERRY PI INSTALLATION
 --------------------------------
 
 
-PASSWORDS
----------
-
-username: root
-rootpw: xxxx
-
-username: pi
-userpasswd: xxxx
-
-mysqllogin: root
-mysqlpw: xxxx
-
-
 SYSTEM INSTALLATION
 -------------------
 
